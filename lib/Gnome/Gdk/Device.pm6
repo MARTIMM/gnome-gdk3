@@ -1,7 +1,7 @@
 use v6;
 use NativeCall;
 
-use Gnome::X::N;
+use Gnome::N::X;
 use Gnome::N::NativeLib;
 use Gnome::N::N-GObject;
 use Gnome::GObject::Object;

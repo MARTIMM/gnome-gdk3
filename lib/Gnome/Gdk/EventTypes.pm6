@@ -8,7 +8,7 @@ use v6;
 
 =head1 Synopsis
 
-  my Gnome::Gtk::Window $top-window .= new(:empty);
+  my Gnome::Gtk3::Window $top-window .= new(:empty);
   $top-window.set-title('Hello GTK!');
   # ... etcetera ...
 
