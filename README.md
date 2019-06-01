@@ -19,9 +19,9 @@
 ## Release notes
 * [Release notes][changes]
 
-# Installation of Gnome::Gdk
+# Installation of Gnome::Gdk3
 
-`zef install Gnome::Gdk`
+`zef install Gnome::Gdk3`
 
 
 # Author
@@ -50,7 +50,7 @@ There are always some problems! If you find one, please help by filing an issue 
 [//]: # (Pod documentation rendered with)
 [//]: # (pod-render.pl6 --pdf --g=MARTIMM/perl6-gnome-gdk3 lib)
 
-[Gnome::Gdk3::EventTypes html]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk/blob/master/doc/EventTypes.html
-[Gnome::Gdk3::EventTypes pdf]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk/blob/master/doc/EventTypes.pdf
-[Gnome::Gdk3::Types html]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk/blob/master/doc/Types.html
-[Gnome::Gdk3::Types pdf]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk/blob/master/doc/Types.pdf
+[Gnome::Gdk3::EventTypes html]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk3/blob/master/doc/EventTypes.html
+[Gnome::Gdk3::EventTypes pdf]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk3/blob/master/doc/EventTypes.pdf
+[Gnome::Gdk3::Types html]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk3/blob/master/doc/Types.html
+[Gnome::Gdk3::Types pdf]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk3/blob/master/doc/Types.pdf
