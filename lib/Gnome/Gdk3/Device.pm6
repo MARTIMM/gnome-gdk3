@@ -5,12 +5,12 @@ use Gnome::N::X;
 use Gnome::N::NativeLib;
 use Gnome::N::N-GObject;
 use Gnome::GObject::Object;
-#use Gnome::Gdk::Types;
+#use Gnome::Gdk3::Types;
 
 #-------------------------------------------------------------------------------
 # See /usr/include/gtk-3.0/gdk/gdkdevice.h
 # https://developer.gnome.org/gdk3/stable/GdkDevice.html
-unit class Gnome::Gdk::Device:auth<github:MARTIMM>;
+unit class Gnome::Gdk3::Device:auth<github:MARTIMM>;
 also is Gnome::GObject::Object;
 
 #-------------------------------------------------------------------------------
@@ -30,7 +30,7 @@ submethod BUILD ( *%options ) {
   ) unless $signals-added;
 
   # prevent creating wrong widgets
-  return unless self.^name eq 'Gnome::Gdk::Device';
+  return unless self.^name eq 'Gnome::Gdk3::Device';
 
   if ? %options<widget> || ? %options<build-id> {
     # provided in GObject

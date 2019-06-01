@@ -2,7 +2,7 @@ use v6;
 #-------------------------------------------------------------------------------
 =begin pod
 
-=TITLE Gnome::Gdk::EventTypes
+=TITLE Gnome::Gdk3::EventTypes
 
 =SUBTITLE Event Structures — Data structures specific to each type of event
 
@@ -41,16 +41,16 @@ use Gnome::N::X;
 use Gnome::N::NativeLib;
 use Gnome::N::N-GObject;
 #use Gnome::Glib::GTypes;
-use Gnome::Gdk::Types;
+use Gnome::Gdk3::Types;
 
 #-------------------------------------------------------------------------------
 # https://developer.gnome.org/gdk3/stable/gdk3-Event-Structures.html
 # https://developer.gnome.org/gdk3/stable/gdk3-Events.html
 =begin pod
-=head1 class Gnome::Gdk::EventTypes
+=head1 class Gnome::Gdk3::EventTypes
 =end pod
 
-unit class Gnome::Gdk::EventTypes:auth<github:MARTIMM>;
+unit class Gnome::Gdk3::EventTypes:auth<github:MARTIMM>;
 
 #-------------------------------------------------------------------------------
 =begin pod

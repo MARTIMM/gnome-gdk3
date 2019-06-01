@@ -9,7 +9,7 @@ use Gnome::GObject::Object;
 #-------------------------------------------------------------------------------
 # See /usr/include/gtk-3.0/gdk/gdkscreen.h
 # https://developer.gnome.org/gdk3/stable/GdkScreen.html
-unit class Gnome::Gdk::Screen:auth<github:MARTIMM>
+unit class Gnome::Gdk3::Screen:auth<github:MARTIMM>
   is Gnome::GObject::Object;
 
 #-------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ submethod BUILD ( *%options ) {
   ) unless $signals-added;
 
   # prevent creating wrong widgets
-  return unless self.^name eq 'Gnome::Gdk::Screen';
+  return unless self.^name eq 'Gnome::Gdk3::Screen';
 
   if ? %options<default> {
     self.native-gobject(gdk_screen_get_default());

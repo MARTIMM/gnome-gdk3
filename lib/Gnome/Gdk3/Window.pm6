@@ -5,12 +5,12 @@ use Gnome::N::X;
 use Gnome::N::NativeLib;
 use Gnome::N::N-GObject;
 use Gnome::GObject::Object;
-use Gnome::Gdk::Types;
+use Gnome::Gdk3::Types;
 
 #-------------------------------------------------------------------------------
 # See /usr/include/gtk-3.0/gdk/gdkwindow.h
 # https://developer.gnome.org/gdk3/stable/gdk3-Windows.html
-unit class Gnome::Gdk::Window:auth<github:MARTIMM>
+unit class Gnome::Gdk3::Window:auth<github:MARTIMM>
   is Gnome::GObject::Object;
 
 #-------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ submethod BUILD ( *%options ) {
   ) unless $signals-added;
 
   # prevent creating wrong widgets
-  return unless self.^name eq 'Gnome::Gdk::Window';
+  return unless self.^name eq 'Gnome::Gdk3::Window';
 
   if ? %options<default> {
     self.native-gobject(gdk_get_default_root_window());

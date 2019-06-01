@@ -5,12 +5,12 @@ use Gnome::N::X;
 use Gnome::N::NativeLib;
 use Gnome::N::N-GObject;
 use Gnome::GObject::Object;
-#use Gnome::Gdk::Screen;
+#use Gnome::Gdk3::Screen;
 
 #-------------------------------------------------------------------------------
 # See /usr/include/gtk-3.0/gdk/gdkscreen.h
 # https://developer.gnome.org/gdk3/stable/GdkDisplay.html
-unit class Gnome::Gdk::Display:auth<github:MARTIMM>;
+unit class Gnome::Gdk3::Display:auth<github:MARTIMM>;
 also is Gnome::GObject::Object;
 
 #-------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ submethod BUILD ( *%options ) {
   ) unless $signals-added;
 
   # prevent creating wrong widgets
-  return unless self.^name eq 'Gnome::Gdk::Display';
+  return unless self.^name eq 'Gnome::Gdk3::Display';
 
   if ? %options<default> {
     note "no: ", self.native-gobject(gdk_display_get_default()).defined;

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>Gnome::Gdk::EventTypes</title>
+        <title>Gnome::Gdk3::EventTypes</title>
         <meta charset="UTF-8" />
   <link type="text/css" rel="stylesheet" href="file:///mnt/Data/opt/Perl6/rakudo/install/share/perl6/site/resources/8E2223EC8A82AFADF6C944FF8969408E59014865.css">
         
@@ -10,13 +10,13 @@
  <body class="pod" onload="prettyPrint()">
     <div id="___top"></div>
     
-    <div class='title'><img src='file:///mnt/Data/opt/Perl6/rakudo/install/share/perl6/site/resources/0B7FF4E498A5251B3DC3E867D243E1F3A497ABA3.svg' align='left' />Gnome::Gdk::EventTypes</div>
+    <div class='title'><img src='file:///mnt/Data/opt/Perl6/rakudo/install/share/perl6/site/resources/0B7FF4E498A5251B3DC3E867D243E1F3A497ABA3.svg' align='left' />Gnome::Gdk3::EventTypes</div>
     <p class='subtitle'>Event Structures — Data structures specific to each type of event</p>
     <nav class="indexgroup">
 <table id="TOC">
 <caption><h2 id="TOC_Title">Table of Contents</h2></caption>
   <tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#Synopsis">Synopsis</a></td></tr>
-    <tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#class_Gnome::Gdk::EventTypes">class Gnome::Gdk::EventTypes</a></td></tr>
+    <tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#class_Gnome::Gdk3::EventTypes">class Gnome::Gdk3::EventTypes</a></td></tr>
  <tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#Enums,_Structs_and_Unions">Enums, Structs and Unions</a></td></tr>
  <tr class="toc-level-2"><td class="toc-number">3.1</td><td class="toc-text"><a href="#Enum_GdkEventType_Specifies_the_type_of_the_event.">Enum GdkEventType Specifies the type of the event.</a></td></tr>
                                                       <tr class="toc-level-2"><td class="toc-number">3.2</td><td class="toc-text"><a href="#GdkScrollDirection">GdkScrollDirection</a></td></tr>
@@ -26,13 +26,13 @@
      <tr class="toc-level-2"><td class="toc-number">3.6</td><td class="toc-text"><a href="#class_GdkEventKey">class GdkEventKey</a></td></tr>
              <tr class="toc-level-2"><td class="toc-number">3.7</td><td class="toc-text"><a href="#class_GdkEventButton">class GdkEventButton</a></td></tr>
                     <tr class="toc-level-2"><td class="toc-number">3.8</td><td class="toc-text"><a href="#class_GdkEventTouch">class GdkEventTouch</a></td></tr>
-                <tr class="toc-level-2"><td class="toc-number">3.9</td><td class="toc-text"><a href="#GdkEventScroll:">GdkEventScroll:</a></td></tr>
-                <tr class="toc-level-2"><td class="toc-number">3.10</td><td class="toc-text"><a href="#GdkEventMotion">GdkEventMotion</a></td></tr>
-                <tr class="toc-level-2"><td class="toc-number">3.11</td><td class="toc-text"><a href="#GdkEventExpose">GdkEventExpose</a></td></tr>
-           <tr class="toc-level-2"><td class="toc-number">3.12</td><td class="toc-text"><a href="#GdkEventCrossing">GdkEventCrossing</a></td></tr>
-               <tr class="toc-level-2"><td class="toc-number">3.13</td><td class="toc-text"><a href="#GdkEventFocus">GdkEventFocus</a></td></tr>
-      <tr class="toc-level-2"><td class="toc-number">3.14</td><td class="toc-text"><a href="#GdkEventConfigure">GdkEventConfigure</a></td></tr>
-         <tr class="toc-level-2"><td class="toc-number">3.15</td><td class="toc-text"><a href="#GdkEvent">GdkEvent</a></td></tr>
+                <tr class="toc-level-2"><td class="toc-number">3.9</td><td class="toc-text"><a href="#class_GdkEventScroll">class GdkEventScroll</a></td></tr>
+                <tr class="toc-level-2"><td class="toc-number">3.10</td><td class="toc-text"><a href="#class_GdkEventMotion">class GdkEventMotion</a></td></tr>
+                <tr class="toc-level-2"><td class="toc-number">3.11</td><td class="toc-text"><a href="#class_GdkEventExpose">class GdkEventExpose</a></td></tr>
+           <tr class="toc-level-2"><td class="toc-number">3.12</td><td class="toc-text"><a href="#class_GdkEventCrossing">class GdkEventCrossing</a></td></tr>
+               <tr class="toc-level-2"><td class="toc-number">3.13</td><td class="toc-text"><a href="#class_GdkEventFocus">class GdkEventFocus</a></td></tr>
+      <tr class="toc-level-2"><td class="toc-number">3.14</td><td class="toc-text"><a href="#class_GdkEventConfigure">class GdkEventConfigure</a></td></tr>
+         <tr class="toc-level-2"><td class="toc-number">3.15</td><td class="toc-text"><a href="#class_GdkEvent">class GdkEvent</a></td></tr>
  
 </table>
 </nav>
@@ -60,7 +60,7 @@ method handle-keypress ( :$widget, GdkEvent :$event ) {
     # key &#39;s&#39; pressed, stop process ...
   }
 }</pre>
-<h1 id="class_Gnome::Gdk::EventTypes"><a class="u" href="#___top" title="go to top of document">class Gnome::Gdk::EventTypes</a></h1>
+<h1 id="class_Gnome::Gdk3::EventTypes"><a class="u" href="#___top" title="go to top of document">class Gnome::Gdk3::EventTypes</a></h1>
 <h1 id="Enums,_Structs_and_Unions"><a class="u" href="#___top" title="go to top of document">Enums, Structs and Unions</a></h1>
 <h2 id="Enum_GdkEventType_Specifies_the_type_of_the_event."><a class="u" href="#___top" title="go to top of document">Enum GdkEventType Specifies the type of the event.</a></h2>
 <p>Do not confuse these events with the signals that GTK+ widgets emit. Although many of these events result in corresponding signals being emitted, the events are often transformed or filtered along the way.</p>
@@ -319,7 +319,7 @@ method handle-keypress ( :$widget, GdkEvent :$event ) {
 <li><p>Num $.y_root; the y coordinate of the pointer relative to the root of the screen</p>
 </li>
 </ul>
-<h2 id="GdkEventScroll:"><a class="u" href="#___top" title="go to top of document">GdkEventScroll:</a></h2>
+<h2 id="class_GdkEventScroll"><a class="u" href="#___top" title="go to top of document">class GdkEventScroll</a></h2>
 <p>Generated from button presses for the buttons 4 to 7. Wheel mice are usually configured to generate button press events for buttons 4 and 5 when the wheel is turned.</p>
 <p>Some GDK backends can also generate “smooth” scroll events, which can be recognized by the GDK_SCROLL_SMOOTH scroll direction. For these, the scroll deltas can be obtained with gdk_event_get_scroll_deltas().</p>
 <ul><li><p>UInt $.type: the type of the event (GDK_SCROLL).</p>
@@ -349,7 +349,7 @@ method handle-keypress ( :$widget, GdkEvent :$event ) {
 <li><p>Num $.delta_y: the y coordinate of the scroll delta</p>
 </li>
 </ul>
-<h2 id="GdkEventMotion"><a class="u" href="#___top" title="go to top of document">GdkEventMotion</a></h2>
+<h2 id="class_GdkEventMotion"><a class="u" href="#___top" title="go to top of document">class GdkEventMotion</a></h2>
 <p>Generated when the pointer moves.</p>
 <ul><li><p>UInt $.type: the type of the event.</p>
 </li>
@@ -376,7 +376,7 @@ method handle-keypress ( :$widget, GdkEvent :$event ) {
 <li><p>Num $.y_root: the y coordinate of the pointer relative to the root of the screen.</p>
 </li>
 </ul>
-<h2 id="GdkEventExpose"><a class="u" href="#___top" title="go to top of document">GdkEventExpose</a></h2>
+<h2 id="class_GdkEventExpose"><a class="u" href="#___top" title="go to top of document">class GdkEventExpose</a></h2>
 <p>Generated when all or part of a window becomes visible and needs to be redrawn.</p>
 <ul><li><p>UInt $.type: the type of the event (GDK_EXPOSE or GDK_DAMAGE).</p>
 </li>
@@ -392,7 +392,7 @@ method handle-keypress ( :$widget, GdkEvent :$event ) {
 <ul><li><p>Int $.count: the number of contiguous GDK_EXPOSE events following this one. The only use for this is “exposure compression”, i.e. handling all contiguous GDK_EXPOSE events in one go, though GDK performs some exposure compression so this is not normally needed.</p>
 </li>
 </ul>
-<h2 id="GdkEventCrossing"><a class="u" href="#___top" title="go to top of document">GdkEventCrossing</a></h2>
+<h2 id="class_GdkEventCrossing"><a class="u" href="#___top" title="go to top of document">class GdkEventCrossing</a></h2>
 <p>Generated when the pointer enters or leaves a window.</p>
 <ul><li><p>UInt $.type: the type of the event (GDK_ENTER_NOTIFY or GDK_LEAVE_NOTIFY).</p>
 </li>
@@ -421,7 +421,7 @@ method handle-keypress ( :$widget, GdkEvent :$event ) {
 <li><p>UInt $.state: (type GdkModifierType): a bit-mask representing the state of the modifier keys (e.g. Control, Shift and Alt) and the pointer buttons. See GdkModifierType.</p>
 </li>
 </ul>
-<h2 id="GdkEventFocus"><a class="u" href="#___top" title="go to top of document">GdkEventFocus</a></h2>
+<h2 id="class_GdkEventFocus"><a class="u" href="#___top" title="go to top of document">class GdkEventFocus</a></h2>
 <p>Describes a change of keyboard focus.</p>
 <ul><li><p>UInt $.type: the type of the event (GDK_FOCUS_CHANGE).</p>
 </li>
@@ -432,7 +432,7 @@ method handle-keypress ( :$widget, GdkEvent :$event ) {
 <li><p>Int $.in: 1 if the window has gained the keyboard focus, 0 if it has lost the focus.</p>
 </li>
 </ul>
-<h2 id="GdkEventConfigure"><a class="u" href="#___top" title="go to top of document">GdkEventConfigure</a></h2>
+<h2 id="class_GdkEventConfigure"><a class="u" href="#___top" title="go to top of document">class GdkEventConfigure</a></h2>
 <p>Generated when a window size or position has changed.</p>
 <ul><li><p>GdkEventType $.type: the type of the event (GDK_CONFIGURE).</p>
 </li>
@@ -449,7 +449,7 @@ method handle-keypress ( :$widget, GdkEvent :$event ) {
 <li><p>Int $.height: the new height of the window.</p>
 </li>
 </ul>
-<h2 id="GdkEvent"><a class="u" href="#___top" title="go to top of document">GdkEvent</a></h2>
+<h2 id="class_GdkEvent"><a class="u" href="#___top" title="go to top of document">class GdkEvent</a></h2>
 <p>The event structures contain data specific to each type of event in GDK. The type is a union of all structures explained above.</p>
 
     </div>

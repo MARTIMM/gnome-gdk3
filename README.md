@@ -10,11 +10,11 @@
 
 | Pdf from pod | Link to Gnome Developer |
 |-------|--------------|
-| Gnome::Gdk::Display | [Controls a set of GdkScreens and their associated input devices][GdkDisplay]
-| [Gnome::Gdk::EventTypes][Gnome::Gdk::EventTypes pdf] | [Device events][GdkEventTypes]
-| Gnome::Gdk::Screen | [Object representing a physical screen][GdkScreen]
-| [Gnome::Gdk::Types][Gnome::Gdk::Types pdf] |
-| Gnome::Gdk::Window | [Windows][GdkWindow]
+| Gnome::Gdk3::Display | [Controls a set of Screens and their associated input devices][GdkDisplay]
+| [Gnome::Gdk3::EventTypes][Gnome::Gdk3::EventTypes pdf] | [Device events][GdkEventTypes]
+| Gnome::Gdk3::Screen | [Object representing a physical screen][GdkScreen]
+| [Gnome::Gdk3::Types][Gnome::Gdk3::Types pdf] |
+| Gnome::Gdk3::Window | [Windows][GdkWindow]
 
 ## Release notes
 * [Release notes][changes]
@@ -31,7 +31,7 @@ Github account name: **MARTIMM**
 
 # Issues
 
-There are always some problems! If you find one, please help by filing an issue at [my github project](https://github.com/MARTIMM/perl6-gnome-gdk/issues).
+There are always some problems! If you find one, please help by filing an issue at [my github project](https://github.com/MARTIMM/perl6-gnome-gdk3/issues).
 
 # Attribution
 * The inventors of Perl6 of course and the writers of the documentation which help me out every time again and again.
@@ -48,9 +48,9 @@ There are always some problems! If you find one, please help by filing an issue 
 [GdkWindow]: https://developer.gnome.org/gdk3/stable/gdk3-Windows.html
 
 [//]: # (Pod documentation rendered with)
-[//]: # (pod-render.pl6 --pdf --g=MARTIMM/perl6-gnome-gdk lib)
+[//]: # (pod-render.pl6 --pdf --g=MARTIMM/perl6-gnome-gdk3 lib)
 
-[Gnome::Gdk::EventTypes html]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk/blob/master/doc/EventTypes.html
-[Gnome::Gdk::EventTypes pdf]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk/blob/master/doc/EventTypes.pdf
-[Gnome::Gdk::Types html]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk/blob/master/doc/Types.html
-[Gnome::Gdk::Types pdf]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk/blob/master/doc/Types.pdf
+[Gnome::Gdk3::EventTypes html]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk/blob/master/doc/EventTypes.html
+[Gnome::Gdk3::EventTypes pdf]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk/blob/master/doc/EventTypes.pdf
+[Gnome::Gdk3::Types html]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk/blob/master/doc/Types.html
+[Gnome::Gdk3::Types pdf]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk/blob/master/doc/Types.pdf
