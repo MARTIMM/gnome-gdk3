@@ -1,6 +1,6 @@
 {
   "description": "Perl6 Gnome gdk api",
-  "name": "Gnome::Gdk",
+  "name": "Gnome::Gdk3",
   "version": "0.13.2",
   "authors": [ "Marcel Timmerman"],
   "tags": [ "gnome", "gdk"],
