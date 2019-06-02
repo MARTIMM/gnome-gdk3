@@ -19,9 +19,10 @@
 ## Release notes
 * [Release notes][changes]
 
-# Installation of Gnome::Gdk3
+# Installation
+Do not install this package on its own. Instead install `Gnome::Gtk3`.
 
-`zef install Gnome::Gdk3`
+`zef install Gnome::Gtk3`
 
 
 # Author
@@ -31,7 +32,7 @@ Github account name: **MARTIMM**
 
 # Issues
 
-There are always some problems! If you find one, please help by filing an issue at [my github project](https://github.com/MARTIMM/perl6-gnome-gdk3/issues).
+There are always some problems! If you find one, please help by filing an issue at [my Gnome::Gtk3 github project][issues].
 
 # Attribution
 * The inventors of Perl6 of course and the writers of the documentation which help me out every time again and again.
@@ -41,6 +42,7 @@ There are always some problems! If you find one, please help by filing an issue 
 [//]: # (---- [refs] ----------------------------------------------------------)
 [changes]: https://github.com/MARTIMM/perl6-gnome-gdk/blob/master/CHANGES.md
 [logo]: https://github.com/MARTIMM/perl6-gnome-gdk/blob/master/doc/images/gtk-logo-100.png
+[issues]: https://github.com/MARTIMM/perl6-gnome-gtk3/issues
 
 [GdkDisplay]: https://developer.gnome.org/gdk3/stable/GdkDisplay.html
 [GdkEventTypes]: https://developer.gnome.org/gdk3/stable/gdk3-Event-Structures.html
