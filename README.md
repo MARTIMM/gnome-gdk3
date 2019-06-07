@@ -12,6 +12,8 @@
 |-------|--------------|
 | Gnome::Gdk3::Display | [Controls a set of Screens and their associated input devices][GdkDisplay]
 | [Gnome::Gdk3::EventTypes][Gnome::Gdk3::EventTypes pdf] | [Device events][GdkEventTypes]
+| Gnome::Gdk3::Keysyms |
+| Gnome::Gdk3::RGBA | [Red Green Blue and Opacity structure][GdkRGBA]
 | Gnome::Gdk3::Screen | [Object representing a physical screen][GdkScreen]
 | [Gnome::Gdk3::Types][Gnome::Gdk3::Types pdf] |
 | Gnome::Gdk3::Window | [Windows][GdkWindow]
@@ -46,6 +48,7 @@ There are always some problems! If you find one, please help by filing an issue 
 
 [GdkDisplay]: https://developer.gnome.org/gdk3/stable/GdkDisplay.html
 [GdkEventTypes]: https://developer.gnome.org/gdk3/stable/gdk3-Event-Structures.html
+[GdkRGBA]: https://developer.gnome.org/gdk3/stable/gdk3-RGBA-Colors.html
 [GdkScreen]: https://developer.gnome.org/gdk3/stable/GdkScreen.html
 [GdkWindow]: https://developer.gnome.org/gdk3/stable/gdk3-Windows.html
 

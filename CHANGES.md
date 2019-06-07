@@ -1,5 +1,8 @@
 ## Release notes
 
+* 2019-06-07 0.14.0
+  * Added RGBA structure
+
 * 2019-05-28 0.13.3
   * Updating docs
 

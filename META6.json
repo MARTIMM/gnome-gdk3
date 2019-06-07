@@ -1,7 +1,7 @@
 {
   "description": "Perl6 Gnome gdk api",
   "name": "Gnome::Gdk3",
-  "version": "0.13.3",
+  "version": "0.14.0",
   "authors": [ "Marcel Timmerman"],
   "tags": [ "gnome", "gdk"],
 
@@ -13,6 +13,7 @@
     "Gnome::Gdk3::Display": "lib/Gnome/Gdk3/Display.pm6",
     "Gnome::Gdk3::EventTypes": "lib/Gnome/Gdk3/EventTypes.pm6",
     "Gnome::Gdk3::Keysyms": "lib/Gnome/Gdk3/Keysyms.pm6",
+    "Gnome::Gdk3::RGBA": "lib/Gnome/Gdk3/RGBA.pm6",
     "Gnome::Gdk3::Screen": "lib/Gnome/Gdk3/Screen.pm6",
     "Gnome::Gdk3::Types": "lib/Gnome/Gdk3/Types.pm6",
     "Gnome::Gdk3::Window": "lib/Gnome/Gdk3/Window.pm6"
