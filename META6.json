@@ -1,5 +1,5 @@
 {
-  "description": "Perl6 Gnome gdk api",
+  "description": "Perl6 Gnome gdk api, Please install Gnome::Gtk3",
   "name": "Gnome::Gdk3",
   "version": "0.14.0",
   "authors": [ "Marcel Timmerman"],
