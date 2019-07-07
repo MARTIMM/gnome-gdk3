@@ -52,10 +52,10 @@ GdkRGBA is a convenient way to pass rgba colors around. It’s based on cairo’
 =end pod
 }}
 class GdkRGBA is repr('CStruct') is export {
-  HAS num64 $.red;
-  HAS num64 $.green;
-  HAS num64 $.blue;
-  HAS num64 $.alpha;
+  has num64 $.red;
+  has num64 $.green;
+  has num64 $.blue;
+  has num64 $.alpha;
 }
 
 #`[[[
