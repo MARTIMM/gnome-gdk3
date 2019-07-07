@@ -1,5 +1,8 @@
 ## Release notes
 
+* 2019-06-07 0.14.1
+  * Extended Gnome::Gdk3::Window
+  
 * 2019-06-07 0.14.0
   * Added RGBA structure
 
