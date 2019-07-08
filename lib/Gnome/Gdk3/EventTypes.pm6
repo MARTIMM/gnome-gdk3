@@ -15,7 +15,7 @@ use v6;
   # Register a signal handler for a window event
   $top-window.register-signal( self, 'handle-keypress', 'key-press-event');
 
-  method handle-keypress ( :$widget, GdkEvent :$event ) {
+  method handle-keypress ( :$widget, GdkEvent :handle-arg0($event) ) {
     if $event.event-any.type ~~ GDK_KEY_PRESS and
        $event.event-key.keyval eq 's' {
 
@@ -25,7 +25,7 @@ use v6;
 
 The handler signature can also be defined as
 
-  method handle-keypress ( :$widget, GdkEventKey :$event ) {
+  method handle-keypress ( :$widget, GdkEventKey :handle-arg0($event) ) {
     if $event.type ~~ GDK_KEY_PRESS and $event.keyval eq 's' {
 
       # key 's' pressed, stop process ...
