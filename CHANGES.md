@@ -1,5 +1,8 @@
 ## Release notes
 
+* 2019-06-07 0.14.3
+  * extended Window
+
 * 2019-06-07 0.14.2
   * bugfixes
 
