@@ -50,73 +50,6 @@ unit class Gnome::Gdk3::Window:auth<github:MARTIMM>;
 also is Gnome::GObject::Object;
 
 #-------------------------------------------------------------------------------
-my Bool $signals-added = False;
-#-------------------------------------------------------------------------------
-=begin pod
-=head1 Methods
-=head2 new
-
-  multi method new ( Bool :$empty! )
-
-Create a new plain object. The value doesn't have to be True nor False. The name only will suffice.
-
-  multi method new ( Gnome::GObject::Object :$widget! )
-
-Create an object using a native object from elsewhere. See also C<Gnome::GObject::Object>.
-
-  multi method new ( Str :$build-id! )
-
-Create an object using a native object from a builder. See also C<Gnome::GObject::Object>.
-
-=end pod
-
-submethod BUILD ( *%options ) {
-
-  # add signal info in the form of group<signal-name>.
-  # groups are e.g. signal, event, nativeobject etc
-  $signals-added = self.add-signal-types( $?CLASS.^name,
-    :int2<create-surface>,
-    :num2ptr2<from-embedder to-embedder>,
-    :ptr2bool2<moved-to-rect>,
-    :num2<pick-embedded-child>,
-  ) unless $signals-added;
-
-  # prevent creating wrong widgets
-  return unless self.^name eq 'Gnome::Gdk3::Window';
-
-  # process all named arguments
-  if ? %options<empty> {
-    # self.native-gobject(gdk_window_new());
-  }
-
-  elsif ? %options<widget> || %options<build-id> {
-    # provided in Gnome::GObject::Object
-  }
-
-  elsif %options.keys.elems {
-    die X::GTK::V3.new(
-      :message('Unsupported options for ' ~ self.^name ~
-               ': ' ~ %options.keys.join(', ')
-              )
-    );
-  }
-}
-
-#-------------------------------------------------------------------------------
-# no pod. user does not have to know about it.
-method fallback ( $native-sub is copy --> Callable ) {
-
-  my Callable $s;
-  try { $s = &::($native-sub); }
-  try { $s = &::("gdk_window_$native-sub"); } unless ?$s;
-
-#note "ad $native-sub: ", $s;
-  $s = callsame unless ?$s;
-
-  $s;
-}
-
-#-------------------------------------------------------------------------------
 =begin pod
 =head1 Types
 
@@ -441,7 +374,7 @@ enum GdkFullscreenMode is export (
   'GDK_FULLSCREEN_ON_ALL_MONITORS'
 );
 
-#`{{
+
 =begin pod
 =head2 class GdkWindowAttr
 
@@ -462,11 +395,11 @@ Attributes to use for a newly-created window.
 =item Int $.override_redirect: C<1> to bypass the window manager
 =item C<Gnome::Gdk3::WindowTypeHint> $.type_hint: a hint of the function of the window
 =end pod
-}}
+
 
 
 class GdkWindowAttr is export is repr('CStruct') {
-  has Str $.title;
+  has str $.title;
   has int32 $.event_mask;
   has int32 $.x;
   has int32 $.y;
@@ -476,8 +409,8 @@ class GdkWindowAttr is export is repr('CStruct') {
   has Pointer $.visual;        # Gnome::Gdk3::Visual
   has int32 $.window_type;     # enum GdkWindowType
   has Pointer $.cursor;        # Gnome::Gdk3::Cursor
-  has Str $.wmclass_name;
-  has Str $.wmclass_class;
+  has str $.wmclass_name;
+  has str $.wmclass_class;
   has int32 $.override_redirect;
   has int32 $.type_hint;
 }
@@ -571,6 +504,80 @@ class GdkGeometry is export is repr('CStruct') {
   has int32 $.win_gravity;      # GdkGravity
 }
 
+#-------------------------------------------------------------------------------
+my Bool $signals-added = False;
+#-------------------------------------------------------------------------------
+=begin pod
+=head1 Methods
+=head2 new
+
+  multi method new ( Bool :$empty! )
+
+Create a new plain object. The value doesn't have to be True nor False. The name only will suffice.
+
+  multi method new ( Gnome::GObject::Object :$widget! )
+
+Create an object using a native object from elsewhere. See also C<Gnome::GObject::Object>.
+
+  multi method new ( Str :$build-id! )
+
+Create an object using a native object from a builder. See also C<Gnome::GObject::Object>.
+
+=end pod
+
+submethod BUILD ( *%options ) {
+
+  # add signal info in the form of group<signal-name>.
+  # groups are e.g. signal, event, nativeobject etc
+  $signals-added = self.add-signal-types( $?CLASS.^name,
+    :int2<create-surface>,
+    :num2ptr2<from-embedder to-embedder>,
+    :ptr2bool2<moved-to-rect>,
+    :num2<pick-embedded-child>,
+  ) unless $signals-added;
+
+  # prevent creating wrong widgets
+  return unless self.^name eq 'Gnome::Gdk3::Window';
+
+  # process all named arguments
+  if ? %options<empty> {
+    my GdkWindowAttr $attrs .= new(
+      :title('Empty-Window'), :x(100), :y(100)
+    );
+
+    self.native-gobject(
+      gdk_window_new(
+        Any, $attrs, GDK_WA_TITLE +| GDK_WA_X +| GDK_WA_Y
+      )
+    );
+  }
+
+  elsif ? %options<widget> || %options<build-id> {
+    # provided in Gnome::GObject::Object
+  }
+
+  elsif %options.keys.elems {
+    die X::Gnome.new(
+      :message('Unsupported options for ' ~ self.^name ~
+               ': ' ~ %options.keys.join(', ')
+              )
+    );
+  }
+}
+
+#-------------------------------------------------------------------------------
+# no pod. user does not have to know about it.
+method fallback ( $native-sub is copy --> Callable ) {
+
+  my Callable $s;
+  try { $s = &::($native-sub); }
+  try { $s = &::("gdk_window_$native-sub"); } unless ?$s;
+
+#note "ad $native-sub: ", $s;
+  $s = callsame unless ?$s;
+
+  $s;
+}
 
 #-------------------------------------------------------------------------------
 =begin pod
@@ -619,13 +626,13 @@ Gets the type of the window. See C<Gnome::Gdk3::WindowType>.
 
 Returns: type of window
 
-  method gdk_window_get_window_type ( --> N-GObject )
+  method gdk_window_get_window_type ( --> GdkWindowType )
 
 
 =end pod
 
 sub gdk_window_get_window_type ( N-GObject $window )
-  returns N-GObject
+  returns int32
   is native(&gdk-lib)
   { * }
 
