@@ -400,18 +400,18 @@ Attributes to use for a newly-created window.
 
 class GdkWindowAttr is export is repr('CStruct') {
   has str $.title;
-  has int32 $.event_mask;
+  has int32 $.event_mask;         # required
   has int32 $.x;
   has int32 $.y;
-  has int32 $.width;
-  has int32 $.height;
-  has int32 $.wclass;          # enum GdkWindowWindowClass
-  has Pointer $.visual;        # Gnome::Gdk3::Visual
-  has int32 $.window_type;     # enum GdkWindowType
-  has Pointer $.cursor;        # Gnome::Gdk3::Cursor
+  has int32 $.width;              # required
+  has int32 $.height;             # required
+  has int32 $.wclass;             # required enum GdkWindowWindowClass
+  has Pointer $.visual;           #          Gnome::Gdk3::Visual
+  has int32 $.window_type;        # required enum GdkWindowType
+  has Pointer $.cursor;           #          Gnome::Gdk3::Cursor
   has str $.wmclass_name;
   has str $.wmclass_class;
-  has int32 $.override_redirect;
+  has int32 $.override_redirect;  # required
   has int32 $.type_hint;
 }
 
@@ -541,15 +541,17 @@ submethod BUILD ( *%options ) {
 
   # process all named arguments
   if ? %options<empty> {
+    # GDK_WINDOW_ROOT cannot be used because it covers the entire
+    # screen, and is created by the window system. (there can only be one!).
     my GdkWindowAttr $attrs .= new(
-      :title('Empty-Window'), :x(100), :y(100)
+      :event_mask(0), :wclass(GDK_INPUT_OUTPUT),
+      :window_type(GDK_WINDOW_TOPLEVEL), :override_redirect(0)
     );
 
-    self.native-gobject(
-      gdk_window_new(
-        Any, $attrs, GDK_WA_TITLE +| GDK_WA_X +| GDK_WA_Y
-      )
-    );
+    # No parent, no extra attributes, toplevel
+    my N-GObject $o = gdk_window_new( Any, $attrs, 0);
+
+    self.native-gobject($o);
   }
 
   elsif ? %options<widget> || %options<build-id> {
@@ -861,8 +863,9 @@ move, then resize, if you don’t use C<gdk_window_move_resize()>.)
 
 =end pod
 
-sub gdk_window_move_resize ( N-GObject $window, int32 $x, int32 $y, int32 $width, int32 $height )
-  is native(&gdk-lib)
+sub gdk_window_move_resize (
+  N-GObject $window, int32 $x, int32 $y, int32 $width, int32 $height
+) is native(&gdk-lib)
   { * }
 
 #-------------------------------------------------------------------------------
@@ -2204,6 +2207,12 @@ the 16-bit coordinates of X11.
 sub gdk_window_get_geometry ( N-GObject $window, int32 $x, int32 $y, int32 $width, int32 $height )
   is native(&gdk-lib)
   { * }
+#`{{
+sub hidden_gdk_window_get_geometry ( N-GObject $window, int32 $x, int32 $y, int32 $width, int32 $height )
+  is native(&gdk-lib)
+  is symbol('gdk_window_get_geometry')
+  { * }
+}}
 
 #-------------------------------------------------------------------------------
 =begin pod
@@ -2265,16 +2274,23 @@ received or processed.
 
 The position coordinates are relative to the window’s parent window.
 
+  method gdk_window_get_position ( --> List )
 
-  method gdk_window_get_position ( Int $x, Int $y )
-
-=item Int $x; (out) (allow-none): X coordinate of window
-=item Int $y; (out) (allow-none): Y coordinate of window
+Returned list contains 2 items
+=item Int $x; X coordinate of window
+=item Int $y; Y coordinate of window
 
 =end pod
 
-sub gdk_window_get_position ( N-GObject $window, int32 $x, int32 $y )
-  is native(&gdk-lib)
+sub gdk_window_get_position ( N-GObject $window --> List ) is inlinable {
+  _gdk_window_get_position( $window, my int32 $x, my int32 $y);
+  ( $x, $y)
+}
+
+sub _gdk_window_get_position (
+  N-GObject $window, int32 $x is rw, int32 $y is rw
+) is native(&gdk-lib)
+  is symbol('gdk_window_get_position')
   { * }
 
 #-------------------------------------------------------------------------------
@@ -2286,18 +2302,23 @@ Obtains the position of a window in root window coordinates.
 C<gdk_window_get_geometry()> which return the position of a window
 relative to its parent window.)
 
-Returns: not meaningful, ignore
+  method gdk_window_get_origin ( --> List  )
 
-  method gdk_window_get_origin ( Int $x, Int $y --> Int  )
-
+Returns a list with
 =item Int $x; (out) (allow-none): return location for X coordinate
 =item Int $y; (out) (allow-none): return location for Y coordinate
 
 =end pod
 
-sub gdk_window_get_origin ( N-GObject $window, int32 $x, int32 $y )
+sub gdk_window_get_origin ( N-GObject $window --> List ) is inlinable {
+  _gdk_window_get_origin( $window, my int32 $x, my int32 $y);
+  ( $x, $y)
+}
+
+sub _gdk_window_get_origin ( N-GObject $window, int32 $x is rw, int32 $y is rw )
   returns int32
   is native(&gdk-lib)
+  is symbol('gdk_window_get_origin')
   { * }
 
 #-------------------------------------------------------------------------------
@@ -2475,24 +2496,38 @@ corner of I<window>.
 
 Use C<gdk_window_get_device_position_double()> if you need subpixel precision.
 
-Returns: (nullable) (transfer none): The window underneath I<device>
-(as with C<gdk_device_get_window_at_position()>), or C<Any> if the
-window is not known to GDK.
-
+Returns: (nullable) (transfer none):
 Since: 3.0
 
-  method gdk_window_get_device_position ( N-GObject $device, Int $x, Int $y, GdkModifierType $mask --> N-GObject  )
+  method gdk_window_get_device_position ( N-GObject $device --> List  )
 
 =item N-GObject $device; pointer C<Gnome::Gdk3::Device> to query to.
-=item Int $x; (out) (allow-none): return location for the X coordinate of I<device>, or C<Any>.
-=item Int $y; (out) (allow-none): return location for the Y coordinate of I<device>, or C<Any>.
-=item GdkModifierType $mask; (out) (allow-none): return location for the modifier mask, or C<Any>.
+
+Returns a List with items
+=item N-GObject $dev-window; The window underneath I<device> (as with C<gdk_device_get_window_at_position()>), or C<Any> if the window is not known to GDK.
+=item Int $x; return location for the X coordinate of I<device>, or C<Any>.
+=item Int $y; return location for the Y coordinate of I<device>, or C<Any>.
+=item GdkModifierType $mask; return location for the modifier mask, or C<Any>.
 
 =end pod
 
-sub gdk_window_get_device_position ( N-GObject $window, N-GObject $device, int32 $x, int32 $y, int32 $mask )
+sub gdk_window_get_device_position (
+  N-GObject $window, N-GObject $device --> List
+) is inlinable {
+  my N-GObject $dev-window = _gdk_window_get_device_position (
+    $window, $device, my int32 $x, my int32 $y, my int32 $mask
+  );
+
+  ( $dev-window, $x, $y, $mask)
+}
+
+sub _gdk_window_get_device_position (
+  N-GObject $window, N-GObject $device, int32 $x is rw,
+  int32 $y is rw, int32 $mask is rw
+)
   returns N-GObject
   is native(&gdk-lib)
+  is symbol('gdk_window_get_device_position')
   { * }
 
 #-------------------------------------------------------------------------------
@@ -2503,24 +2538,36 @@ Obtains the current device position in doubles and modifier state.
 The position is given in coordinates relative to the upper left
 corner of I<window>.
 
-Returns: (nullable) (transfer none): The window underneath I<device>
-(as with C<gdk_device_get_window_at_position()>), or C<Any> if the
-window is not known to GDK.
-
 Since: 3.10
 
-  method gdk_window_get_device_position_double ( N-GObject $device, Num $x, Num $y, GdkModifierType $mask --> N-GObject  )
+  method gdk_window_get_device_position_double (
+    N-GObject $device --> List
+  )
 
 =item N-GObject $device; pointer C<Gnome::Gdk3::Device> to query to.
+
+Returns a List with items
+=item N-GObject $dev-window; The window underneath I<device> (as with C<gdk_device_get_window_at_position()>), or C<Any> if the window is not known to GDK.
 =item Num $x; (out) (allow-none): return location for the X coordinate of I<device>, or C<Any>.
 =item Num $y; (out) (allow-none): return location for the Y coordinate of I<device>, or C<Any>.
 =item GdkModifierType $mask; (out) (allow-none): return location for the modifier mask, or C<Any>.
 
 =end pod
 
-sub gdk_window_get_device_position_double ( N-GObject $window, N-GObject $device, num64 $x, num64 $y, int32 $mask )
+sub gdk_window_get_device_position_double (
+  N-GObject $window, N-GObject $device --> List
+) is inlinable {
+  my N-GObject $dev-window = _gdk_window_get_device_position (
+    $window, $device, my num64 $x, my num64 $y, my int32 $mask
+  );
+
+  ( $dev-window, $x, $y, $mask)
+}
+
+sub _gdk_window_get_device_position_double ( N-GObject $window, N-GObject $device, num64 $x, num64 $y, int32 $mask )
   returns N-GObject
   is native(&gdk-lib)
+  is symbol('gdk_window_get_device_position_double')
   { * }
 
 #-------------------------------------------------------------------------------
@@ -2542,7 +2589,6 @@ there are offscreen windows in the hierarchy.
 Returns: (transfer none): parent of I<window>
 
   method gdk_window_get_parent ( --> N-GObject  )
-
 
 =end pod
 
