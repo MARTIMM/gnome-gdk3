@@ -2368,17 +2368,33 @@ See also: C<gdk_window_coords_from_parent()>
 
 Since: 2.22
 
-  method gdk_window_coords_to_parent ( Num $x, Num $y, Num $parent_x, Num $parent_y )
+  method gdk_window_coords_to_parent ( Num $x, Num $y --> List )
 
 =item Num $x; X coordinate in child’s coordinate system
 =item Num $y; Y coordinate in child’s coordinate system
+
+Returns a list with items
 =item Num $parent_x; (out) (allow-none): return location for X coordinate in parent’s coordinate system, or C<Any>
 =item Num $parent_y; (out) (allow-none): return location for Y coordinate in parent’s coordinate system, or C<Any>
 
 =end pod
 
-sub gdk_window_coords_to_parent ( N-GObject $window, num64 $x, num64 $y, num64 $parent_x, num64 $parent_y )
+sub gdk_window_coords_to_parent (
+  N-GObject $window, num64 $x, num64 $y --> List
+) is inlinable {
+  _gdk_window_coords_to_parent(
+    $window, $x, $y, my num64 $parent-x, my num64 $parent-y
+  );
+
+  ( $parent-x, $parent-y)
+}
+
+sub _gdk_window_coords_to_parent (
+  N-GObject $window, num64 $x, num64 $y,
+  num64 $parent_x is rw, num64 $parent_y is rw
+)
   is native(&gdk-lib)
+  is symbol('gdk_window_coords_to_parent')
   { * }
 
 #-------------------------------------------------------------------------------
@@ -2424,16 +2440,24 @@ sub gdk_window_coords_from_parent ( N-GObject $window, num64 $parent_x, num64 $p
 Obtains the top-left corner of the window manager frame in root
 window coordinates.
 
+  method gdk_window_get_root_origin ( --> List )
 
-  method gdk_window_get_root_origin ( Int $x, Int $y )
-
+Returns a list with
 =item Int $x; (out): return location for X position of window frame
 =item Int $y; (out): return location for Y position of window frame
 
 =end pod
 
-sub gdk_window_get_root_origin ( N-GObject $window, int32 $x, int32 $y )
+sub gdk_window_get_root_origin ( N-GObject $window --> List ) {
+  _gdk_window_get_root_origin( $window, my int32 $x, my int32 $y);
+  ( $x, $y)
+}
+
+sub _gdk_window_get_root_origin (
+  N-GObject $window, int32 $x is rw, int32 $y is rw
+)
   is native(&gdk-lib)
+  is symbol('gdk_window_get_root_origin')
   { * }
 
 #-------------------------------------------------------------------------------
