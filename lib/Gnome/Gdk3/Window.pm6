@@ -2195,24 +2195,30 @@ the X server and because these functions support the full 32-bit
 coordinate space, whereas C<gdk_window_get_geometry()> is restricted to
 the 16-bit coordinates of X11.
 
-  method gdk_window_get_geometry ( Int $x, Int $y, Int $width, Int $height )
+  method gdk_window_get_geometry ( --> List )
 
-=item Int $x; (out) (allow-none): return location for X coordinate of window (relative to its parent)
-=item Int $y; (out) (allow-none): return location for Y coordinate of window (relative to its parent)
-=item Int $width; (out) (allow-none): return location for width of window
-=item Int $height; (out) (allow-none): return location for height of window
+Returns a List with
+=item Int $x; return X coordinate of window (relative to its parent)
+=item Int $y; return Y coordinate of window (relative to its parent)
+=item Int $width; return width of window
+=item Int $height; return height of window
 
 =end pod
 
-sub gdk_window_get_geometry ( N-GObject $window, int32 $x, int32 $y, int32 $width, int32 $height )
-  is native(&gdk-lib)
-  { * }
-#`{{
-sub hidden_gdk_window_get_geometry ( N-GObject $window, int32 $x, int32 $y, int32 $width, int32 $height )
-  is native(&gdk-lib)
+sub gdk_window_get_geometry ( N-GObject $window --> List ) is inlinable {
+  _gdk_window_get_geometry(
+    $window, my int32 $x, my int32 $y, my int32 $width, my int32 $height
+  );
+
+  ( $x, $y, $width, $height)
+}
+
+sub _gdk_window_get_geometry (
+  N-GObject $window, int32 $x is rw, int32 $y is rw,
+  int32 $width is rw, int32 $height is rw
+) is native(&gdk-lib)
   is symbol('gdk_window_get_geometry')
   { * }
-}}
 
 #-------------------------------------------------------------------------------
 =begin pod
@@ -2420,17 +2426,32 @@ See also: C<gdk_window_coords_to_parent()>
 
 Since: 2.22
 
-  method gdk_window_coords_from_parent ( Num $parent_x, Num $parent_y, Num $x, Num $y )
+  method gdk_window_coords_from_parent ( Num $parent_x, Num $parent_y --> List )
 
 =item Num $parent_x; X coordinate in parent’s coordinate system
 =item Num $parent_y; Y coordinate in parent’s coordinate system
-=item Num $x; (out) (allow-none): return location for X coordinate in child’s coordinate system
-=item Num $y; (out) (allow-none): return location for Y coordinate in child’s coordinate system
+
+Returns a List with
+=item Num $x; return X coordinate in child’s coordinate system
+=item Num $y; return Y coordinate in child’s coordinate system
 
 =end pod
 
-sub gdk_window_coords_from_parent ( N-GObject $window, num64 $parent_x, num64 $parent_y, num64 $x, num64 $y )
-  is native(&gdk-lib)
+sub gdk_window_coords_from_parent (
+  N-GObject $window, num64 $parent_x, num64 $parent_y
+) is inlinable {
+  _gdk_window_coords_from_parent(
+    $window, $parent_x, $parent_y, my num64 $x, my num64 $y
+  );
+
+  ( $x, $y)
+}
+
+sub _gdk_window_coords_from_parent (
+  N-GObject $window, num64 $parent_x, num64 $parent_y,
+  num64 $x is rw, num64 $y is rw
+) is native(&gdk-lib)
+  is symbol('gdk_window_coords_from_parent')
   { * }
 
 #-------------------------------------------------------------------------------
@@ -2443,12 +2464,12 @@ window coordinates.
   method gdk_window_get_root_origin ( --> List )
 
 Returns a list with
-=item Int $x; (out): return location for X position of window frame
-=item Int $y; (out): return location for Y position of window frame
+=item Int $x; return X position of window frame
+=item Int $y; return Y position of window frame
 
 =end pod
 
-sub gdk_window_get_root_origin ( N-GObject $window --> List ) {
+sub gdk_window_get_root_origin ( N-GObject $window --> List ) is inlinable {
   _gdk_window_get_root_origin( $window, my int32 $x, my int32 $y);
   ( $x, $y)
 }
@@ -2529,9 +2550,9 @@ Since: 3.0
 
 Returns a List with items
 =item N-GObject $dev-window; The window underneath I<device> (as with C<gdk_device_get_window_at_position()>), or C<Any> if the window is not known to GDK.
-=item Int $x; return location for the X coordinate of I<device>, or C<Any>.
-=item Int $y; return location for the Y coordinate of I<device>, or C<Any>.
-=item GdkModifierType $mask; return location for the modifier mask, or C<Any>.
+=item Int $x; return the X coordinate of I<device>, or C<Any>.
+=item Int $y; return the Y coordinate of I<device>, or C<Any>.
+=item GdkModifierType $mask; return the modifier mask, or C<Any>.
 
 =end pod
 
@@ -2572,9 +2593,9 @@ Since: 3.10
 
 Returns a List with items
 =item N-GObject $dev-window; The window underneath I<device> (as with C<gdk_device_get_window_at_position()>), or C<Any> if the window is not known to GDK.
-=item Num $x; (out) (allow-none): return location for the X coordinate of I<device>, or C<Any>.
-=item Num $y; (out) (allow-none): return location for the Y coordinate of I<device>, or C<Any>.
-=item GdkModifierType $mask; (out) (allow-none): return location for the modifier mask, or C<Any>.
+=item Num $x; return the X coordinate of I<device>, or C<Any>.
+=item Num $y; return the Y coordinate of I<device>, or C<Any>.
+=item GdkModifierType $mask; return the modifier mask, or C<Any>.
 
 =end pod
 
@@ -2588,8 +2609,10 @@ sub gdk_window_get_device_position_double (
   ( $dev-window, $x, $y, $mask)
 }
 
-sub _gdk_window_get_device_position_double ( N-GObject $window, N-GObject $device, num64 $x, num64 $y, int32 $mask )
-  returns N-GObject
+sub _gdk_window_get_device_position_double (
+  N-GObject $window, N-GObject $device,
+  num64 $x is rw, num64 $y is rw, int32 $mask is rw
+) returns N-GObject
   is native(&gdk-lib)
   is symbol('gdk_window_get_device_position_double')
   { * }
@@ -3829,19 +3852,40 @@ sub gdk_window_thaw_updates ( N-GObject $window )
 Constrains a desired width and height according to a
 set of geometry hints (such as minimum and maximum size).
 
-  method gdk_window_constrain_size ( GdkGeometry $geometry, GdkWindowHints $flags, Int $width, Int $height, Int $new_width, Int $new_height )
+  method gdk_window_constrain_size (
+    GdkGeometry $geometry, GdkWindowHints $flags, Int $width, Int $height
+    --> List
+  )
 
 =item GdkGeometry $geometry; a C<Gnome::Gdk3::Geometry> structure
 =item GdkWindowHints $flags; a mask indicating what portions of I<geometry> are set
 =item Int $width; desired width of window
 =item Int $height; desired height of the window
-=item Int $new_width; (out): location to store resulting width
-=item Int $new_height; (out): location to store resulting height
+
+Returns a List with
+=item Int $new_width; resulting width
+=item Int $new_height; resulting height
 
 =end pod
 
-sub gdk_window_constrain_size ( GdkGeometry $geometry, int32 $flags, int32 $width, int32 $height, int32 $new_width, int32 $new_height )
-  is native(&gdk-lib)
+sub gdk_window_constrain_size (
+  N-GObject $window, GdkGeometry $geometry,
+  int32 $flags, int32 $width, int32 $height
+  --> List
+) is inlinable {
+  _gdk_window_constrain_size(
+    $geometry, $flags, $width, $height,
+    my int32 $new_width, my int32 $new_height
+  );
+
+  ( $new_width, $new_height)
+}
+
+sub _gdk_window_constrain_size (
+  GdkGeometry $geometry, int32 $flags, int32 $width, int32 $height, int32
+  $new_width is rw, int32 $new_height is rw
+) is native(&gdk-lib)
+  is symbol('gdk_window_constrain_size')
   { * }
 
 #-------------------------------------------------------------------------------
@@ -4208,9 +4252,16 @@ sub gdk_window_create_gl_context ( N-GObject $window, N-GObject $error )
 =begin pod
 =head1 List of deprecated (not implemented!) methods
 
-=head2 Since 3.0.
+=head2 Since 3.0
 =head3 method gdk_window_at_pointer ( Int $win_x, Int $win_y --> N-GObject  )
 =head3 method gdk_window_get_pointer ( Int $x, Int $y, GdkModifierType $mask --> N-GObject  )
+
+=head2 Since 3.4
+=head3 method gdk_window_set_background ( GdkColor $color )
+
+=head2 Since 3.8
+=head3 method gdk_window_enable_synchronized_configure ( )
+=head3 method gdk_window_configure_finished ( )
 
 =head2 Since 3.14
 =head3 method gdk_window_flush ( )
@@ -4229,18 +4280,9 @@ sub gdk_window_create_gl_context ( N-GObject $window, N-GObject $error )
 =head3 method gdk_window_process_all_updates ( )
 =head3 method gdk_window_process_updates ( Int $update_children )
 =head3 method gdk_window_set_debug_updates ( Int $setting )
-
-=head2 Since 3.22.
 =head3 method gdk_window_begin_paint_rect ( N-GObject $rectangle )
 =head3 method gdk_window_begin_paint_region ( cairo_region_t $region )
 =head3 method gdk_window_end_paint ( )
-
-=head2 Since 3.4
-=head3 method gdk_window_set_background ( GdkColor $color )
-
-=head2 Since 3.8
-=head3 method gdk_window_enable_synchronized_configure ( )
-=head3 method gdk_window_configure_finished ( )
 =end pod
 #-------------------------------------------------------------------------------
 =begin pod
