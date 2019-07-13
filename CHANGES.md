@@ -1,5 +1,8 @@
 ## Release notes
 
+* 2019-06-07 0.14.4
+  * modified multiple return values of several native subs into a List.
+
 * 2019-06-07 0.14.3
   * extended Window
 
