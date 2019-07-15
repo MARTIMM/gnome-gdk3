@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>Gnome::Gdk3::EventTypes</title>
+        <title>Gnome::Gdk3::Events</title>
         <meta charset="UTF-8" />
   <link type="text/css" rel="stylesheet" href="file:///mnt/Data/opt/Perl6/rakudo/install/share/perl6/site/resources/8E2223EC8A82AFADF6C944FF8969408E59014865.css">
         
@@ -10,13 +10,13 @@
  <body class="pod" onload="prettyPrint()">
     <div id="___top"></div>
     
-    <div class='title'><img src='file:///mnt/Data/opt/Perl6/rakudo/install/share/perl6/site/resources/0B7FF4E498A5251B3DC3E867D243E1F3A497ABA3.svg' align='left' />Gnome::Gdk3::EventTypes</div>
+    <div class='title'><img src='file:///mnt/Data/opt/Perl6/rakudo/install/share/perl6/site/resources/0B7FF4E498A5251B3DC3E867D243E1F3A497ABA3.svg' align='left' />Gnome::Gdk3::Events</div>
     <p class='subtitle'>Event Structures — Data structures specific to each type of event</p>
     <nav class="indexgroup">
 <table id="TOC">
 <caption><h2 id="TOC_Title">Table of Contents</h2></caption>
   <tr class="toc-level-1"><td class="toc-number">1</td><td class="toc-text"><a href="#Synopsis">Synopsis</a></td></tr>
-    <tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#class_Gnome::Gdk3::EventTypes">class Gnome::Gdk3::EventTypes</a></td></tr>
+    <tr class="toc-level-1"><td class="toc-number">2</td><td class="toc-text"><a href="#class_Gnome::Gdk3::Events">class Gnome::Gdk3::Events</a></td></tr>
  <tr class="toc-level-1"><td class="toc-number">3</td><td class="toc-text"><a href="#Enums,_Structs_and_Unions">Enums, Structs and Unions</a></td></tr>
  <tr class="toc-level-2"><td class="toc-number">3.1</td><td class="toc-text"><a href="#Enum_GdkEventType_Specifies_the_type_of_the_event.">Enum GdkEventType Specifies the type of the event.</a></td></tr>
                                                       <tr class="toc-level-2"><td class="toc-number">3.2</td><td class="toc-text"><a href="#GdkScrollDirection">GdkScrollDirection</a></td></tr>
@@ -60,7 +60,7 @@ method handle-keypress ( :$widget, GdkEvent :$event ) {
     # key &#39;s&#39; pressed, stop process ...
   }
 }</pre>
-<h1 id="class_Gnome::Gdk3::EventTypes"><a class="u" href="#___top" title="go to top of document">class Gnome::Gdk3::EventTypes</a></h1>
+<h1 id="class_Gnome::Gdk3::Events"><a class="u" href="#___top" title="go to top of document">class Gnome::Gdk3::Events</a></h1>
 <h1 id="Enums,_Structs_and_Unions"><a class="u" href="#___top" title="go to top of document">Enums, Structs and Unions</a></h1>
 <h2 id="Enum_GdkEventType_Specifies_the_type_of_the_event."><a class="u" href="#___top" title="go to top of document">Enum GdkEventType Specifies the type of the event.</a></h2>
 <p>Do not confuse these events with the signals that GTK+ widgets emit. Although many of these events result in corresponding signals being emitted, the events are often transformed or filtered along the way.</p>
