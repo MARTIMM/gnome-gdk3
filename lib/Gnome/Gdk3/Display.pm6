@@ -28,7 +28,7 @@ submethod BUILD ( *%options ) {
   return unless self.^name eq 'Gnome::Gdk3::Display';
 
   if ? %options<default> {
-    note "no: ", self.native-gobject(gdk_display_get_default()).defined;
+    self.native-gobject(gdk_display_get_default()).defined;
   }
 
   elsif ? %options<open> {
