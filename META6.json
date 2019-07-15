@@ -1,7 +1,7 @@
 {
   "description": "Perl6 Gnome gdk api, Please install Gnome::Gtk3",
   "name": "Gnome::Gdk3",
-  "version": "0.14.4",
+  "version": "0.14.5",
   "authors": [ "Marcel Timmerman"],
   "tags": [ "gnome", "gdk"],
 
@@ -11,7 +11,7 @@
   "provides": {
     "Gnome::Gdk3::Device": "lib/Gnome/Gdk3/Device.pm6",
     "Gnome::Gdk3::Display": "lib/Gnome/Gdk3/Display.pm6",
-    "Gnome::Gdk3::EventTypes": "lib/Gnome/Gdk3/EventTypes.pm6",
+    "Gnome::Gdk3::Events": "lib/Gnome/Gdk3/Events.pm6",
     "Gnome::Gdk3::Keysyms": "lib/Gnome/Gdk3/Keysyms.pm6",
     "Gnome::Gdk3::RGBA": "lib/Gnome/Gdk3/RGBA.pm6",
     "Gnome::Gdk3::Screen": "lib/Gnome/Gdk3/Screen.pm6",

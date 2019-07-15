@@ -11,7 +11,7 @@
 | Pdf from pod | Link to Gnome Developer |
 |-------|--------------|
 | Gnome::Gdk3::Display | [Controls a set of Screens and their associated input devices][GdkDisplay]
-| [Gnome::Gdk3::EventTypes][Gnome::Gdk3::EventTypes pdf] | [Device events][GdkEventTypes]
+| [Gnome::Gdk3::Events][Gnome::Gdk3::Events pdf] | [Device events][GdkEventTypes]
 | Gnome::Gdk3::Keysyms |
 | Gnome::Gdk3::RGBA | [Red Green Blue and Opacity structure][GdkRGBA]
 | Gnome::Gdk3::Screen | [Object representing a physical screen][GdkScreen]
@@ -55,7 +55,7 @@ There are always some problems! If you find one, please help by filing an issue 
 [//]: # (Pod documentation rendered with)
 [//]: # (pod-render.pl6 --pdf --g=MARTIMM/perl6-gnome-gdk3 lib)
 
-[Gnome::Gdk3::EventTypes html]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk3/blob/master/doc/EventTypes.html
-[Gnome::Gdk3::EventTypes pdf]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk3/blob/master/doc/EventTypes.pdf
+[Gnome::Gdk3::Events html]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk3/blob/master/doc/EventTypes.html
+[Gnome::Gdk3::Events pdf]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk3/blob/master/doc/EventTypes.pdf
 [Gnome::Gdk3::Types html]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk3/blob/master/doc/Types.html
 [Gnome::Gdk3::Types pdf]: https://nbviewer.jupyter.org/github/MARTIMM/perl6-gnome-gdk3/blob/master/doc/Types.pdf
