@@ -9,17 +9,6 @@ use Gnome::Gdk3::Window;
 #use Gnome::N::X;
 #Gnome::N::debug(:on);
 
-
-#`{{
-use Gnome::N::NativeLib;
-use Gnome::N::N-GObject;
-#use Gnome::GObject::Object;
-sub gdk_window_get_position (
-  N-GObject $window, int32 $x is rw, int32 $y is rw
-) is native(&gdk-lib)
-  { * }
-}}
-
 #-------------------------------------------------------------------------------
 subtest 'ISA test', {
   my Gnome::Gdk3::Window $window .= new(:empty);

@@ -517,15 +517,16 @@ Create a new plain object. The value doesn't have to be True nor False. The name
 
   multi method new ( Gnome::GObject::Object :$widget! )
 
-Create an object using a native object from elsewhere. See also C<Gnome::GObject::Object>.
+Create an object using a native object from elsewhere. See also C<Gnome::Gtk3::Widget>.
 
   multi method new ( Str :$build-id! )
 
-Create an object using a native object from a builder. See also C<Gnome::GObject::Object>.
+Create an object using a native object from a builder. See also C<Gnome::Gtk3::Widget>.
 
 =end pod
 
 submethod BUILD ( *%options ) {
+note "Gdk Window build";
 
   # add signal info in the form of group<signal-name>.
   # groups are e.g. signal, event, nativeobject etc
@@ -4288,7 +4289,7 @@ sub gdk_window_create_gl_context ( N-GObject $window, N-GObject $error )
 =begin pod
 =head1 Signals
 
-Register any signal as follows. See also C<Gnome::GObject::Object>.
+Register any signal as follows. See also C<Gnome::Gtk3::Widget>.
 
   my Bool $is-registered = $my-widget.register-signal (
     $handler-object, $handler-name, $signal-name,
