@@ -104,12 +104,7 @@ enum GdkWindowType is export (
 =begin pod
 =head2 enum GdkWindowAttributesType
 
-Used to indicate which fields in the C<Gnome::Gdk3::WindowAttr> struct should be honored.
-For example, if you filled in the “cursor” and “x” fields of C<Gnome::Gdk3::WindowAttr>,
-pass “I<GDK_WA_X> | I<GDK_WA_CURSOR>” to C<gdk_window_new()>. Fields in
-C<Gnome::Gdk3::WindowAttr> not covered by a bit in this enum are required; for example,
-the I<width>/I<height>, I<wclass>, and I<window_type> fields are required, they have
-no corresponding flag in C<Gnome::Gdk3::WindowAttributesType>.
+Used to indicate which fields in the C<Gnome::Gdk3::WindowAttr> struct should be honored. For example, if you filled in the “cursor” and “x” fields of C<Gnome::Gdk3::WindowAttr>, pass “I<GDK_WA_X> \| I<GDK_WA_CURSOR>” to C<gdk_window_new()>. Fields in C<Gnome::Gdk3::WindowAttr> not covered by a bit in this enum are required; for example, the I<width>/I<height>, I<wclass>, and I<window_type> fields are required, they have no corresponding flag in C<Gnome::Gdk3::WindowAttributesType>.
 
 
 =item GDK_WA_TITLE: Honor the title field
@@ -517,11 +512,11 @@ Create a new plain object. The value doesn't have to be True nor False. The name
 
   multi method new ( Gnome::GObject::Object :$widget! )
 
-Create an object using a native object from elsewhere. See also C<Gnome::Gtk3::Widget>.
+Create an object using a native object from elsewhere. See also C<Gnome::GObject::Object>.
 
   multi method new ( Str :$build-id! )
 
-Create an object using a native object from a builder. See also C<Gnome::Gtk3::Widget>.
+Create an object using a native object from a builder. See also C<Gnome::GObject::Object>.
 
 =end pod
 
@@ -4289,7 +4284,7 @@ sub gdk_window_create_gl_context ( N-GObject $window, N-GObject $error )
 =begin pod
 =head1 Signals
 
-Register any signal as follows. See also C<Gnome::Gtk3::Widget>.
+Register any signal as follows. See also C<Gnome::GObject::Object>.
 
   my Bool $is-registered = $my-widget.register-signal (
     $handler-object, $handler-name, $signal-name,

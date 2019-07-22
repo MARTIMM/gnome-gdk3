@@ -75,11 +75,11 @@ Create a new object.
 
   multi method new ( Gnome::GObject::Object :$widget! )
 
-Create an object using a native object from elsewhere. See also C<Gnome::Gtk3::Widget>.
+Create an object using a native object from elsewhere. See also C<Gnome::GObject::Object>.
 
   multi method new ( Str :$build-id! )
 
-Create an object using a native object from a builder. See also C<Gnome::Gtk3::Widget>.
+Create an object using a native object from a builder. See also C<Gnome::GObject::Object>.
 
 =end pod
 
@@ -391,7 +391,7 @@ sub gdk_rgba_to_string (  N-GObject $rgba )
 =begin pod
 =head1 Signals
 
-Register any signal as follows. See also C<Gnome::Gtk3::Widget>.
+Register any signal as follows. See also C<Gnome::GObject::Object>.
 
   my Bool $is-registered = $my-widget.register-signal (
     $handler-object, $handler-name, $signal-name,

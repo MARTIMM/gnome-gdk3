@@ -1342,11 +1342,11 @@ Create a new event object. When successful, the object must be freed explicitly 
 
   multi method new ( Gnome::GObject::Object :$widget! )
 
-Create an object using a native object from elsewhere. See also C<Gnome::Gtk3::Widget>.
+Create an object using a native object from elsewhere. See also C<Gnome::GObject::Object>.
 
   multi method new ( Str :$build-id! )
 
-Create an object using a native object from a builder. See also C<Gnome::Gtk3::Widget>.
+Create an object using a native object from a builder. See also C<Gnome::GObject::Object>.
 
 =end pod
 
