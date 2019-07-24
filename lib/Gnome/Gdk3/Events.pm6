@@ -25,7 +25,7 @@ In GTK+ applications the events are handled automatically in C<gtk_main_do_event
   # ... etcetera ...
 
   # Define a handler method
-  method handle-keypress ( :$widget, GdkEvent :handle-arg0($event) ) {
+  method handle-keypress ( :$widget, GdkEvent :handler-arg0($event) ) {
     if $event.event-any.type ~~ GDK_KEY_PRESS {
       my GdkEventKey $event-key = $event;
       if $event.event-key.keyval eq 's' {
@@ -39,7 +39,7 @@ In GTK+ applications the events are handled automatically in C<gtk_main_do_event
 
 If the handler handles only one event type, the method can also be defined as
 
-  method handle-keypress ( :$widget, GdkEventKey :handle-arg0($event-key) ) {
+  method handle-keypress ( :$widget, GdkEventKey :handler-arg0($event-key) ) {
     if $event-key.type ~~ GDK_KEY_PRESS and $event-key.keyval eq 's' {
       # key 's' pressed, stop process ...
     }
@@ -1274,7 +1274,7 @@ A C<GdkEvent> contains a union of all of the event types, and allows access to t
 
 The event type is always the first field in all of the event types, and can always be accessed with the following code, no matter what type of event it is:
 
-  method my-handler ( GdkEvent :handle-arg0($event) ) {
+  method my-handler ( GdkEvent :handler-arg0($event) ) {
     if $event.type ~~ GDK_BUTTON_PRESS {
       my GdkEventButton $event-button = $event;
       ...
@@ -2784,22 +2784,3 @@ class GdkEvent is repr('CUnion') is export {
   HAS GdkEventFocus $.event-focus;
   HAS GdkEventConfigure $.event-configure;
 }
-
-#-------------------------------------------------------------------------------
-# No need to define subs because all can be read from structures above.
-#`{{
-
-=begin pod
-=head1 Methods
-
-=head2 [gdk_event_] get_button
-
-  method gdk_event_get_button ( uint $button is rw --> Int )
-
-Extract the button number from an event.
-=end pod
-sub gdk_event_get_button ( GdkEvent $event, uint $button is rw )
-  returns int32
-  is native(&gobject-lib)
-  { * }
-}}
