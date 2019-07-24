@@ -1,5 +1,8 @@
 ## Release notes
 
+* 2019-07-15 0.14.6
+  * small pod doc changes
+
 * 2019-07-15 0.14.5
   * Extended EventTypes and renamed to Events.
 
