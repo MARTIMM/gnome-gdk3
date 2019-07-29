@@ -5,10 +5,6 @@ use Test;
 use Gnome::N::N-GObject;
 use Gnome::Gdk3::Display;
 
-#TODO auto init
-#use Gnome::Gtk3::Main;
-#my Gnome::Gtk3::Main $m .= new;
-
 #-------------------------------------------------------------------------------
 subtest 'Manage display', {
 #  X::Gnome.debug(:on);

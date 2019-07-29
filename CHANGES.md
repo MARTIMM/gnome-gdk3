@@ -1,5 +1,8 @@
 ## Release notes
 
+* 2019-07-29 0.14.7
+  * Bug fix; unneeded `use Gnome::Gtk3::Main` in some of the tests. This was needed when there was no automatic init and the test needed to do that.
+
 * 2019-07-15 0.14.6
   * small pod doc changes
 

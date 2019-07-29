@@ -6,10 +6,6 @@ use Gnome::GObject::Object;
 use Gnome::Gdk3::Display;
 use Gnome::Gdk3::Screen;
 
-#TODO auto init
-use Gnome::Gtk3::Main;
-my Gnome::Gtk3::Main $m .= new;
-
 #-------------------------------------------------------------------------------
 subtest 'Manage display', {
   my Gnome::Gdk3::Screen $screen;
