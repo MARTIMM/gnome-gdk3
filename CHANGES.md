@@ -1,5 +1,9 @@
 ## Release notes
 
+* 2019-07-31 0.14.9 sic
+* 2019-07-31 0.14.8
+  * Packaging error. Had to repackage with newer version.
+
 * 2019-07-29 0.14.7
   * Bug fix; unneeded `use Gnome::Gtk3::Main` in some of the tests. This was needed when there was no automatic init and the test needed to do that.
 
