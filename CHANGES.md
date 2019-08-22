@@ -1,5 +1,7 @@
 ## Release notes
 
+* 2019-08-22 0.14.10
+  * All fallback() method renamed to \_fallback()
 * 2019-07-31 0.14.9 sic
 * 2019-07-31 0.14.8
   * Packaging error. Had to repackage with newer version.
