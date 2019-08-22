@@ -3105,7 +3105,7 @@ sub gdk_window_set_functions ( N-GObject $window, int32 $functions )
 
 Create a new surface that is as compatible as possible with the
 given I<window>. For example the new surface will have the same
-_fallback resolution and font options as I<window>. Generally, the new
+fallback resolution and font options as I<window>. Generally, the new
 surface will also use the same backend as I<window>, unless that is
 not possible for some reason. The type of the returned surface may
 be examined with C<cairo_surface_get_type()>.
@@ -3630,7 +3630,7 @@ You might use this function to implement a “window resize grip,” for
 example; in fact C<Gnome::Gtk3::Statusbar> uses it. The function works best
 with window managers that support the
 [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
-but has a _fallback implementation for other window managers.
+but has a fallback implementation for other window managers.
 
 Since: 3.4
 
@@ -3680,7 +3680,7 @@ Begins a window move operation (for a toplevel window).
 You might use this function to implement a “window move grip,” for
 example. The function works best with window managers that support the
 [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
-but has a _fallback implementation for other window managers.
+but has a fallback implementation for other window managers.
 
 Since: 3.4
 
