@@ -151,10 +151,10 @@ method CALL-ME ( N-GObject $widget? --> N-GObject ) {
 # no pod. user does not have to know about it.
 #
 # Fallback method to find the native subs which then can be called as if it
-# were a method. Each class must provide their own 'fallback' method which,
-# when nothing found, must call the parents fallback with 'callsame'.
+# were a method. Each class must provide their own '_fallback' method which,
+# when nothing found, must call the parents _fallback with 'callsame'.
 # The subs in some class all start with some prefix which can be left out too
-# provided that the fallback functions must also test with an added prefix.
+# provided that the _fallback functions must also test with an added prefix.
 # So e.g. a sub 'gtk_label_get_text' defined in class GtlLabel can be called
 # like '$label.gtk_label_get_text()' or '$label.get_text()'. As an extra
 # feature dashes can be used instead of underscores, so '$label.get-text()'
@@ -177,9 +177,9 @@ method FALLBACK ( $native-sub is copy, |c ) {
   # check if there are underscores in the name. then the name is not too short.
   my Callable $s;
 
-  # call the fallback functions of this classes children starting
+  # call the _fallback functions of this classes children starting
   # at the bottom
-  $s = self.fallback($native-sub);
+  $s = self._fallback($native-sub);
 
   die X::Gnome.new(:message("Native sub '$native-sub' not found"))
       unless $s.defined;
@@ -202,7 +202,7 @@ method FALLBACK ( $native-sub is copy, |c ) {
 
 #-------------------------------------------------------------------------------
 # no pod. user does not have to know about it.
-method fallback ( $native-sub is copy --> Callable ) {
+method _fallback ( $native-sub is copy --> Callable ) {
 
   my Callable $s;
   try { $s = &::($native-sub); }
