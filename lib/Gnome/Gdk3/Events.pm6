@@ -25,7 +25,7 @@ In GTK+ applications the events are handled automatically in C<gtk_main_do_event
   # ... etcetera ...
 
   # Define a handler method
-  method handle-keypress ( :$widget, GdkEvent :handler-arg0($event) ) {
+  method handle-keypress ( GdkEvent $event, :$widget ) {
     if $event.event-any.type ~~ GDK_KEY_PRESS {
       my GdkEventKey $event-key = $event;
       if $event.event-key.keyval eq 's' {
@@ -39,7 +39,7 @@ In GTK+ applications the events are handled automatically in C<gtk_main_do_event
 
 If the handler handles only one event type, the method can also be defined as
 
-  method handle-keypress ( :$widget, GdkEventKey :handler-arg0($event-key) ) {
+  method handle-keypress ( GdkEventKey $event-key, :$widget ) {
     if $event-key.type ~~ GDK_KEY_PRESS and $event-key.keyval eq 's' {
       # key 's' pressed, stop process ...
     }
@@ -1274,14 +1274,14 @@ A C<GdkEvent> contains a union of all of the event types, and allows access to t
 
 The event type is always the first field in all of the event types, and can always be accessed with the following code, no matter what type of event it is:
 
-  method my-handler ( GdkEvent :handler-arg0($event) ) {
+  method my-handler ( GdkEvent $event ) {
     if $event.type ~~ GDK_BUTTON_PRESS {
       my GdkEventButton $event-button = $event;
       ...
     }
 
     elsif $event.type ~~ GDK_KEY_RELEASE {
-      my GdkEventKeyn $event-key = $event;
+      my GdkEventKey $event-key = $event;
       ...
     }
   }
