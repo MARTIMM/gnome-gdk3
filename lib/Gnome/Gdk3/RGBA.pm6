@@ -1,14 +1,16 @@
+#TL:1:Gnome::Gdk3::Rgba:
+
 use v6;
 #-------------------------------------------------------------------------------
 =begin pod
 
-=TITLE Gnome::Gdk3::Rgba
+=head1 Gnome::Gdk3::Rgba
 
-=SUBTITLE RGBA colors
+RGBA colors
 
 =head1 Description
 
-C<Gnome::Gdk3::RGBA> is a convenient way to pass rgba colors around.
+B<Gnome::Gdk3::RGBA> is a convenient way to pass rgba colors around.
 It’s based on cairo’s way to deal with colors and mirrors its behavior.
 All values are in the range from 0.0 to 1.0 inclusive. So the color
 (0.0, 0.0, 0.0, 0.0) represents transparent black and
@@ -19,6 +21,7 @@ to this range when drawing.
 =head2 Declaration
 
   unit class Gnome::Gdk3::RGBA;
+  also is Gnome::GObject::Boxed;
 
 =head2 Example
 
@@ -32,13 +35,14 @@ use NativeCall;
 use Gnome::N::X;
 use Gnome::N::NativeLib;
 use Gnome::N::N-GObject;
-#use Gnome::GObject::Object;
+use Gnome::GObject::Boxed;
 
 #-------------------------------------------------------------------------------
 # See /usr/include/gtk-3.0/gdk/gdkrgba.h
 unit class Gnome::Gdk3::RGBA:auth<github:MARTIMM>;
+also is Gnome::GObject::Boxed;
+
 #-------------------------------------------------------------------------------
-#`{{
 =begin pod
 =head2 GdkRGBA
 
@@ -50,57 +54,58 @@ GdkRGBA is a convenient way to pass rgba colors around. It’s based on cairo’
 =item $.alpha; The opacity of the color from 0.0 for completely translucent to 1.0 for opaque
 
 =end pod
-}}
-class GdkRGBA is repr('CStruct') is export {
+#TT:1:GdkRGBA
+class GdkRGBA is repr('CStruct') is export is DEPRECATED('N-GdkRGBA') {
   has num64 $.red;
   has num64 $.green;
   has num64 $.blue;
   has num64 $.alpha;
 }
 
-#`[[[
+class N-GdkRGBA is repr('CStruct') is export {
+  has num64 $.red;
+  has num64 $.green;
+  has num64 $.blue;
+  has num64 $.alpha;
+}
+
 #-------------------------------------------------------------------------------
-my Bool $signals-added = False;
-my GdkRGBA $n-rgba;
+#my N-GdkRGBA $n-rgba;
 
 #-------------------------------------------------------------------------------
 =begin pod
 =head1 Methods
 =head2 new
 
-...
-  multi method new ( Bool :$empty! )
+Create a new object using colors and transparency values. Their ranges are from 0 to 1
 
-Create a new object.
+  multi method new ( Num :$red!, Num :$green!, Num :$blue!, Num :$alpha! )
+
+
+Create an object using a native object from elsewhere. See also B<Gnome::GObject::Object>.
 
   multi method new ( Gnome::GObject::Object :$widget! )
 
-Create an object using a native object from elsewhere. See also C<Gnome::GObject::Object>.
-
-  multi method new ( Str :$build-id! )
-
-Create an object using a native object from a builder. See also C<Gnome::GObject::Object>.
-
 =end pod
+
+#TM:0:new(:red,:green,:blue,:alpha):
+#TM:0:new(:widget):
 
 submethod BUILD ( *%options ) {
 
-  # add signal info in the form of group<signal-name>.
-  # groups are e.g. signal, event, nativeobject etc
-  $signals-added = self.add-signal-types( $?CLASS.^name,
-    ... :type<signame>
-  ) unless $signals-added;
-
   # prevent creating wrong widgets
-  return unless self.^name eq 'Gnome::Gdk3::Rgba';
+  return unless self.^name eq 'Gnome::Gdk3::RGBA';
 
   # process all named arguments
-  if ? %options<empty> {
-    self.native-gobject(gtk__new());
-  }
+  if ? %options<red> or ? %options<green> or
+     ? %options<blue> or ? %options<alpha> {
 
-  elsif ? %options<widget> || %options<build-id> {
-    # provided in Gnome::GObject::Object
+    my Num $red = %options<red> // 1.0e1;
+    my Num $green = %options<green> // 1.0e1;
+    my Num $blue = %options<blue> // 1.0e1;
+    my Num $alpha = %options<alpha> // 1.0e1;
+
+    self.native-gboxed(N-GdkRGBA.new( :$red, :$green, :$blue, :$alpha));
   }
 
   elsif %options.keys.elems {
@@ -110,94 +115,9 @@ submethod BUILD ( *%options ) {
               )
     );
   }
-}
 
-#-------------------------------------------------------------------------------
-# no pod. user does not have to know about it.
-
-#`{{
-=begin pod
-=head2 CALL-ME
-
-  method CALL-ME ( N-GObject $widget? --> N-GObject )
-
-This method is designed to set and retrieve the gtk object from a perl6 widget object. This is indirectly called by C<new> when the :widget option is used. On many occasions this is done automatically or indirect like explained above, that it is hardly used by the user directly.
-
-  # Example only to show how things can be tranported between objects. Not
-  # something you need to remember!
-  my N-GObject $button = Gnome::Gtk3::Button.new(:label('Exit'))();
-  my Gnome::Gtk3::Button $b .= new(:empty);
-  $b($button);
-
-See also L<native-gobject>.
-=end pod
-}}
-#TODO destroy when overwritten? g_object_unref?
-method CALL-ME ( N-GObject $widget? --> N-GObject ) {
-
-  if ?$widget {
-    # if native object exists it will be overwritten. unref object first.
-    if ?$!g-object {
-      #TODO self.g_object_unref();
-    }
-    $!g-object = $widget;
-    #TODO self.g_object_ref();
-  }
-
-  $!g-object
-}
-
-#-------------------------------------------------------------------------------
-# no pod. user does not have to know about it.
-#
-# Fallback method to find the native subs which then can be called as if it
-# were a method. Each class must provide their own '_fallback' method which,
-# when nothing found, must call the parents _fallback with 'callsame'.
-# The subs in some class all start with some prefix which can be left out too
-# provided that the _fallback functions must also test with an added prefix.
-# So e.g. a sub 'gtk_label_get_text' defined in class GtlLabel can be called
-# like '$label.gtk_label_get_text()' or '$label.get_text()'. As an extra
-# feature dashes can be used instead of underscores, so '$label.get-text()'
-# works too.
-method FALLBACK ( $native-sub is copy, |c ) {
-
-  CATCH { test-catch-exception( $_, $native-sub); }
-
-  # convert all dashes to underscores if there are any. then check if
-  # name is not too short.
-  $native-sub ~~ s:g/ '-' /_/ if $native-sub.index('-').defined;
-#`{{
-  die X::Gnome.new(:message(
-      "Native sub name '$native-sub' made too short." ~
-      " Keep at least one '-' or '_'."
-    )
-  ) unless $native-sub.index('_') // -1 >= 0;
-}}
-
-  # check if there are underscores in the name. then the name is not too short.
-  my Callable $s;
-
-  # call the _fallback functions of this classes children starting
-  # at the bottom
-  $s = self._fallback($native-sub);
-
-  die X::Gnome.new(:message("Native sub '$native-sub' not found"))
-      unless $s.defined;
-
-  # User convenience substitutions to get a native object instead of
-  # a GtkSomeThing or GlibSomeThing object
-  my Array $params = [];
-  for c.list -> $p {
-    if $p.^name ~~ m/^ 'Gnome::' [ Gtk3 || Gdk3 || Glib || GObject ] '::' / {
-      $params.push($p());
-    }
-
-    else {
-      $params.push($p);
-    }
-  }
-
-  test-call( $s, $!g-object, |$params)
+  # only after creating the widget, the gtype is known
+  self.set-class-info('GdkRgba');
 }
 
 #-------------------------------------------------------------------------------
@@ -214,18 +134,19 @@ method _fallback ( $native-sub is copy --> Callable ) {
   $s;
 }
 
+#`[[[
 
 #-------------------------------------------------------------------------------
 =begin pod
 =head2 gdk_rgba_copy
 
-Makes a copy of a C<Gnome::Gdk3::RGBA>. The result must be freed through gdk_rgba_free().
+Makes a copy of a B<Gnome::Gdk3::RGBA>. The result must be freed through gdk_rgba_free().
 
   method gdk_rgba_copy ( N-GObject $rgba --> N-GObject )
 
-=item GdkRGBA $rgba;  a C<Gnome::Gdk3::RGBA>
+=item GdkRGBA $rgba;  a B<Gnome::Gdk3::RGBA>
 
-Returns N-GObject; A newly allocated C<Gnome::Gdk3::RGBA>, with the same contents as @rgba
+Returns N-GObject; A newly allocated B<Gnome::Gdk3::RGBA>, with the same contents as @rgba
 =end pod
 
 sub gdk_rgba_copy (  N-GObject $rgba )
@@ -238,13 +159,13 @@ sub gdk_rgba_copy (  N-GObject $rgba )
 =head2 gdk_rgba_free
 
 
-Frees a C<Gnome::Gdk3::RGBA> created with gdk_rgba_copy()
+Frees a B<Gnome::Gdk3::RGBA> created with gdk_rgba_copy()
 
 
 
   method gdk_rgba_free ( N-GObject $rgba)
 
-=item N-GObject $rgba;  a C<Gnome::Gdk3::RGBA>
+=item N-GObject $rgba;  a B<Gnome::Gdk3::RGBA>
 
 =end pod
 
@@ -258,14 +179,14 @@ sub gdk_rgba_free (  N-GObject $rgba )
 
 
 A hash function suitable for using for a hash
-table that stores C<Gnome::Gdk3::RGBAs>.
+table that stores B<Gnome::Gdk3::RGBAs>.
 
 
 
 
   method gdk_rgba_hash ( gpointer $p --> UInt )
 
-=item gpointer $p;  (type C<Gnome::Gdk3::RGBA>): a C<Gnome::Gdk3::RGBA> pointer
+=item gpointer $p;  (type B<Gnome::Gdk3::RGBA>): a B<Gnome::Gdk3::RGBA> pointer
 
 Returns uint32; The hash value for @p
 =end pod
@@ -287,8 +208,8 @@ Compares two RGBA colors.
 
   method gdk_rgba_equal ( gpointer $p1, gpointer $p2 --> Int )
 
-=item gpointer $p1;  (type C<Gnome::Gdk3::RGBA>): a C<Gnome::Gdk3::RGBA> pointer
-=item gpointer $p2;  (type C<Gnome::Gdk3::RGBA>): another C<Gnome::Gdk3::RGBA> pointer
+=item gpointer $p1;  (type B<Gnome::Gdk3::RGBA>): a B<Gnome::Gdk3::RGBA> pointer
+=item gpointer $p2;  (type B<Gnome::Gdk3::RGBA>): another B<Gnome::Gdk3::RGBA> pointer
 
 Returns int32; 1 if the two colors compare equal
 =end pod
@@ -304,7 +225,7 @@ sub gdk_rgba_equal (  gpointer $p1,  gpointer $p2 )
 
 
 Parses a textual representation of a color, filling in
-the @red, @green, @blue and @alpha fields of the @rgba C<Gnome::Gdk3::RGBA>.
+the @red, @green, @blue and @alpha fields of the @rgba B<Gnome::Gdk3::RGBA>.
 
 The string can be either one of:
 - A standard name (Taken from the X11 rgb.txt file).
@@ -324,7 +245,7 @@ a is a floating point value in the range 0 to 1.
 
   method gdk_rgba_parse ( N-GObject $rgba, Str $spec --> Int )
 
-=item N-GObject $rgba;  the C<Gnome::Gdk3::RGBA> to fill in
+=item N-GObject $rgba;  the B<Gnome::Gdk3::RGBA> to fill in
 =item Str $spec;  the string specifying the color
 
 Returns int32; 1 if the parsing succeeded
@@ -361,7 +282,7 @@ different representation.
 
   method gdk_rgba_to_string ( N-GObject $rgba --> Str )
 
-=item N-GObject $rgba;  a C<Gnome::Gdk3::RGBA>
+=item N-GObject $rgba;  a B<Gnome::Gdk3::RGBA>
 
 Returns str; A newly allocated text string
 =end pod
@@ -375,77 +296,40 @@ sub gdk_rgba_to_string (  N-GObject $rgba )
 #-------------------------------------------------------------------------------
 =end pod
 
-
-#`{{
-#-------------------------------------------------------------------------------
-=begin pod
-=head1 Types
-=head2
-
-=item
-
-=end pod
-}}
-
-#-------------------------------------------------------------------------------
-=begin pod
-=head1 Signals
-
-Register any signal as follows. See also C<Gnome::GObject::Object>.
-
-  my Bool $is-registered = $my-widget.register-signal (
-    $handler-object, $handler-name, $signal-name,
-    :$user-option1, ..., $user-optionN
-  )
-
-=begin comment
-
-=head2 Supported signals
-
-=head2 Unsupported signals
-
-=end comment
-
-
-=head2 Not yet supported signals
-
-
-
-
-=begin comment
-
-=head4 Signal Handler Signature
-
-  method handler (
-    Gnome::GObject::Object :$widget, :$user-option1, ..., $user-optionN
-  )
-
-=head4 Event Handler Signature
-
-  method handler (
-    Gnome::GObject::Object :$widget, GdkEvent :$event,
-    :$user-option1, ..., $user-optionN
-  )
-
-=head4 Native Object Handler Signature
-
-  method handler (
-    Gnome::GObject::Object :$widget, N-GObject :$nativewidget,
-    :$user-option1, ..., :$user-optionN
-  )
-
-=end comment
-
-
-=begin comment
-
-=head4 Handler Method Arguments
-=item $widget; This can be any perl6 widget with C<Gnome::GObject::Object> as the top parent class e.g. C<Gnome::Gtk3::Button>.
-=item $event; A structure defined in C<Gnome::Gdk3::Events>.
-=item $nativewidget; A native widget (a C<N-GObject>) which can be turned into a perl6 widget using C<.new(:widget())> on the appropriate class.
-=item $user-option*; Any extra options given by the user when registering the signal.
-
-=end comment
-
-=end pod
 ]]]
+
+#-------------------------------------------------------------------------------
+#TM:0:gdk_rgba_to_string:
+=begin pod
+=head2 [gdk_rgba_] to_string
+
+Returns a textual specification of I<rgba> in the form
+`rgb (r, g, b)` or
+`rgba (r, g, b, a)`,
+where “r”, “g”, “b” and “a” represent the red, green,
+blue and alpha values respectively. r, g, and b are
+represented as integers in the range 0 to 255, and a
+is represented as floating point value in the range 0 to 1.
+
+These string forms are string forms those supported by
+the CSS3 colors module, and can be parsed by C<gdk_rgba_parse()>.
+
+Note that this string representation may lose some
+precision, since r, g and b are represented as 8-bit
+integers. If this is a concern, you should use a
+different representation.
+
+Returns: A newly allocated text string
+
+Since: 3.0
+
+  method gdk_rgba_to_string ( N-GdkRGBA $rgba --> Str  )
+
+=item N-GObject $rgba; a native B<Gnome::Gdk3::RGBA>
+
+=end pod
+
+sub gdk_rgba_to_string ( N-GdkRGBA $rgba )
+  returns Str
+  is native(&gdk-lib)
+  { * }
