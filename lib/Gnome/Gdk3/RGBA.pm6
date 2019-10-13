@@ -70,8 +70,8 @@ class N-GdkRGBA is repr('CStruct') is export {
 }
 
 #-------------------------------------------------------------------------------
-#my N-GdkRGBA $n-rgba;
-
+# keys come from gdk_rgba_hash and are Int;
+my %rgba-hash{UInt} = %();
 #-------------------------------------------------------------------------------
 =begin pod
 =head1 Methods
@@ -81,15 +81,20 @@ Create a new object using colors and transparency values. Their ranges are from 
 
   multi method new ( Num :$red!, Num :$green!, Num :$blue!, Num :$alpha! )
 
+Create an object using a string which is parsed with C<gdk_rgba_parse()>. If parsing fails, the color is set to opaque white.
 
-Create an object using a native object from elsewhere. See also B<Gnome::GObject::Object>.
+  multi method new ( Str :$rgba! )
 
-  multi method new ( Gnome::GObject::Object :$widget! )
+Create an object using a native object from elsewhere.
+
+  multi method new ( Gnome::GObject::Object :$rgba! )
 
 =end pod
 
-#TM:0:new(:red,:green,:blue,:alpha):
-#TM:0:new(:widget):
+#TM:1:new(:red,:green,:blue,:alpha):
+#TM:1:new(:rgba(Gnome::Gdk3::RGBA)):
+#TM:1:new(:rgba(N-GdkRGBA)):
+#TM:1:new(:rgba(Str)):
 
 submethod BUILD ( *%options ) {
 
@@ -106,6 +111,29 @@ submethod BUILD ( *%options ) {
     my Num $alpha = %options<alpha> // 1.0e1;
 
     self.native-gboxed(N-GdkRGBA.new( :$red, :$green, :$blue, :$alpha));
+  }
+
+  elsif ? %options<rgba> {
+    if %options<rgba> ~~ N-GdkRGBA {
+      self.native-gboxed(%options<rgba>);
+    }
+
+    elsif %options<rgba> ~~ Gnome::Gdk3::RGBA {
+      self.native-gboxed(%options<rgba>.get-native-gboxed);
+    }
+
+    elsif %options<rgba> ~~ Str {
+      my N-GdkRGBA $c .= new(
+        :red(1.0e0), :green(1.0e0), :blue(1.0e0), :alpha(1.0e0)
+      );
+      self.native-gboxed($c);
+      my Int $ok = gdk_rgba_parse( $c, %options<rgba>);
+      self.native-gboxed($c) if $ok;
+    }
+
+    else {
+      die X::Gnome.new(:message('Improper type for :rgba option'));
+    }
   }
 
   elsif %options.keys.elems {
@@ -134,105 +162,127 @@ method _fallback ( $native-sub is copy --> Callable ) {
   $s;
 }
 
-#`[[[
-
 #-------------------------------------------------------------------------------
+#TM:1:gdk_rgba_copy:
 =begin pod
 =head2 gdk_rgba_copy
 
-Makes a copy of a B<Gnome::Gdk3::RGBA>. The result must be freed through gdk_rgba_free().
+Makes a copy of a B<Gnome::Gdk3::RGBA>.
 
-  method gdk_rgba_copy ( N-GObject $rgba --> N-GObject )
+=comment The result must be freed through C<gdk_rgba_free()>.
 
-=item GdkRGBA $rgba;  a B<Gnome::Gdk3::RGBA>
+Returns: A newly allocated B<Gnome::Gdk3::RGBA>, with the same contents as I<rgba>
 
-Returns N-GObject; A newly allocated B<Gnome::Gdk3::RGBA>, with the same contents as @rgba
+Since: 3.0
+
+  method gdk_rgba_copy ( N-GObject $rgba --> N-GObject  )
+
+=item N-GdkRGBA $rgba; a B<Gnome::Gdk3::RGBA>
+
 =end pod
 
-sub gdk_rgba_copy (  N-GObject $rgba )
-  returns N-GObject
-  is native(&gdk-lib)
-  { * }
+# make my own version of copy...
+sub gdk_rgba_copy ( N-GdkRGBA $rgba ) {
+  my N-GdkRGBA $clone .= new(
+    :red($rgba.red), :green($rgba.green),
+    :blue($rgba.blue), :alpha($rgba.alpha)
+  );
 
+  $clone
+}
+
+#`[[ Not needed because of simulated copy
 #-------------------------------------------------------------------------------
+# TM:0:gdk_rgba_free:
 =begin pod
 =head2 gdk_rgba_free
 
+Frees a B<Gnome::Gdk3::RGBA> created with C<gdk_rgba_copy()>
 
-Frees a B<Gnome::Gdk3::RGBA> created with gdk_rgba_copy()
+Since: 3.0
 
+  method gdk_rgba_free ( N-GObject $rgba )
 
-
-  method gdk_rgba_free ( N-GObject $rgba)
-
-=item N-GObject $rgba;  a B<Gnome::Gdk3::RGBA>
+=item N-GObject $rgba; a B<Gnome::Gdk3::RGBA>
 
 =end pod
 
-sub gdk_rgba_free (  N-GObject $rgba )
+sub gdk_rgba_free ( N-GObject $rgba )
   is native(&gdk-lib)
   { * }
+]]
 
 #-------------------------------------------------------------------------------
+#TM:1:gdk_rgba_hash(UInt):
+#TM:1:gdk_rgba_hash(N-GdkRGBA):
 =begin pod
 =head2 gdk_rgba_hash
 
+A method that stores B<Gnome::Gdk3::RGBAs> values in a hash or to return a value. Note that the original GTK function only returns a uint32 value and does not provide a hash table storage facility
 
-A hash function suitable for using for a hash
-table that stores B<Gnome::Gdk3::RGBAs>.
+  multi method gdk_rgba_hash ( N-GdkRGBA $p --> UInt )
 
+  multi method gdk_rgba_hash ( UInt $hash-int --> N-GdkRGBA )
 
+=item N-GdkRGBA $p; a B<Gnome::Gdk3::RGBA> value to store
+=item UInt $hash-int; a key to return a previously stored B<N-GdkRGBA> value
 
-
-  method gdk_rgba_hash ( gpointer $p --> UInt )
-
-=item gpointer $p;  (type B<Gnome::Gdk3::RGBA>): a B<Gnome::Gdk3::RGBA> pointer
-
-Returns uint32; The hash value for @p
 =end pod
 
-sub gdk_rgba_hash (  gpointer $p )
+# use $rgba-hash
+proto gdk_rgba_hash ( N-GdkRGBA $p, | ) { * }
+multi sub gdk_rgba_hash ( N-GdkRGBA $p --> UInt ) {
+  %rgba-hash{my UInt $hash-int = _gdk_rgba_hash($p)} = $p;
+  $hash-int
+}
+
+multi sub gdk_rgba_hash ( N-GdkRGBA $p, UInt $hash-int --> N-GdkRGBA ) {
+  %rgba-hash{$hash-int}
+}
+
+sub _gdk_rgba_hash ( N-GdkRGBA $p )
   returns uint32
   is native(&gdk-lib)
+  is symbol('gdk_rgba_hash')
   { * }
 
+
 #-------------------------------------------------------------------------------
+#TM:1:gdk_rgba_equal:
 =begin pod
 =head2 gdk_rgba_equal
 
+Compare native RGBA color with a given one.
 
-Compares two RGBA colors.
+Returns: C<1> if the two colors compare equal
 
+Since: 3.0
 
+  method gdk_rgba_equal ( N-GdkRGBA $compare-with --> Int )
 
+=item N-GdkRGBA $compare-with; another B<Gnome::Gdk3::RGBA> pointer
 
-  method gdk_rgba_equal ( gpointer $p1, gpointer $p2 --> Int )
-
-=item gpointer $p1;  (type B<Gnome::Gdk3::RGBA>): a B<Gnome::Gdk3::RGBA> pointer
-=item gpointer $p2;  (type B<Gnome::Gdk3::RGBA>): another B<Gnome::Gdk3::RGBA> pointer
-
-Returns int32; 1 if the two colors compare equal
 =end pod
 
-sub gdk_rgba_equal (  gpointer $p1,  gpointer $p2 )
+sub gdk_rgba_equal ( N-GdkRGBA $p1, N-GdkRGBA $p2 )
   returns int32
   is native(&gdk-lib)
   { * }
 
 #-------------------------------------------------------------------------------
+#TM:0:gdk_rgba_parse:
 =begin pod
 =head2 gdk_rgba_parse
 
-
-Parses a textual representation of a color, filling in
-the @red, @green, @blue and @alpha fields of the @rgba B<Gnome::Gdk3::RGBA>.
+Parses a textual representation of a color and set / overwrite the values in
+the I<red>, I<green>, I<blue> and I<alpha> fields in this B<Gnome::Gdk3::RGBA>.
 
 The string can be either one of:
 - A standard name (Taken from the X11 rgb.txt file).
-- A hexadecimal value in the form “\C<rgb>”, “\C<rrggbb>”,
-  “\C<rrrgggbbb>” or ”\C<rrrrggggbbbb>”
+- A hexadecimal value in the form “\B<rgb>”, “\B<rrggbb>”,
+“\B<rrrgggbbb>” or ”\B<rrrrggggbbbb>”
 - A RGB color in the form “rgb(r,g,b)” (In this case the color will
-  have full opacity)
+have full opacity)
 - A RGBA color in the form “rgba(r,g,b,a)”
 
 Where “r”, “g”, “b” and “a” are respectively the red, green, blue and
@@ -240,66 +290,24 @@ alpha color values. In the last two cases, r g and b are either integers
 in the range 0 to 255 or precentage values in the range 0% to 100%, and
 a is a floating point value in the range 0 to 1.
 
+Returns: C<1> if the parsing succeeded
 
+Since: 3.0
 
+  method gdk_rgba_parse ( Str $spec --> Int )
 
-  method gdk_rgba_parse ( N-GObject $rgba, Str $spec --> Int )
+=item N-GObject $rgba; the B<Gnome::Gdk3::RGBA> to fill in
+=item Str $spec; the string specifying the color
 
-=item N-GObject $rgba;  the B<Gnome::Gdk3::RGBA> to fill in
-=item Str $spec;  the string specifying the color
-
-Returns int32; 1 if the parsing succeeded
 =end pod
 
-sub gdk_rgba_parse (  N-GObject $rgba,  str $spec )
+sub gdk_rgba_parse ( N-GdkRGBA $rgba is rw, Str $spec )
   returns int32
   is native(&gdk-lib)
   { * }
 
 #-------------------------------------------------------------------------------
-=begin pod
-=head2 [gdk_rgba_] to_string
-
-
-Returns a textual specification of @rgba in the form
-`rgb (r, g, b)` or
-`rgba (r, g, b, a)`,
-where “r”, “g”, “b” and “a” represent the red, green,
-blue and alpha values respectively. r, g, and b are
-represented as integers in the range 0 to 255, and a
-is represented as floating point value in the range 0 to 1.
-
-These string forms are string forms those supported by
-the CSS3 colors module, and can be parsed by gdk_rgba_parse().
-
-Note that this string representation may lose some
-precision, since r, g and b are represented as 8-bit
-integers. If this is a concern, you should use a
-different representation.
-
-
-
-
-  method gdk_rgba_to_string ( N-GObject $rgba --> Str )
-
-=item N-GObject $rgba;  a B<Gnome::Gdk3::RGBA>
-
-Returns str; A newly allocated text string
-=end pod
-
-sub gdk_rgba_to_string (  N-GObject $rgba )
-  returns str
-  is native(&gdk-lib)
-  { * }
-
-
-#-------------------------------------------------------------------------------
-=end pod
-
-]]]
-
-#-------------------------------------------------------------------------------
-#TM:0:gdk_rgba_to_string:
+#TM:1:gdk_rgba_to_string:
 =begin pod
 =head2 [gdk_rgba_] to_string
 
