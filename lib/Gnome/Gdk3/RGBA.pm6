@@ -25,7 +25,7 @@ to this range when drawing.
 
 =head2 Example
 
-  my GdkRGBA $color .= new(
+  my Gnome::Gdk3::RGBA $color .= new(
     :red(.5e0), :green(.5e0), :blue(.5e0), :alpha(.5e0)
   );
 
@@ -44,9 +44,13 @@ also is Gnome::GObject::Boxed;
 
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 GdkRGBA
+=head1 Types
+=end pod
+#-------------------------------------------------------------------------------
+=begin pod
+=head2 N-GdkRGBA
 
-GdkRGBA is a convenient way to pass rgba colors around. It’s based on cairo’s way to deal with colors and mirrors its behavior. All values are in the range from 0.0 to 1.0 inclusive. So the color (0.0, 0.0, 0.0, 0.0) represents transparent black and (1.0, 1.0, 1.0, 1.0) is opaque white. Other values will be clamped to this range when drawing.
+N-GdkRGBA is a convenient way to pass rgba colors around. It’s based on cairo’s way to deal with colors and mirrors its behavior. All values are in the range from 0.0 to 1.0 inclusive. So the color (0.0, 0.0, 0.0, 0.0) represents transparent black and (1.0, 1.0, 1.0, 1.0) is opaque white. Other values will be clamped to this range when drawing.
 
 =item $.red; The intensity of the red channel from 0.0 to 1.0 inclusive
 =item $.green; The intensity of the green channel from 0.0 to 1.0 inclusive
@@ -54,7 +58,7 @@ GdkRGBA is a convenient way to pass rgba colors around. It’s based on cairo’
 =item $.alpha; The opacity of the color from 0.0 for completely translucent to 1.0 for opaque
 
 =end pod
-#TT:1:GdkRGBA
+# TT:1:GdkRGBA:Obsolete
 class GdkRGBA is repr('CStruct') is export is DEPRECATED('N-GdkRGBA') {
   has num64 $.red;
   has num64 $.green;
@@ -156,10 +160,114 @@ method _fallback ( $native-sub is copy --> Callable ) {
   try { $s = &::($native-sub); }
   try { $s = &::("gdk_rgba_$native-sub"); } unless ?$s;
 
-#note "ad $native-sub: ", $s;
+  self.set-class-name-of-sub('GdkRgba');
   $s = callsame unless ?$s;
 
   $s;
+}
+
+#-------------------------------------------------------------------------------
+=begin pod
+=head2 red
+
+Set the red color to a new value if provided. Returns original or newly set color value.
+
+  method red ( Num $c? --> Num )
+
+=end pod
+
+#TM:1:red
+method red ( Num $c? is copy --> Num ) {
+  if $c.defined {
+    $c = 0e0 if $c < 0e0;
+    $c = 1e0 if $c > 1e0;
+
+    my N-GdkRGBA $o = self.get-native-gboxed;
+    my N-GdkRGBA $clr .= new(
+      :red($c), :green($o.green), :blue($o.blue), :alpha($o.alpha)
+    );
+    self.native-gboxed($clr);
+  }
+
+  self.get-native-gboxed.red
+}
+
+#-------------------------------------------------------------------------------
+=begin pod
+=head2 red
+
+Set the green color to a new value if provided. Returns original or newly set color value.
+
+  method green ( Num $c? --> Num )
+
+=end pod
+
+#TM:1:green
+method green ( Num $c? is copy --> Num ) {
+  if $c.defined {
+    $c = 0e0 if $c < 0e0;
+    $c = 1e0 if $c > 1e0;
+
+    my N-GdkRGBA $o = self.get-native-gboxed;
+    my N-GdkRGBA $clr .= new(
+      :red($o.red), :green($c), :blue($o.blue), :alpha($o.alpha)
+    );
+    self.native-gboxed($clr);
+  }
+
+  self.get-native-gboxed.green
+}
+
+#-------------------------------------------------------------------------------
+=begin pod
+=head2 red
+
+Set the blue color to a new value if provided. Returns original or newly set color value.
+
+  method blue ( Num $c? --> Num )
+
+=end pod
+
+#TM:1:blue
+method blue ( Num $c? is copy --> Num ) {
+  if $c.defined {
+    $c = 0e0 if $c < 0e0;
+    $c = 1e0 if $c > 1e0;
+
+    my N-GdkRGBA $o = self.get-native-gboxed;
+    my N-GdkRGBA $clr .= new(
+      :red($o.red), :green($o.green), :blue($c), :alpha($o.alpha)
+    );
+    self.native-gboxed($clr);
+  }
+
+  self.get-native-gboxed.blue
+}
+
+#-------------------------------------------------------------------------------
+=begin pod
+=head2 alpha
+
+Set the alpha transparency to a new value if provided. Returns original or newly set value.
+
+  method alpha ( Num $c? --> Num )
+
+=end pod
+
+#TM:1:alpha
+method alpha ( Num $c? is copy --> Num ) {
+  if $c.defined {
+    $c = 0e0 if $c < 0e0;
+    $c = 1e0 if $c > 1e0;
+
+    my N-GdkRGBA $o = self.get-native-gboxed;
+    my N-GdkRGBA $clr .= new(
+      :red($o.red), :green($o.green), :blue($o.blue), :alpha($c)
+    );
+    self.native-gboxed($clr);
+  }
+
+  self.get-native-gboxed.alpha
 }
 
 #-------------------------------------------------------------------------------

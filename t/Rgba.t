@@ -49,8 +49,18 @@ subtest 'Manipulations', {
 
   ok $r.gdk-rgba-parse('#8f0'), '.gdk-rgba-parse("#rgb")';
   is $r.to-string, 'rgb(136,255,0)', 'compare rgb string ok';
-  ok $r.gdk-rgba-parse('rgba(128,255,0,0.5)'), '.gdk-rgba-parse("rgba()")';
-  is $r.to-string, 'rgba(128,255,0,0.5)', 'compare string ok';
+  ok $r.gdk-rgba-parse('rgba(127,255,0,0.5)'), '.gdk-rgba-parse("rgba()")';
+  is $r.to-string, 'rgba(127,255,0,0.5)', 'compare string ok';
+
+  is $r.red.round(0.1), 0.5, '.red()';
+  is $r.green, 1.0, '.green()';
+  is $r.blue, 0, '.blue()';
+  is $r.alpha, 0.5, '.alpha()';
+
+  $r.red(1e0);
+  is $r.to-string, 'rgba(255,255,0,0.5)', 'red changed';
+  $r.blue(1e0);
+  is $r.to-string, 'rgba(255,255,255,0.5)', 'blue changed';
 }
 
 #`{{
