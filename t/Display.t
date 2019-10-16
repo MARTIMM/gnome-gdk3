@@ -1,38 +1,55 @@
 use v6;
 use NativeCall;
 use Test;
-#use lib '../perl6-gnome-native/lib';
-#use lib '../perl6-gnome-gobject/lib';
 
-use Gnome::Gdk3::Window;
+use Gnome::N::N-GObject;
+use Gnome::Gdk3::Display;
 
 #use Gnome::N::X;
 #Gnome::N::debug(:on);
 
 #-------------------------------------------------------------------------------
-my Gnome::Gdk3::Window $w .= new(:empty);
+my Gnome::Gdk3::Display $d;
 #-------------------------------------------------------------------------------
 subtest 'ISA test', {
-  my Gnome::Gdk3::Window $w .= new(:empty);
-  isa-ok $w, Gnome::Gdk3::Window;
-
-  my Int $wtype = $w.get-window-type;
-  is GdkWindowType($wtype), GDK_WINDOW_TOPLEVEL, 'toplevel window type';
+  $d .= new(:default);
+  isa-ok $d, Gnome::Gdk3::Display, '.new(:default)';
 }
 
 #-------------------------------------------------------------------------------
 subtest 'Manipulations', {
+#  X::Gnome.debug(:on);
 
-  $w.gdk-window-move( 500, 600);
-  my Int ( $x, $y) = $w.get-position;
-  is $x, 0, 'x is still 0';
-  is $y, 0, 'y is still 0';
+  throws-like
+    { $d .= new; },
+    X::Gnome, "No options used",
+    :message('No options used to create or set the native widget');
 
-  $w.gdk-window-resize( 200, 300);
-  is $w.get-width, 1, 'width is still 1';
-  is $w.get-height, 1, 'height is still 1';
+  throws-like
+    { $d .= new( :find, :search); },
+    X::Gnome, "Wrong options used",
+    :message(
+      /:s Unsupported options for
+          'Gnome::Gdk3::Display:'
+          [(find||search) ',']+ /
+    );
+
+  $d .= new(:default);
+  my Str $d-name = $d.get-name();
+  like $d-name, /\: \d+/, '.get-name(): ' ~ $d-name;
+
+  $d .= new( :open, :display-name($d-name));
+  $d-name = $d.get-name();
+  like $d-name, /\: \d+/, '.new( :open, :display-name): ' ~ $d-name;
+
+
+  nok $d.is-closed, '.is-closed()';
+
+#(Display.t:14631): Gdk-CRITICAL **: 16:41:06.574: gdk_display_is_closed: assertion 'GDK_IS_DISPLAY (display)' failed
+  #$d.gdk-display-close;
+  #ok $d.is-closed, '.is-closed()';
+
 }
-
 
 #`{{
 #-------------------------------------------------------------------------------
