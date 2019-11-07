@@ -52,10 +52,14 @@ also is Gnome::GObject::Boxed;
 
 N-GdkRGBA is a convenient way to pass rgba colors around. It’s based on cairo’s way to deal with colors and mirrors its behavior. All values are in the range from 0.0 to 1.0 inclusive. So the color (0.0, 0.0, 0.0, 0.0) represents transparent black and (1.0, 1.0, 1.0, 1.0) is opaque white. Other values will be clamped to this range when drawing.
 
+The colors originally where B<Num> type but they can now also be B<Int>, B<Rat>, B<Str> or B<Num> as long as they represent a number between 0 and 1.
+
 =item $.red; The intensity of the red channel from 0.0 to 1.0 inclusive
 =item $.green; The intensity of the green channel from 0.0 to 1.0 inclusive
 =item $.blue; The intensity of the blue channel from 0.0 to 1.0 inclusive
 =item $.alpha; The opacity of the color from 0.0 for completely translucent to 1.0 for opaque
+
+  my N-GdkRGBA $c .= new( :red(1), :green(1), :blue(0.5), :alpha(0.99));
 
 =end pod
 # TT:1:GdkRGBA:Obsolete
@@ -66,11 +70,19 @@ class GdkRGBA is repr('CStruct') is export is DEPRECATED('N-GdkRGBA') {
   has num64 $.alpha;
 }
 
+#TT:1:N-GdkRGBA:
 class N-GdkRGBA is repr('CStruct') is export {
   has num64 $.red;
   has num64 $.green;
   has num64 $.blue;
   has num64 $.alpha;
+
+  submethod BUILD ( :$red, :$green, :$blue, :$alpha ) {
+    $!red = $red.Num;
+    $!green = $green.Num;
+    $!blue = $blue.Num;
+    $!alpha = $alpha.Num;
+  }
 }
 
 #-------------------------------------------------------------------------------
@@ -83,9 +95,9 @@ my %rgba-hash{UInt} = %();
 
 Create a new object using colors and transparency values. Their ranges are from 0 to 1
 
-  multi method new ( Num :$red!, Num :$green!, Num :$blue!, Num :$alpha! )
+  multi method new ( :$red!, :$green!, :$blue!, :$alpha! )
 
-Create an object using a string which is parsed with C<gdk_rgba_parse()>. If parsing fails, the color is set to opaque white.
+Create an object using a string which is parsed with C<gdk_rgba_parse()>. If parsing fails, the color is set to opaque white. The colors originally where B<Num> type but they can now also be B<Int>, B<Rat>, B<Str> or B<Num> as long as they represent a number between 0 and 1.
 
   multi method new ( Str :$rgba! )
 
@@ -109,10 +121,10 @@ submethod BUILD ( *%options ) {
   if ? %options<red> or ? %options<green> or
      ? %options<blue> or ? %options<alpha> {
 
-    my Num $red = %options<red> // 1.0e1;
-    my Num $green = %options<green> // 1.0e1;
-    my Num $blue = %options<blue> // 1.0e1;
-    my Num $alpha = %options<alpha> // 1.0e1;
+    my Num $red = %options<red>.Num // 1.0e1;
+    my Num $green = %options<green>.Num // 1.0e1;
+    my Num $blue = %options<blue>.Num // 1.0e1;
+    my Num $alpha = %options<alpha>.Num // 1.0e1;
 
     self.native-gboxed(N-GdkRGBA.new( :$red, :$green, :$blue, :$alpha));
   }
