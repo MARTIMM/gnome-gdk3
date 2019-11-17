@@ -1,5 +1,8 @@
 ## Release notes
 
+* 2019-11-17 0.14.13
+  * bugfixed in RGBA. Any should have defaults of 1.0.
+
 * 2019-11-07 0.14.12
   * Convenience additions to RGBA. The object can now be initialized using Int, Num, Rat or Str types instead of Num only.
 

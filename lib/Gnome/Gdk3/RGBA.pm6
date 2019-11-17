@@ -77,7 +77,7 @@ class N-GdkRGBA is repr('CStruct') is export {
   has num64 $.blue;
   has num64 $.alpha;
 
-  submethod BUILD ( :$red, :$green, :$blue, :$alpha ) {
+  submethod BUILD ( :$red = 1, :$green = 1, :$blue = 1, :$alpha = 1 ) {
     $!red = $red.Num;
     $!green = $green.Num;
     $!blue = $blue.Num;
