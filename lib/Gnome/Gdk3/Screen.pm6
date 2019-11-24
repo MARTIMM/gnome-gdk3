@@ -71,7 +71,7 @@ Create an object using a native screen object from elsewhere.
 submethod BUILD ( *%options ) {
 
   $signals-added = self.add-signal-types( $?CLASS.^name,
-    :w0<size-changed composited-changed monitors-changed>, 
+    :w0<size-changed composited-changed monitors-changed>,
   ) unless $signals-added;
 
   # prevent creating wrong widgets
@@ -101,8 +101,9 @@ submethod BUILD ( *%options ) {
 method _fallback ( $native-sub is copy --> Callable ) {
 
   my Callable $s;
-  try { $s = &::($native-sub); }
-  try { $s = &::("gdk_screen_$native-sub"); } unless ?$s;
+  try { $s = &::("gdk_screen_$native-sub"); };
+  try { $s = &::("gdk_$native-sub"); } unless ?$s;
+  try { $s = &::($native-sub); } if !$s and $native-sub ~~ m/^ 'gdk_' /;
 
   self.set-class-name-of-sub('GdkScreen');
   $s = callsame unless ?$s;

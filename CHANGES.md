@@ -1,10 +1,15 @@
 ## Release notes
 
+* 2019-11-24 0.14.14
+  * Modified `_fallback()` routines to change order of tests
+
+* Something went wrong with versions
+
 * 2019-10-13 0.14.11
   * all classes reviewed caused by changes in signalling system, also modules are extended and documented. Tests are added too.
 
 * 2019-08-22 0.14.10
-  * All fallback() method renamed to \_fallback()
+  * All `fallback()` method renamed to `_fallback()`
 
 * 2019-07-31 0.14.9 sic
 * 2019-07-31 0.14.8
