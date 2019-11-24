@@ -1426,8 +1426,9 @@ submethod BUILD ( *%options ) {
 method _fallback ( $native-sub is copy --> Callable ) {
 
   my Callable $s;
-  try { $s = &::($native-sub); }
-  try { $s = &::("gdk_events_$native-sub"); } unless ?$s;
+  try { $s = &::("gdk_events_$native-sub"); };
+  try { $s = &::("gdk_$native-sub"); } unless ?$s;
+  try { $s = &::($native-sub); } if !$s and $native-sub ~~ m/^ 'gdk_' /;
 
   $s = callsame unless ?$s;
 

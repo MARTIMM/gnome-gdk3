@@ -193,8 +193,9 @@ submethod BUILD ( *%options ) {
 method _fallback ( $native-sub is copy --> Callable ) {
 
   my Callable $s;
-  try { $s = &::($native-sub); }
-  try { $s = &::("gdk_device_$native-sub"); } unless ?$s;
+  try { $s = &::("gdk_device_$native-sub"); };
+  try { $s = &::("gdk_$native-sub"); } unless ?$s;
+  try { $s = &::($native-sub); } if !$s and $native-sub ~~ m/^ 'gdk_' /;
 
   self.set-class-name-of-sub('GdkDevice');
   $s = callsame unless ?$s;
