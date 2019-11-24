@@ -13,7 +13,7 @@ use Gnome::Gdk3::RGBA;
 my Gnome::Gdk3::RGBA $r;
 #-------------------------------------------------------------------------------
 subtest 'ISA test', {
-  $r .= new( :red(.5e0), :green(.5e0), :blue(.5e0), :alpha(.5e0));
+  $r .= new( :red(.5e0), :green('0.5'), :blue(0.5), :alpha(.5e0));
   isa-ok $r, Gnome::Gdk3::RGBA, '.new(:red,...)';
 
   my Gnome::Gdk3::RGBA $c1 .= new(:rgba($r()));
