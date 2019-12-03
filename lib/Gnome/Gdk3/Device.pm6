@@ -206,7 +206,7 @@ method _fallback ( $native-sub is copy --> Callable ) {
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_name:
 =begin pod
-=head2 [gdk_device_] get_name
+=head2 [[gdk_] device_] get_name
 
 Determines the name of the device.
 
@@ -227,7 +227,7 @@ sub gdk_device_get_name ( N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_has_cursor:
 =begin pod
-=head2 [gdk_device_] get_has_cursor
+=head2 [[gdk_] device_] get_has_cursor
 
 Determines whether the pointer follows device motion.
 This is not meaningful for keyboard devices, which don't have a pointer.
@@ -249,7 +249,7 @@ sub gdk_device_get_has_cursor ( N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_source:
 =begin pod
-=head2 [gdk_device_] get_source
+=head2 [[gdk_] device_] get_source
 
 Determines the type of the device.
 
@@ -270,7 +270,7 @@ sub gdk_device_get_source ( N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_mode:
 =begin pod
-=head2 [gdk_device_] get_mode
+=head2 [[gdk_] device_] get_mode
 
 Determines the mode of the device.
 
@@ -291,7 +291,7 @@ sub gdk_device_get_mode ( N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_set_mode:
 =begin pod
-=head2 [gdk_device_] set_mode
+=head2 [[gdk_] device_] set_mode
 
 Sets a the mode of an input device. The mode controls if the
 device is active and whether the device’s range is mapped to the
@@ -317,7 +317,7 @@ sub gdk_device_set_mode ( N-GObject $device, int32 $mode )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_n_keys:
 =begin pod
-=head2 [gdk_device_] get_n_keys
+=head2 [[gdk_] device_] get_n_keys
 
 Returns the number of keys the device currently has.
 
@@ -338,7 +338,7 @@ sub gdk_device_get_n_keys ( N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_key:
 =begin pod
-=head2 [gdk_device_] get_key
+=head2 [[gdk_] device_] get_key
 
 If I<index_> has a valid keyval, this function will return C<1>
 and fill in I<keyval> and I<modifiers> with the keyval settings.
@@ -363,7 +363,7 @@ sub gdk_device_get_key ( N-GObject $device, uint32 $index_, uint32 $keyval, int3
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_set_key:
 =begin pod
-=head2 [gdk_device_] set_key
+=head2 [[gdk_] device_] set_key
 
 Specifies the X key event to generate when a macro button of a device
 is pressed.
@@ -384,7 +384,7 @@ sub gdk_device_set_key ( N-GObject $device, uint32 $index_, uint32 $keyval, int3
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_axis_use:
 =begin pod
-=head2 [gdk_device_] get_axis_use
+=head2 [[gdk_] device_] get_axis_use
 
 Returns the axis use for I<index_>.
 
@@ -406,7 +406,7 @@ sub gdk_device_get_axis_use ( N-GObject $device, uint32 $index_ )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_set_axis_use:
 =begin pod
-=head2 [gdk_device_] set_axis_use
+=head2 [[gdk_] device_] set_axis_use
 
 Specifies how an axis of a device is used.
 
@@ -425,7 +425,7 @@ sub gdk_device_set_axis_use ( N-GObject $device, uint32 $index_, GdkAxisUse $use
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_state:
 =begin pod
-=head2 [gdk_device_] get_state
+=head2 [[gdk_] device_] get_state
 
 Gets the current state of a pointer device relative to I<window>. As a slave
 device’s coordinates are those of its master pointer, this
@@ -447,7 +447,7 @@ sub gdk_device_get_state ( N-GObject $device, N-GObject $window, num64 $axes, in
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_position:
 =begin pod
-=head2 [gdk_device_] get_position
+=head2 [[gdk_] device_] get_position
 
 Gets the current location of I<device>. As a slave device
 coordinates are those of its master pointer, This function
@@ -471,7 +471,7 @@ sub gdk_device_get_position ( N-GObject $device, N-GObject $screen, int32 $x, in
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_window_at_position:
 =begin pod
-=head2 [gdk_device_] get_window_at_position
+=head2 [[gdk_] device_] get_window_at_position
 
 Obtains the window underneath I<device>, returning the location of the device in I<win_x> and I<win_y>. Returns
 C<Any> if the window tree under I<device> is not known to GDK (for example, belongs to another application).
@@ -500,7 +500,7 @@ sub gdk_device_get_window_at_position ( N-GObject $device, int32 $win_x, int32 $
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_position_double:
 =begin pod
-=head2 [gdk_device_] get_position_double
+=head2 [[gdk_] device_] get_position_double
 
 Gets the current location of I<device> in double precision. As a slave device's
 coordinates are those of its master pointer, this function
@@ -524,7 +524,7 @@ sub gdk_device_get_position_double ( N-GObject $device, N-GObject $screen, num64
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_window_at_position_double:
 =begin pod
-=head2 [gdk_device_] get_window_at_position_double
+=head2 [[gdk_] device_] get_window_at_position_double
 
 Obtains the window underneath I<device>, returning the location of the device in I<win_x> and I<win_y> in
 double precision. Returns C<Any> if the window tree under I<device> is not known to GDK (for example,
@@ -555,7 +555,7 @@ sub gdk_device_get_window_at_position_double ( N-GObject $device, num64 $win_x, 
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_history:
 =begin pod
-=head2 [gdk_device_] get_history
+=head2 [[gdk_] device_] get_history
 
 Obtains the motion history for a pointer device; given a starting and
 ending timestamp, return all events in the motion history for
@@ -589,7 +589,7 @@ sub gdk_device_get_history ( N-GObject $device, N-GObject $window, uint32 $start
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_free_history:
 =begin pod
-=head2 [gdk_device_] free_history
+=head2 [[gdk_] device_] free_history
 
 Frees an array of B<Gnome::Gdk3::TimeCoord> that was returned by C<gdk_device_get_history()>.
 
@@ -608,7 +608,7 @@ sub gdk_device_free_history ( GdkTimeCoord $events, int32 $n_events )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_n_axes:
 =begin pod
-=head2 [gdk_device_] get_n_axes
+=head2 [[gdk_] device_] get_n_axes
 
 Returns the number of axes the device currently has.
 
@@ -629,7 +629,7 @@ sub gdk_device_get_n_axes ( N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_list_axes:
 =begin pod
-=head2 [gdk_device_] list_axes
+=head2 [[gdk_] device_] list_axes
 
 Returns a B<GList> of B<Gnome::Gdk3::Atoms>, containing the labels for
 the axes that I<device> currently has.
@@ -653,7 +653,7 @@ sub gdk_device_list_axes ( N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_axis_value:
 =begin pod
-=head2 [gdk_device_] get_axis_value
+=head2 [[gdk_] device_] get_axis_value
 
 Interprets an array of double as axis values for a given device,
 and locates the value in the array for a given axis label, as returned
@@ -681,7 +681,7 @@ sub gdk_device_get_axis_value ( N-GObject $device, num64 $axes, GdkAtom $axis_la
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_axis:
 =begin pod
-=head2 [gdk_device_] get_axis
+=head2 [[gdk_] device_] get_axis
 
 Interprets an array of double as axis values for a given device,
 and locates the value in the array for a given axis use.
@@ -705,7 +705,7 @@ sub gdk_device_get_axis ( N-GObject $device, num64 $axes, GdkAxisUse $use, num64
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_display:
 =begin pod
-=head2 [gdk_device_] get_display
+=head2 [[gdk_] device_] get_display
 
 Returns the B<Gnome::Gdk3::Display> to which I<device> pertains.
 
@@ -727,7 +727,7 @@ sub gdk_device_get_display ( N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_associated_device:
 =begin pod
-=head2 [gdk_device_] get_associated_device
+=head2 [[gdk_] device_] get_associated_device
 
 Returns the associated device to I<device>, if I<device> is of type
 C<GDK_DEVICE_TYPE_MASTER>, it will return the paired pointer or
@@ -757,7 +757,7 @@ sub gdk_device_get_associated_device ( N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_list_slave_devices:
 =begin pod
-=head2 [gdk_device_] list_slave_devices
+=head2 [[gdk_] device_] list_slave_devices
 
 If the device if of type C<GDK_DEVICE_TYPE_MASTER>, it will return
 the list of slave devices attached to it, otherwise it will return
@@ -781,7 +781,7 @@ sub gdk_device_list_slave_devices ( N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_device_type:
 =begin pod
-=head2 [gdk_device_] get_device_type
+=head2 [[gdk_] device_] get_device_type
 
 Returns the device type for I<device>.
 
@@ -833,7 +833,7 @@ sub gdk_device_warp ( N-GObject $device, N-GObject $screen, int32 $x, int32 $y )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_last_event_window:
 =begin pod
-=head2 [gdk_device_] get_last_event_window
+=head2 [[gdk_] device_] get_last_event_window
 
 Gets information about which window the given pointer device is in, based on events
 that have been received so far from the display server. If another application
@@ -858,7 +858,7 @@ sub gdk_device_get_last_event_window ( N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_vendor_id:
 =begin pod
-=head2 [gdk_device_] get_vendor_id
+=head2 [[gdk_] device_] get_vendor_id
 
 Returns the vendor ID of this device, or C<Any> if this information couldn't
 be obtained. This ID is retrieved from the device, and is thus constant for
@@ -904,7 +904,7 @@ sub gdk_device_get_vendor_id ( N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_product_id:
 =begin pod
-=head2 [gdk_device_] get_product_id
+=head2 [[gdk_] device_] get_product_id
 
 Returns the product ID of this device, or C<Any> if this information couldn't
 be obtained. This ID is retrieved from the device, and is thus constant for
@@ -927,7 +927,7 @@ sub gdk_device_get_product_id ( N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_seat:
 =begin pod
-=head2 [gdk_device_] get_seat
+=head2 [[gdk_] device_] get_seat
 
 Returns the B<Gnome::Gdk3::Seat> the device belongs to.
 
@@ -950,7 +950,7 @@ sub gdk_device_get_seat ( N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_device_get_axes:
 =begin pod
-=head2 [gdk_device_] get_axes
+=head2 [[gdk_] device_] get_axes
 
 Returns the axes currently available on the device.
 
