@@ -680,7 +680,7 @@ sub gdk_window_destroy ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:1:gdk_window_get_window_type:
 =begin pod
-=head2 [gdk_window_] get_window_type
+=head2 [[gdk_] window_] get_window_type
 
 Gets the type of the window. See B<Gnome::Gdk3::WindowType>.
 
@@ -699,7 +699,7 @@ sub gdk_window_get_window_type ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_is_destroyed:
 =begin pod
-=head2 [gdk_window_] is_destroyed
+=head2 [[gdk_] window_] is_destroyed
 
 Check to see if a window is destroyed..
 
@@ -720,7 +720,7 @@ sub gdk_window_is_destroyed ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_visual:
 =begin pod
-=head2 [gdk_window_] get_visual
+=head2 [[gdk_] window_] get_visual
 
 Gets the B<Gnome::Gdk3::Visual> describing the pixel format of I<window>.
 
@@ -741,7 +741,7 @@ sub gdk_window_get_visual ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_screen:
 =begin pod
-=head2 [gdk_window_] get_screen
+=head2 [[gdk_] window_] get_screen
 
 Gets the B<Gnome::Gdk3::Screen> associated with a B<Gnome::Gdk3::Window>.
 
@@ -762,7 +762,7 @@ sub gdk_window_get_screen ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_display:
 =begin pod
-=head2 [gdk_window_] get_display
+=head2 [[gdk_] window_] get_display
 
 Gets the B<Gnome::Gdk3::Display> associated with a B<Gnome::Gdk3::Window>.
 
@@ -844,7 +844,7 @@ sub gdk_window_withdraw ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_show_unraised:
 =begin pod
-=head2 [gdk_window_] show_unraised
+=head2 [[gdk_] window_] show_unraised
 
 Shows a B<Gnome::Gdk3::Window> onscreen, but does not modify its stacking
 order. In contrast, C<gdk_window_show()> will raise the window
@@ -916,7 +916,7 @@ sub gdk_window_resize ( N-GObject $window, int32 $width, int32 $height )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_move_resize:
 =begin pod
-=head2 [gdk_window_] move_resize
+=head2 [[gdk_] window_] move_resize
 
 Equivalent to calling C<gdk_window_move()> and C<gdk_window_resize()>,
 except that both operations are performed at once, avoiding strange
@@ -939,7 +939,7 @@ sub gdk_window_move_resize ( N-GObject $window, int32 $x, int32 $y, int32 $width
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_move_to_rect:
 =begin pod
-=head2 [gdk_window_] move_to_rect
+=head2 [[gdk_] window_] move_to_rect
 
 Moves I<window> to I<rect>, aligning their anchor points.
 
@@ -1094,7 +1094,7 @@ sub gdk_window_focus ( N-GObject $window, uint32 $timestamp )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_user_data:
 =begin pod
-=head2 [gdk_window_] set_user_data
+=head2 [[gdk_] window_] set_user_data
 
 For most purposes this function is deprecated in favor of
 C<g_object_set_data()>. However, for historical reasons GTK+ stores
@@ -1118,7 +1118,7 @@ sub gdk_window_set_user_data ( N-GObject $window, Pointer $user_data )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_override_redirect:
 =begin pod
-=head2 [gdk_window_] set_override_redirect
+=head2 [[gdk_] window_] set_override_redirect
 
 An override redirect window is not under the control of the window manager.
 This means it won’t have a titlebar, won’t be minimizable, etc. - it will
@@ -1143,7 +1143,7 @@ sub gdk_window_set_override_redirect ( N-GObject $window, int32 $override_redire
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_accept_focus:
 =begin pod
-=head2 [gdk_window_] get_accept_focus
+=head2 [[gdk_] window_] get_accept_focus
 
 Determines whether or not the desktop environment shuld be hinted that
 the window does not want to receive input focus.
@@ -1165,7 +1165,7 @@ sub gdk_window_get_accept_focus ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_accept_focus:
 =begin pod
-=head2 [gdk_window_] set_accept_focus
+=head2 [[gdk_] window_] set_accept_focus
 
 Setting I<accept_focus> to C<0> hints the desktop environment that the
 window doesn’t want to receive input focus.
@@ -1188,7 +1188,7 @@ sub gdk_window_set_accept_focus ( N-GObject $window, int32 $accept_focus )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_focus_on_map:
 =begin pod
-=head2 [gdk_window_] get_focus_on_map
+=head2 [[gdk_] window_] get_focus_on_map
 
 Determines whether or not the desktop environment should be hinted that the
 window does not want to receive input focus when it is mapped.
@@ -1211,7 +1211,7 @@ sub gdk_window_get_focus_on_map ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_focus_on_map:
 =begin pod
-=head2 [gdk_window_] set_focus_on_map
+=head2 [[gdk_] window_] set_focus_on_map
 
 Setting I<focus_on_map> to C<0> hints the desktop environment that the
 window doesn’t want to receive input focus when it is mapped.
@@ -1238,7 +1238,7 @@ sub gdk_window_set_focus_on_map ( N-GObject $window, int32 $focus_on_map )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_add_filter:
 =begin pod
-=head2 [gdk_window_] add_filter
+=head2 [[gdk_] window_] add_filter
 
 Adds an event filter to I<window>, allowing you to intercept events
 before they reach GDK. This is a low-level operation and makes it
@@ -1264,7 +1264,7 @@ sub gdk_window_add_filter ( N-GObject $window, GdkFilterFunc $function, Pointer 
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_remove_filter:
 =begin pod
-=head2 [gdk_window_] remove_filter
+=head2 [[gdk_] window_] remove_filter
 
 Remove a filter previously added with C<gdk_window_add_filter()>.
 
@@ -1312,7 +1312,7 @@ sub gdk_window_scroll ( N-GObject $window, int32 $dx, int32 $dy )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_move_region:
 =begin pod
-=head2 [gdk_window_] move_region
+=head2 [[gdk_] window_] move_region
 
 Move the part of I<window> indicated by I<region> by I<dy> pixels in the Y
 direction and I<dx> pixels in the X direction. The portions of I<region>
@@ -1338,7 +1338,7 @@ sub gdk_window_move_region ( N-GObject $window, cairo_region_t $region, int32 $d
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_ensure_native:
 =begin pod
-=head2 [gdk_window_] ensure_native
+=head2 [[gdk_] window_] ensure_native
 
 Tries to ensure that there is a window-system native window for this
 B<Gnome::Gdk3::Window>. This may fail in some situations, returning C<0>.
@@ -1365,7 +1365,7 @@ sub gdk_window_ensure_native ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_shape_combine_region:
 =begin pod
-=head2 [gdk_window_] shape_combine_region
+=head2 [[gdk_] window_] shape_combine_region
 
 Makes pixels in I<window> outside I<shape_region> be transparent,
 so that the window may be nonrectangular.
@@ -1398,7 +1398,7 @@ sub gdk_window_shape_combine_region ( N-GObject $window, cairo_region_t $shape_r
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_child_shapes:
 =begin pod
-=head2 [gdk_window_] set_child_shapes
+=head2 [[gdk_] window_] set_child_shapes
 
 Sets the shape mask of I<window> to the union of shape masks
 for all children of I<window>, ignoring the shape mask of I<window>
@@ -1417,7 +1417,7 @@ sub gdk_window_set_child_shapes ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_merge_child_shapes:
 =begin pod
-=head2 [gdk_window_] merge_child_shapes
+=head2 [[gdk_] window_] merge_child_shapes
 
 Merges the shape masks for any child windows into the
 shape mask for I<window>. i.e. the union of all masks
@@ -1441,7 +1441,7 @@ sub gdk_window_merge_child_shapes ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_input_shape_combine_region:
 =begin pod
-=head2 [gdk_window_] input_shape_combine_region
+=head2 [[gdk_] window_] input_shape_combine_region
 
 Like C<gdk_window_shape_combine_region()>, but the shape applies
 only to event handling. Mouse events which happen while
@@ -1478,7 +1478,7 @@ sub gdk_window_input_shape_combine_region ( N-GObject $window, cairo_region_t $s
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_child_input_shapes:
 =begin pod
-=head2 [gdk_window_] set_child_input_shapes
+=head2 [[gdk_] window_] set_child_input_shapes
 
 Sets the input shape mask of I<window> to the union of input shape masks
 for all children of I<window>, ignoring the input shape mask of I<window>
@@ -1499,7 +1499,7 @@ sub gdk_window_set_child_input_shapes ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_merge_child_input_shapes:
 =begin pod
-=head2 [gdk_window_] merge_child_input_shapes
+=head2 [[gdk_] window_] merge_child_input_shapes
 
 Merges the input shape masks for any child windows into the
 input shape mask for I<window>. i.e. the union of all input masks
@@ -1524,7 +1524,7 @@ sub gdk_window_merge_child_input_shapes ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_pass_through:
 =begin pod
-=head2 [gdk_window_] set_pass_through
+=head2 [[gdk_] window_] set_pass_through
 
 Sets whether input to the window is passed through to the window
 below.
@@ -1560,7 +1560,7 @@ sub gdk_window_set_pass_through ( N-GObject $window, int32 $pass_through )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_pass_through:
 =begin pod
-=head2 [gdk_window_] get_pass_through
+=head2 [[gdk_] window_] get_pass_through
 
 Returns whether input to the window is passed through to the window
 below.
@@ -1582,7 +1582,7 @@ sub gdk_window_get_pass_through ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_is_visible:
 =begin pod
-=head2 [gdk_window_] is_visible
+=head2 [[gdk_] window_] is_visible
 
 Checks whether the window has been mapped (with C<gdk_window_show()> or
 C<gdk_window_show_unraised()>).
@@ -1602,7 +1602,7 @@ sub gdk_window_is_visible ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_is_viewable:
 =begin pod
-=head2 [gdk_window_] is_viewable
+=head2 [[gdk_] window_] is_viewable
 
 Check if the window and all ancestors of the window are
 mapped. (This is not necessarily "viewable" in the X sense, since
@@ -1624,7 +1624,7 @@ sub gdk_window_is_viewable ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_is_input_only:
 =begin pod
-=head2 [gdk_window_] is_input_only
+=head2 [[gdk_] window_] is_input_only
 
 Determines whether or not the window is an input only window.
 
@@ -1645,7 +1645,7 @@ sub gdk_window_is_input_only ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_is_shaped:
 =begin pod
-=head2 [gdk_window_] is_shaped
+=head2 [[gdk_] window_] is_shaped
 
 Determines whether or not the window is shaped.
 
@@ -1666,7 +1666,7 @@ sub gdk_window_is_shaped ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_state:
 =begin pod
-=head2 [gdk_window_] get_state
+=head2 [[gdk_] window_] get_state
 
 Gets the bitwise OR of the currently active window state flags,
 from the B<Gnome::Gdk3::WindowState> enumeration.
@@ -1687,7 +1687,7 @@ sub gdk_window_get_state ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_invalidate_handler:
 =begin pod
-=head2 [gdk_window_] set_invalidate_handler
+=head2 [[gdk_] window_] set_invalidate_handler
 
 Registers an invalidate handler for a specific window. This
 will get called whenever a region in the window or its children
@@ -1715,7 +1715,7 @@ sub gdk_window_set_invalidate_handler ( N-GObject $window, GdkWindowInvalidateHa
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_has_native:
 =begin pod
-=head2 [gdk_window_] has_native
+=head2 [[gdk_] window_] has_native
 
 Checks whether the window has a native window or not. Note that
 you can use C<gdk_window_ensure_native()> if a native window is needed.
@@ -1737,7 +1737,7 @@ sub gdk_window_has_native ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_type_hint:
 =begin pod
-=head2 [gdk_window_] set_type_hint
+=head2 [[gdk_] window_] set_type_hint
 
 The application can use this call to provide a hint to the window
 manager about the functionality of a window. The window manager
@@ -1759,7 +1759,7 @@ sub gdk_window_set_type_hint ( N-GObject $window, int32 $hint )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_type_hint:
 =begin pod
-=head2 [gdk_window_] get_type_hint
+=head2 [[gdk_] window_] get_type_hint
 
 This function returns the type hint set for a window.
 
@@ -1780,7 +1780,7 @@ sub gdk_window_get_type_hint ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_modal_hint:
 =begin pod
-=head2 [gdk_window_] get_modal_hint
+=head2 [[gdk_] window_] get_modal_hint
 
 Determines whether or not the window manager is hinted that I<window>
 has modal behaviour.
@@ -1802,7 +1802,7 @@ sub gdk_window_get_modal_hint ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_modal_hint:
 =begin pod
-=head2 [gdk_window_] set_modal_hint
+=head2 [[gdk_] window_] set_modal_hint
 
 The application can use this hint to tell the window manager
 that a certain window has modal behaviour. The window manager
@@ -1825,7 +1825,7 @@ sub gdk_window_set_modal_hint ( N-GObject $window, int32 $modal )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_skip_taskbar_hint:
 =begin pod
-=head2 [gdk_window_] set_skip_taskbar_hint
+=head2 [[gdk_] window_] set_skip_taskbar_hint
 
 Toggles whether a window should appear in a task list or window
 list. If a window’s semantic type as specified with
@@ -1849,7 +1849,7 @@ sub gdk_window_set_skip_taskbar_hint ( N-GObject $window, int32 $skips_taskbar )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_skip_pager_hint:
 =begin pod
-=head2 [gdk_window_] set_skip_pager_hint
+=head2 [[gdk_] window_] set_skip_pager_hint
 
 Toggles whether a window should appear in a pager (workspace
 switcher, or other desktop utility program that displays a small
@@ -1875,7 +1875,7 @@ sub gdk_window_set_skip_pager_hint ( N-GObject $window, int32 $skips_pager )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_urgency_hint:
 =begin pod
-=head2 [gdk_window_] set_urgency_hint
+=head2 [[gdk_] window_] set_urgency_hint
 
 Toggles whether a window needs the user's
 urgent attention.
@@ -1895,7 +1895,7 @@ sub gdk_window_set_urgency_hint ( N-GObject $window, int32 $urgent )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_geometry_hints:
 =begin pod
-=head2 [gdk_window_] set_geometry_hints
+=head2 [[gdk_] window_] set_geometry_hints
 
 Sets the geometry hints for I<window>. Hints flagged in I<geom_mask>
 are set, hints not flagged in I<geom_mask> are unset.
@@ -1935,7 +1935,7 @@ sub gdk_window_set_geometry_hints ( N-GObject $window, GdkGeometry $geometry, in
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_clip_region:
 =begin pod
-=head2 [gdk_window_] get_clip_region
+=head2 [[gdk_] window_] get_clip_region
 
 Computes the region of a window that potentially can be written
 to by drawing primitives. This region may not take into account
@@ -1959,7 +1959,7 @@ sub gdk_window_get_clip_region ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_visible_region:
 =begin pod
-=head2 [gdk_window_] get_visible_region
+=head2 [[gdk_] window_] get_visible_region
 
 Computes the region of the I<window> that is potentially visible.
 This does not necessarily take into account if the window is
@@ -1982,7 +1982,7 @@ sub gdk_window_get_visible_region ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_mark_paint_from_clip:
 =begin pod
-=head2 [gdk_window_] mark_paint_from_clip
+=head2 [[gdk_] window_] mark_paint_from_clip
 
 If you call this during a paint (e.g. between C<gdk_window_begin_paint_region()>
 and C<gdk_window_end_paint()> then GDK will mark the current clip region of the
@@ -2008,7 +2008,7 @@ sub gdk_window_mark_paint_from_clip ( N-GObject $window, cairo_t $cr )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_begin_draw_frame:
 =begin pod
-=head2 [gdk_window_] begin_draw_frame
+=head2 [[gdk_] window_] begin_draw_frame
 
 Indicates that you are beginning the process of redrawing I<region>
 on I<window>, and provides you with a B<Gnome::Gdk3::DrawingContext>.
@@ -2059,7 +2059,7 @@ sub gdk_window_begin_draw_frame ( N-GObject $window, cairo_region_t $region )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_end_draw_frame:
 =begin pod
-=head2 [gdk_window_] end_draw_frame
+=head2 [[gdk_] window_] end_draw_frame
 
 Indicates that the drawing of the contents of I<window> started with
 C<gdk_window_begin_frame()> has been completed.
@@ -2084,7 +2084,7 @@ sub gdk_window_end_draw_frame ( N-GObject $window, N-GObject $context )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_title:
 =begin pod
-=head2 [gdk_window_] set_title
+=head2 [[gdk_] window_] set_title
 
 Sets the title of a toplevel window, to be displayed in the titlebar.
 If you haven’t explicitly set the icon name for the window
@@ -2105,7 +2105,7 @@ sub gdk_window_set_title ( N-GObject $window, Str $title )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_role:
 =begin pod
-=head2 [gdk_window_] set_role
+=head2 [[gdk_] window_] set_role
 
 When using GTK+, typically you should use C<gtk_window_set_role()> instead
 of this low-level function.
@@ -2134,7 +2134,7 @@ sub gdk_window_set_role ( N-GObject $window, Str $role )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_startup_id:
 =begin pod
-=head2 [gdk_window_] set_startup_id
+=head2 [[gdk_] window_] set_startup_id
 
 When using GTK+, typically you should use C<gtk_window_set_startup_id()>
 instead of this low-level function.
@@ -2155,7 +2155,7 @@ sub gdk_window_set_startup_id ( N-GObject $window, Str $startup_id )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_transient_for:
 =begin pod
-=head2 [gdk_window_] set_transient_for
+=head2 [[gdk_] window_] set_transient_for
 
 Indicates to the window manager that I<window> is a transient dialog
 associated with the application window I<parent>. This allows the
@@ -2178,7 +2178,7 @@ sub gdk_window_set_transient_for ( N-GObject $window, N-GObject $parent )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_cursor:
 =begin pod
-=head2 [gdk_window_] set_cursor
+=head2 [[gdk_] window_] set_cursor
 
 Sets the default mouse pointer for a B<Gnome::Gdk3::Window>.
 
@@ -2203,7 +2203,7 @@ sub gdk_window_set_cursor ( N-GObject $window, N-GObject $cursor )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_cursor:
 =begin pod
-=head2 [gdk_window_] get_cursor
+=head2 [[gdk_] window_] get_cursor
 
 Retrieves a B<Gnome::Gdk3::Cursor> pointer for the cursor currently set on the
 specified B<Gnome::Gdk3::Window>, or C<Any>.  If the return value is C<Any> then
@@ -2230,7 +2230,7 @@ sub gdk_window_get_cursor ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_device_cursor:
 =begin pod
-=head2 [gdk_window_] set_device_cursor
+=head2 [[gdk_] window_] set_device_cursor
 
 Sets a specific B<Gnome::Gdk3::Cursor> for a given device when it gets inside I<window>.
 Use C<gdk_cursor_new_for_display()> or C<gdk_cursor_new_from_pixbuf()> to create
@@ -2255,7 +2255,7 @@ sub gdk_window_set_device_cursor ( N-GObject $window, N-GObject $device, N-GObje
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_device_cursor:
 =begin pod
-=head2 [gdk_window_] get_device_cursor
+=head2 [[gdk_] window_] get_device_cursor
 
 Retrieves a B<Gnome::Gdk3::Cursor> pointer for the I<device> currently set on the
 specified B<Gnome::Gdk3::Window>, or C<Any>.  If the return value is C<Any> then
@@ -2283,7 +2283,7 @@ sub gdk_window_get_device_cursor ( N-GObject $window, N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_user_data:
 =begin pod
-=head2 [gdk_window_] get_user_data
+=head2 [[gdk_] window_] get_user_data
 
 Retrieves the user data for I<window>, which is normally the widget
 that I<window> belongs to. See C<gdk_window_set_user_data()>.
@@ -2302,7 +2302,7 @@ sub gdk_window_get_user_data ( N-GObject $window, Pointer $data )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_geometry:
 =begin pod
-=head2 [gdk_window_] get_geometry
+=head2 [[gdk_] window_] get_geometry
 
 Any of the return location arguments to this function may be C<Any>,
 if you aren’t interested in getting the value of that field.
@@ -2341,7 +2341,7 @@ sub gdk_window_get_geometry ( N-GObject $window, int32 $x, int32 $y, int32 $widt
 #-------------------------------------------------------------------------------
 #TM:1:gdk_window_get_width:
 =begin pod
-=head2 [gdk_window_] get_width
+=head2 [[gdk_] window_] get_width
 
 Returns the width of the given I<window>.
 
@@ -2366,7 +2366,7 @@ sub gdk_window_get_width ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:1:gdk_window_get_height:
 =begin pod
-=head2 [gdk_window_] get_height
+=head2 [[gdk_] window_] get_height
 
 Returns the height of the given I<window>.
 
@@ -2391,7 +2391,7 @@ sub gdk_window_get_height ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:1:gdk_window_get_position:
 =begin pod
-=head2 [gdk_window_] get_position
+=head2 [[gdk_] window_] get_position
 
 Obtains the position of the window as reported in the
 most-recently-processed B<Gnome::Gdk3::EventConfigure>. Contrast with
@@ -2423,7 +2423,7 @@ sub _gdk_window_get_position ( N-GObject $window, int32 $x is rw, int32 $y is rw
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_origin:
 =begin pod
-=head2 [gdk_window_] get_origin
+=head2 [[gdk_] window_] get_origin
 
 Obtains the position of a window in root window coordinates.
 (Compare with C<gdk_window_get_position()> and
@@ -2447,7 +2447,7 @@ sub gdk_window_get_origin ( N-GObject $window, int32 $x, int32 $y )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_root_coords:
 =begin pod
-=head2 [gdk_window_] get_root_coords
+=head2 [[gdk_] window_] get_root_coords
 
 Obtains the position of a window position in root
 window coordinates. This is similar to
@@ -2472,7 +2472,7 @@ sub gdk_window_get_root_coords ( N-GObject $window, int32 $x, int32 $y, int32 $r
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_coords_to_parent:
 =begin pod
-=head2 [gdk_window_] coords_to_parent
+=head2 [[gdk_] window_] coords_to_parent
 
 Transforms window coordinates from a child window to its parent
 window, where the parent window is the normal parent as returned by
@@ -2509,7 +2509,7 @@ sub gdk_window_coords_to_parent ( N-GObject $window, num64 $x, num64 $y, num64 $
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_coords_from_parent:
 =begin pod
-=head2 [gdk_window_] coords_from_parent
+=head2 [[gdk_] window_] coords_from_parent
 
 Transforms window coordinates from a parent window to a child
 window, where the parent window is the normal parent as returned by
@@ -2546,7 +2546,7 @@ sub gdk_window_coords_from_parent ( N-GObject $window, num64 $parent_x, num64 $p
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_root_origin:
 =begin pod
-=head2 [gdk_window_] get_root_origin
+=head2 [[gdk_] window_] get_root_origin
 
 Obtains the top-left corner of the window manager frame in root
 window coordinates.
@@ -2566,7 +2566,7 @@ sub gdk_window_get_root_origin ( N-GObject $window, int32 $x, int32 $y )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_frame_extents:
 =begin pod
-=head2 [gdk_window_] get_frame_extents
+=head2 [[gdk_] window_] get_frame_extents
 
 Obtains the bounding box of the window, including window manager
 titlebar/borders if any. The frame position is given in root window
@@ -2587,7 +2587,7 @@ sub gdk_window_get_frame_extents ( N-GObject $window, N-GObject $rect )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_scale_factor:
 =begin pod
-=head2 [gdk_window_] get_scale_factor
+=head2 [[gdk_] window_] get_scale_factor
 
 Returns the internal scale factor that maps from window coordiantes
 to the actual device pixels. On traditional systems this is 1, but
@@ -2618,7 +2618,7 @@ sub gdk_window_get_scale_factor ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_device_position:
 =begin pod
-=head2 [gdk_window_] get_device_position
+=head2 [[gdk_] window_] get_device_position
 
 Obtains the current device position and modifier state.
 The position is given in coordinates relative to the upper left
@@ -2649,7 +2649,7 @@ sub gdk_window_get_device_position ( N-GObject $window, N-GObject $device, int32
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_device_position_double:
 =begin pod
-=head2 [gdk_window_] get_device_position_double
+=head2 [[gdk_] window_] get_device_position_double
 
 Obtains the current device position in doubles and modifier state.
 The position is given in coordinates relative to the upper left
@@ -2678,7 +2678,7 @@ sub gdk_window_get_device_position_double ( N-GObject $window, N-GObject $device
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_parent:
 =begin pod
-=head2 [gdk_window_] get_parent
+=head2 [[gdk_] window_] get_parent
 
 Obtains the parent of I<window>, as known to GDK. Does not query the
 X server; thus this returns the parent as passed to C<gdk_window_new()>,
@@ -2707,7 +2707,7 @@ sub gdk_window_get_parent ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_toplevel:
 =begin pod
-=head2 [gdk_window_] get_toplevel
+=head2 [[gdk_] window_] get_toplevel
 
 Gets the toplevel window that’s an ancestor of I<window>.
 
@@ -2735,7 +2735,7 @@ sub gdk_window_get_toplevel ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_effective_parent:
 =begin pod
-=head2 [gdk_window_] get_effective_parent
+=head2 [[gdk_] window_] get_effective_parent
 
 Obtains the parent of I<window>, as known to GDK. Works like
 C<gdk_window_get_parent()> for normal windows, but returns the
@@ -2760,7 +2760,7 @@ sub gdk_window_get_effective_parent ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_effective_toplevel:
 =begin pod
-=head2 [gdk_window_] get_effective_toplevel
+=head2 [[gdk_] window_] get_effective_toplevel
 
 Gets the toplevel window that’s an ancestor of I<window>.
 
@@ -2786,7 +2786,7 @@ sub gdk_window_get_effective_toplevel ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_children:
 =begin pod
-=head2 [gdk_window_] get_children
+=head2 [[gdk_] window_] get_children
 
 Gets the list of children of I<window> known to GDK.
 This function only returns children created via GDK,
@@ -2812,7 +2812,7 @@ sub gdk_window_get_children ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_peek_children:
 =begin pod
-=head2 [gdk_window_] peek_children
+=head2 [[gdk_] window_] peek_children
 
 Like C<gdk_window_get_children()>, but does not copy the list of
 children, so the list does not need to be freed.
@@ -2833,7 +2833,7 @@ sub gdk_window_peek_children ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_children_with_user_data:
 =begin pod
-=head2 [gdk_window_] get_children_with_user_data
+=head2 [[gdk_] window_] get_children_with_user_data
 
 Gets the list of children of I<window> known to GDK with a
 particular I<user_data> set on it.
@@ -2863,7 +2863,7 @@ sub gdk_window_get_children_with_user_data ( N-GObject $window, Pointer $user_da
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_events:
 =begin pod
-=head2 [gdk_window_] get_events
+=head2 [[gdk_] window_] get_events
 
 Gets the event mask for I<window> for all master input devices. See
 C<gdk_window_set_events()>.
@@ -2883,7 +2883,7 @@ sub gdk_window_get_events ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_events:
 =begin pod
-=head2 [gdk_window_] set_events
+=head2 [[gdk_] window_] set_events
 
 The event mask for a window determines which events will be reported
 for that window from all master input devices. For example, an event mask
@@ -2906,7 +2906,7 @@ sub gdk_window_set_events ( N-GObject $window, int32 $event_mask )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_device_events:
 =begin pod
-=head2 [gdk_window_] set_device_events
+=head2 [[gdk_] window_] set_device_events
 
 Sets the event mask for a given device (Normally a floating device, not
 attached to any visible pointer) to I<window>. For example, an event mask
@@ -2932,7 +2932,7 @@ sub gdk_window_set_device_events ( N-GObject $window, N-GObject $device, int32 $
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_device_events:
 =begin pod
-=head2 [gdk_window_] get_device_events
+=head2 [[gdk_] window_] get_device_events
 
 Returns the event mask for I<window> corresponding to an specific device.
 
@@ -2954,7 +2954,7 @@ sub gdk_window_get_device_events ( N-GObject $window, N-GObject $device )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_source_events:
 =begin pod
-=head2 [gdk_window_] set_source_events
+=head2 [[gdk_] window_] set_source_events
 
 Sets the event mask for any floating device (i.e. not attached to any
 visible pointer) that has the source defined as I<source>. This event
@@ -2977,7 +2977,7 @@ sub gdk_window_set_source_events ( N-GObject $window, int32 $source, int32 $even
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_source_events:
 =begin pod
-=head2 [gdk_window_] get_source_events
+=head2 [[gdk_] window_] get_source_events
 
 Returns the event mask for I<window> corresponding to the device class specified
 by I<source>.
@@ -2998,7 +2998,7 @@ sub gdk_window_get_source_events ( N-GObject $window, int32 $source )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_icon_list:
 =begin pod
-=head2 [gdk_window_] set_icon_list
+=head2 [[gdk_] window_] set_icon_list
 
 Sets a list of icons for the window. One of these will be used
 to represent the window when it has been iconified. The icon is
@@ -3023,7 +3023,7 @@ sub gdk_window_set_icon_list ( N-GObject $window, N-GList $pixbufs )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_icon_name:
 =begin pod
-=head2 [gdk_window_] set_icon_name
+=head2 [[gdk_] window_] set_icon_name
 
 Windows may have a name used while minimized, distinct from the
 name they display in their titlebar. Most of the time this is a bad
@@ -3051,7 +3051,7 @@ sub gdk_window_set_icon_name ( N-GObject $window, Str $name )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_group:
 =begin pod
-=head2 [gdk_window_] set_group
+=head2 [[gdk_] window_] set_group
 
 Sets the group leader window for I<window>. By default,
 GDK sets the group leader for all toplevel windows
@@ -3077,7 +3077,7 @@ sub gdk_window_set_group ( N-GObject $window, N-GObject $leader )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_group:
 =begin pod
-=head2 [gdk_window_] get_group
+=head2 [[gdk_] window_] get_group
 
 Returns the group leader window for I<window>. See C<gdk_window_set_group()>.
 
@@ -3098,7 +3098,7 @@ sub gdk_window_get_group ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_decorations:
 =begin pod
-=head2 [gdk_window_] set_decorations
+=head2 [[gdk_] window_] set_decorations
 
 “Decorations” are the features the window manager adds to a toplevel B<Gnome::Gdk3::Window>.
 This function sets the traditional Motif window manager hints that tell the
@@ -3129,7 +3129,7 @@ sub gdk_window_set_decorations ( N-GObject $window, int32 $decorations )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_decorations:
 =begin pod
-=head2 [gdk_window_] get_decorations
+=head2 [[gdk_] window_] get_decorations
 
 Returns the decorations set on the B<Gnome::Gdk3::Window> with
 C<gdk_window_set_decorations()>.
@@ -3150,7 +3150,7 @@ sub gdk_window_get_decorations ( N-GObject $window, int32 $decorations )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_functions:
 =begin pod
-=head2 [gdk_window_] set_functions
+=head2 [[gdk_] window_] set_functions
 
 Sets hints about the window management functions to make available
 via buttons on the window frame.
@@ -3182,7 +3182,7 @@ sub gdk_window_set_functions ( N-GObject $window, int32 $functions )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_create_similar_surface:
 =begin pod
-=head2 [gdk_window_] create_similar_surface
+=head2 [[gdk_] window_] create_similar_surface
 
 Create a new surface that is as compatible as possible with the
 given I<window>. For example the new surface will have the same
@@ -3220,7 +3220,7 @@ sub gdk_window_create_similar_surface ( N-GObject $window, cairo_content_t $cont
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_create_similar_image_surface:
 =begin pod
-=head2 [gdk_window_] create_similar_image_surface
+=head2 [[gdk_] window_] create_similar_image_surface
 
 Create a new image surface that is efficient to draw on the
 given I<window>.
@@ -3464,7 +3464,7 @@ sub gdk_window_fullscreen ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_fullscreen_on_monitor:
 =begin pod
-=head2 [gdk_window_] fullscreen_on_monitor
+=head2 [[gdk_] window_] fullscreen_on_monitor
 
 Moves the window into fullscreen mode on the given monitor. This means
 the window covers the entire screen and is above any panels or task bars.
@@ -3485,7 +3485,7 @@ sub gdk_window_fullscreen_on_monitor ( N-GObject $window, int32 $monitor )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_fullscreen_mode:
 =begin pod
-=head2 [gdk_window_] set_fullscreen_mode
+=head2 [[gdk_] window_] set_fullscreen_mode
 
 Specifies whether the I<window> should span over all monitors (in a multi-head
 setup) or only the current monitor when in fullscreen mode.
@@ -3520,7 +3520,7 @@ sub gdk_window_set_fullscreen_mode ( N-GObject $window, int32 $mode )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_fullscreen_mode:
 =begin pod
-=head2 [gdk_window_] get_fullscreen_mode
+=head2 [[gdk_] window_] get_fullscreen_mode
 
 Obtains the B<Gnome::Gdk3::FullscreenMode> of the I<window>.
 
@@ -3568,7 +3568,7 @@ sub gdk_window_unfullscreen ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_keep_above:
 =begin pod
-=head2 [gdk_window_] set_keep_above
+=head2 [[gdk_] window_] set_keep_above
 
 Set if I<window> must be kept above other windows. If the
 window was already above, then this function does nothing.
@@ -3595,7 +3595,7 @@ sub gdk_window_set_keep_above ( N-GObject $window, int32 $setting )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_keep_below:
 =begin pod
-=head2 [gdk_window_] set_keep_below
+=head2 [[gdk_] window_] set_keep_below
 
 Set if I<window> must be kept below other windows. If the
 window was already below, then this function does nothing.
@@ -3622,7 +3622,7 @@ sub gdk_window_set_keep_below ( N-GObject $window, int32 $setting )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_opacity:
 =begin pod
-=head2 [gdk_window_] set_opacity
+=head2 [[gdk_] window_] set_opacity
 
 Set I<window> to render as partially transparent,
 with opacity 0 being fully transparent and 1 fully opaque. (Values
@@ -3659,7 +3659,7 @@ sub gdk_window_set_opacity ( N-GObject $window, num64 $opacity )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_register_dnd:
 =begin pod
-=head2 [gdk_window_] register_dnd
+=head2 [[gdk_] window_] register_dnd
 
 Registers a window as a potential drop destination.
 
@@ -3676,7 +3676,7 @@ sub gdk_window_register_dnd ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_drag_protocol:
 =begin pod
-=head2 [gdk_window_] get_drag_protocol
+=head2 [[gdk_] window_] get_drag_protocol
 
 Finds out the DND protocol supported by a window.
 
@@ -3699,7 +3699,7 @@ sub gdk_window_get_drag_protocol ( N-GObject $window, N-GObject $target )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_begin_resize_drag:
 =begin pod
-=head2 [gdk_window_] begin_resize_drag
+=head2 [[gdk_] window_] begin_resize_drag
 
 Begins a window resize operation (for a toplevel window).
 
@@ -3724,7 +3724,7 @@ sub gdk_window_begin_resize_drag ( N-GObject $window, int32 $edge, int32 $button
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_begin_resize_drag_for_device:
 =begin pod
-=head2 [gdk_window_] begin_resize_drag_for_device
+=head2 [[gdk_] window_] begin_resize_drag_for_device
 
 Begins a window resize operation (for a toplevel window).
 You might use this function to implement a “window resize grip,” for
@@ -3753,7 +3753,7 @@ sub gdk_window_begin_resize_drag_for_device ( N-GObject $window, int32 $edge, N-
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_begin_move_drag:
 =begin pod
-=head2 [gdk_window_] begin_move_drag
+=head2 [[gdk_] window_] begin_move_drag
 
 Begins a window move operation (for a toplevel window).
 
@@ -3777,7 +3777,7 @@ sub gdk_window_begin_move_drag ( N-GObject $window, int32 $button, int32 $root_x
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_begin_move_drag_for_device:
 =begin pod
-=head2 [gdk_window_] begin_move_drag_for_device
+=head2 [[gdk_] window_] begin_move_drag_for_device
 
 Begins a window move operation (for a toplevel window).
 You might use this function to implement a “window move grip,” for
@@ -3804,7 +3804,7 @@ sub gdk_window_begin_move_drag_for_device ( N-GObject $window, N-GObject $device
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_invalidate_rect:
 =begin pod
-=head2 [gdk_window_] invalidate_rect
+=head2 [[gdk_] window_] invalidate_rect
 
 A convenience wrapper around C<gdk_window_invalidate_region()> which
 invalidates a rectangular region. See
@@ -3825,7 +3825,7 @@ sub gdk_window_invalidate_rect ( N-GObject $window, N-GObject $rect, int32 $inva
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_invalidate_region:
 =begin pod
-=head2 [gdk_window_] invalidate_region
+=head2 [[gdk_] window_] invalidate_region
 
 Adds I<region> to the update area for I<window>. The update area is the
 region that needs to be redrawn, or “dirty region.” The call
@@ -3859,7 +3859,7 @@ sub gdk_window_invalidate_region ( N-GObject $window, cairo_region_t $region, in
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_invalidate_maybe_recurse:
 =begin pod
-=head2 [gdk_window_] invalidate_maybe_recurse
+=head2 [[gdk_] window_] invalidate_maybe_recurse
 
 Adds I<region> to the update area for I<window>. The update area is the
 region that needs to be redrawn, or “dirty region.” The call
@@ -3893,7 +3893,7 @@ sub gdk_window_invalidate_maybe_recurse ( N-GObject $window, cairo_region_t $reg
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_update_area:
 =begin pod
-=head2 [gdk_window_] get_update_area
+=head2 [[gdk_] window_] get_update_area
 
 Transfers ownership of the update area from I<window> to the caller
 of the function. That is, after calling this function, I<window> will
@@ -3918,7 +3918,7 @@ sub gdk_window_get_update_area ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_freeze_updates:
 =begin pod
-=head2 [gdk_window_] freeze_updates
+=head2 [[gdk_] window_] freeze_updates
 
 Temporarily freezes a window such that it won’t receive expose
 events.  The window will begin receiving expose events again when
@@ -3938,7 +3938,7 @@ sub gdk_window_freeze_updates ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_thaw_updates:
 =begin pod
-=head2 [gdk_window_] thaw_updates
+=head2 [[gdk_] window_] thaw_updates
 
 Thaws a window frozen with C<gdk_window_freeze_updates()>.
 
@@ -3954,7 +3954,7 @@ sub gdk_window_thaw_updates ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_constrain_size:
 =begin pod
-=head2 [gdk_window_] constrain_size
+=head2 [[gdk_] window_] constrain_size
 
 Constrains a desired width and height according to a
 set of geometry hints (such as minimum and maximum size).
@@ -4050,7 +4050,7 @@ sub gdk_offscreen_window_get_embedder ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_geometry_changed:
 =begin pod
-=head2 [gdk_window_] geometry_changed
+=head2 [[gdk_] window_] geometry_changed
 
 This function informs GDK that the geometry of an embedded
 offscreen window has changed. This is necessary for GDK to keep
@@ -4070,7 +4070,7 @@ sub gdk_window_geometry_changed ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_support_multidevice:
 =begin pod
-=head2 [gdk_window_] set_support_multidevice
+=head2 [[gdk_] window_] set_support_multidevice
 
 This function will enable multidevice features in I<window>.
 
@@ -4092,7 +4092,7 @@ sub gdk_window_set_support_multidevice ( N-GObject $window, int32 $support_multi
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_support_multidevice:
 =begin pod
-=head2 [gdk_window_] get_support_multidevice
+=head2 [[gdk_] window_] get_support_multidevice
 
 Returns C<1> if the window is aware of the existence of multiple
 devices.
@@ -4114,7 +4114,7 @@ sub gdk_window_get_support_multidevice ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_frame_clock:
 =begin pod
-=head2 [gdk_window_] get_frame_clock
+=head2 [[gdk_] window_] get_frame_clock
 
 Gets the frame clock for the window. The frame clock for a window
 never changes unless the window is reparented to a new toplevel
@@ -4137,7 +4137,7 @@ sub gdk_window_get_frame_clock ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_opaque_region:
 =begin pod
-=head2 [gdk_window_] set_opaque_region
+=head2 [[gdk_] window_] set_opaque_region
 
 For optimisation purposes, compositing window managers may
 like to not draw obscured regions of windows, or turn off blending
@@ -4169,7 +4169,7 @@ sub gdk_window_set_opaque_region ( N-GObject $window, cairo_region_t $region )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_event_compression:
 =begin pod
-=head2 [gdk_window_] set_event_compression
+=head2 [[gdk_] window_] set_event_compression
 
 Determines whether or not extra unprocessed motion events in
 the event queue can be discarded. If C<1> only the most recent
@@ -4195,7 +4195,7 @@ sub gdk_window_set_event_compression ( N-GObject $window, int32 $event_compressi
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_event_compression:
 =begin pod
-=head2 [gdk_window_] get_event_compression
+=head2 [[gdk_] window_] get_event_compression
 
 Get the current event compression setting for this window.
 
@@ -4216,7 +4216,7 @@ sub gdk_window_get_event_compression ( N-GObject $window )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_shadow_width:
 =begin pod
-=head2 [gdk_window_] set_shadow_width
+=head2 [[gdk_] window_] set_shadow_width
 
 Newer GTK+ windows using client-side decorations use extra geometry
 around their frames for effects like shadows and invisible borders.
@@ -4246,7 +4246,7 @@ sub gdk_window_set_shadow_width ( N-GObject $window, int32 $left, int32 $right, 
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_show_window_menu:
 =begin pod
-=head2 [gdk_window_] show_window_menu
+=head2 [[gdk_] window_] show_window_menu
 
 Asks the windowing system to show the window menu. The window menu
 is the menu shown when right-clicking the titlebar on traditional
@@ -4272,7 +4272,7 @@ sub gdk_window_show_window_menu ( N-GObject $window, GdkEvent $event )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_create_gl_context:
 =begin pod
-=head2 [gdk_window_] create_gl_context
+=head2 [[gdk_] window_] create_gl_context
 
 Creates a new B<Gnome::Gdk3::GLContext> matching the
 framebuffer format to the visual of the B<Gnome::Gdk3::Window>. The context

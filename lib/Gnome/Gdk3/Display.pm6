@@ -154,7 +154,7 @@ sub gdk_display_open ( Str $display_name )
 #-------------------------------------------------------------------------------
 #TM:1:gdk_display_get_name:
 =begin pod
-=head2 [gdk_display_] get_name
+=head2 [[gdk_] display_] get_name
 
 Gets the name of the display.
 
@@ -176,7 +176,7 @@ sub gdk_display_get_name ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:2:gdk_display_get_default_screen:new(:default)
 =begin pod
-=head2 [gdk_display_] get_default_screen
+=head2 [[gdk_] display_] get_default_screen
 
 Get the default B<Gnome::Gdk3::Screen> for this display.
 
@@ -195,7 +195,7 @@ sub gdk_display_get_default_screen ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_device_is_grabbed:
 =begin pod
-=head2 [gdk_display_] device_is_grabbed
+=head2 [[gdk_] display_] device_is_grabbed
 
 Returns C<1> if there is an ongoing grab on I<device> for I<display>.
 
@@ -304,7 +304,7 @@ sub gdk_display_close ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:1:gdk_display_is_closed:
 =begin pod
-=head2 [gdk_display_] is_closed
+=head2 [[gdk_] display_] is_closed
 
 Finds out if the display has been closed.
 
@@ -325,7 +325,7 @@ sub gdk_display_is_closed ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_get_event:
 =begin pod
-=head2 [gdk_display_] get_event
+=head2 [[gdk_] display_] get_event
 
 Gets the next B<Gnome::Gdk3::Event> to be processed for the display, fetching events from the windowing system if necessary.
 
@@ -348,7 +348,7 @@ sub gdk_display_get_event ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_peek_event:
 =begin pod
-=head2 [gdk_display_] peek_event
+=head2 [[gdk_] display_] peek_event
 
 Gets a copy of the first B<Gnome::Gdk3::Event> in the I<display>’s event queue, without
 removing the event from the queue.  (Note that this function will
@@ -374,7 +374,7 @@ sub gdk_display_peek_event ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_put_event:
 =begin pod
-=head2 [gdk_display_] put_event
+=head2 [[gdk_] display_] put_event
 
 Appends a copy of the given event onto the front of the event
 queue for I<display>.
@@ -394,7 +394,7 @@ sub gdk_display_put_event ( N-GObject $display, GdkEvent $event )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_has_pending:
 =begin pod
-=head2 [gdk_display_] has_pending
+=head2 [[gdk_] display_] has_pending
 
 Returns whether the display has events that are waiting
 to be processed.
@@ -416,7 +416,7 @@ sub gdk_display_has_pending ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_set_double_click_time:
 =begin pod
-=head2 [gdk_display_] set_double_click_time
+=head2 [[gdk_] display_] set_double_click_time
 
 
 
@@ -433,7 +433,7 @@ sub gdk_display_set_double_click_time ( N-GObject $display, uint32 $msec )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_set_double_click_distance:
 =begin pod
-=head2 [gdk_display_] set_double_click_distance
+=head2 [[gdk_] display_] set_double_click_distance
 
 
 
@@ -450,7 +450,7 @@ sub gdk_display_set_double_click_distance ( N-GObject $display, uint32 $distance
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_get_default:
 =begin pod
-=head2 [gdk_display_] get_default
+=head2 [[gdk_] display_] get_default
 
 Gets the default GdkDisplay. This is a convenience function for C<gdk_display_manager_get_default_display(gdk_display_manager_get())>.
 
@@ -469,7 +469,7 @@ sub gdk_display_get_default (  )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_supports_cursor_alpha:
 =begin pod
-=head2 [gdk_display_] supports_cursor_alpha
+=head2 [[gdk_] display_] supports_cursor_alpha
 
 Returns C<1> if cursors can use an 8bit alpha channel
 on I<display>. Otherwise, cursors are restricted to bilevel
@@ -492,7 +492,7 @@ sub gdk_display_supports_cursor_alpha ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_supports_cursor_color:
 =begin pod
-=head2 [gdk_display_] supports_cursor_color
+=head2 [[gdk_] display_] supports_cursor_color
 
 Returns C<1> if multicolored cursors are supported
 on I<display>. Otherwise, cursors have only a forground
@@ -515,7 +515,7 @@ sub gdk_display_supports_cursor_color ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_get_default_cursor_size:
 =begin pod
-=head2 [gdk_display_] get_default_cursor_size
+=head2 [[gdk_] display_] get_default_cursor_size
 
 Returns the default size to use for cursors on I<display>.
 
@@ -536,7 +536,7 @@ sub gdk_display_get_default_cursor_size ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_get_maximal_cursor_size:
 =begin pod
-=head2 [gdk_display_] get_maximal_cursor_size
+=head2 [[gdk_] display_] get_maximal_cursor_size
 
 Gets the maximal size to use for cursors on I<display>.
 
@@ -556,7 +556,7 @@ sub gdk_display_get_maximal_cursor_size ( N-GObject $display, uint32 $width, uin
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_get_default_group:
 =begin pod
-=head2 [gdk_display_] get_default_group
+=head2 [[gdk_] display_] get_default_group
 
 Returns the default group leader window for all toplevel windows
 on I<display>. This window is implicitly created by GDK.
@@ -580,7 +580,7 @@ sub gdk_display_get_default_group ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_supports_selection_notification:
 =begin pod
-=head2 [gdk_display_] supports_selection_notification
+=head2 [[gdk_] display_] supports_selection_notification
 
 Returns whether B<Gnome::Gdk3::EventOwnerChange> events will be
 sent when the owner of a selection changes.
@@ -604,7 +604,7 @@ sub gdk_display_supports_selection_notification ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_request_selection_notification:
 =begin pod
-=head2 [gdk_display_] request_selection_notification
+=head2 [[gdk_] display_] request_selection_notification
 
 Request B<Gnome::Gdk3::EventOwnerChange> events for ownership changes
 of the selection named by the given atom.
@@ -629,7 +629,7 @@ sub gdk_display_request_selection_notification ( N-GObject $display, GdkAtom $se
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_supports_clipboard_persistence:
 =begin pod
-=head2 [gdk_display_] supports_clipboard_persistence
+=head2 [[gdk_] display_] supports_clipboard_persistence
 
 Returns whether the speicifed display supports clipboard
 persistance; i.e. if it’s possible to store the clipboard data after an
@@ -654,7 +654,7 @@ sub gdk_display_supports_clipboard_persistence ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_store_clipboard:
 =begin pod
-=head2 [gdk_display_] store_clipboard
+=head2 [[gdk_] display_] store_clipboard
 
 Issues a request to the clipboard manager to store the
 clipboard data. On X11, this is a special program that works
@@ -680,7 +680,7 @@ sub gdk_display_store_clipboard ( N-GObject $display, N-GObject $clipboard_windo
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_supports_shapes:
 =begin pod
-=head2 [gdk_display_] supports_shapes
+=head2 [[gdk_] display_] supports_shapes
 
 Returns C<1> if C<gdk_window_shape_combine_mask()> can
 be used to create shaped windows on I<display>.
@@ -702,7 +702,7 @@ sub gdk_display_supports_shapes ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_supports_input_shapes:
 =begin pod
-=head2 [gdk_display_] supports_input_shapes
+=head2 [[gdk_] display_] supports_input_shapes
 
 Returns C<1> if C<gdk_window_input_shape_combine_mask()> can
 be used to modify the input shape of windows on I<display>.
@@ -724,7 +724,7 @@ sub gdk_display_supports_input_shapes ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_notify_startup_complete:
 =begin pod
-=head2 [gdk_display_] notify_startup_complete
+=head2 [[gdk_] display_] notify_startup_complete
 
 Indicates to the GUI environment that the application has
 finished loading, using a given identifier.
@@ -749,7 +749,7 @@ sub gdk_display_notify_startup_complete ( N-GObject $display, Str $startup_id )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_get_app_launch_context:
 =begin pod
-=head2 [gdk_display_] get_app_launch_context
+=head2 [[gdk_] display_] get_app_launch_context
 
 Returns a B<Gnome::Gdk3::AppLaunchContext> suitable for launching
 applications on the given display.
@@ -772,7 +772,7 @@ sub gdk_display_get_app_launch_context ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_get_default_seat:
 =begin pod
-=head2 [gdk_display_] get_default_seat
+=head2 [[gdk_] display_] get_default_seat
 
 Returns the default B<Gnome::Gdk3::Seat> for this display.
 
@@ -793,7 +793,7 @@ sub gdk_display_get_default_seat ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_list_seats:
 =begin pod
-=head2 [gdk_display_] list_seats
+=head2 [[gdk_] display_] list_seats
 
 Returns the list of seats known to I<display>.
 
@@ -815,7 +815,7 @@ sub gdk_display_list_seats ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_get_n_monitors:
 =begin pod
-=head2 [gdk_display_] get_n_monitors
+=head2 [[gdk_] display_] get_n_monitors
 
 Gets the number of monitors that belong to I<display>.
 
@@ -838,7 +838,7 @@ sub gdk_display_get_n_monitors ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_get_monitor:
 =begin pod
-=head2 [gdk_display_] get_monitor
+=head2 [[gdk_] display_] get_monitor
 
 Gets a monitor associated with this display.
 
@@ -860,7 +860,7 @@ sub gdk_display_get_monitor ( N-GObject $display, int32 $monitor_num )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_get_primary_monitor:
 =begin pod
-=head2 [gdk_display_] get_primary_monitor
+=head2 [[gdk_] display_] get_primary_monitor
 
 Gets the primary monitor for the display.
 
@@ -886,7 +886,7 @@ sub gdk_display_get_primary_monitor ( N-GObject $display )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_get_monitor_at_point:
 =begin pod
-=head2 [gdk_display_] get_monitor_at_point
+=head2 [[gdk_] display_] get_monitor_at_point
 
 Gets the monitor in which the point (I<x>, I<y>) is located,
 or a nearby monitor if the point is not in any monitor.
@@ -909,7 +909,7 @@ sub gdk_display_get_monitor_at_point ( N-GObject $display, int32 $x, int32 $y )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_display_get_monitor_at_window:
 =begin pod
-=head2 [gdk_display_] get_monitor_at_window
+=head2 [[gdk_] display_] get_monitor_at_window
 
 Gets the monitor in which the largest area of I<window>
 resides, or a monitor close to I<window> if it is outside

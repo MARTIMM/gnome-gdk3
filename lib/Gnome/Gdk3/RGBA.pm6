@@ -312,9 +312,9 @@ sub gdk_rgba_copy ( N-GdkRGBA $rgba ) {
   $clone
 }
 
-#`[[ Not needed because of simulated copy
+#`{{ Not needed because of simulated copy
 #-------------------------------------------------------------------------------
-# TM:0:gdk_rgba_free:
+#TM:FF:gdk_rgba_free:
 =begin pod
 =head2 gdk_rgba_free
 
@@ -331,7 +331,7 @@ Since: 3.0
 sub gdk_rgba_free ( N-GObject $rgba )
   is native(&gdk-lib)
   { * }
-]]
+}}
 
 #-------------------------------------------------------------------------------
 #TM:1:gdk_rgba_hash(UInt):
@@ -427,7 +427,7 @@ sub gdk_rgba_parse ( N-GdkRGBA $rgba is rw, Str $spec )
 #-------------------------------------------------------------------------------
 #TM:1:gdk_rgba_to_string:
 =begin pod
-=head2 [gdk_rgba_] to_string
+=head2 [[gdk_] rgba_] to_string
 
 Returns a textual specification of this rgba object in the form B<rgb(r,g,b)> or B<rgba(r,g,b,a)>, where C<r>, C<g>, C<b> and C<a> represent the red, green, blue and alpha values respectively. r, g, and b are represented as integers in the range 0 to 255, and a is represented as floating point value in the range 0 to 1.
 
