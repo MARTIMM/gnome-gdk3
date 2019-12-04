@@ -114,7 +114,7 @@ method _fallback ( $native-sub is copy --> Callable ) {
 #-------------------------------------------------------------------------------
 #TM:0:gdk_screen_get_system_visual:
 =begin pod
-=head2 [gdk_screen_] get_system_visual
+=head2 [[gdk_] screen_] get_system_visual
 
 Get the system’s default visual for this screen. This is the visual for the root window of the display. The return value should not be freed.
 
@@ -135,7 +135,7 @@ sub gdk_screen_get_system_visual ( N-GObject $screen )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_screen_get_rgba_visual:
 =begin pod
-=head2 [gdk_screen_] get_rgba_visual
+=head2 [[gdk_] screen_] get_rgba_visual
 
 Gets a visual to use for creating windows with an alpha channel. The windowing system on which GTK+ is running may not support this capability, in which case C<Any> will be returned. Even if a non-C<Any> value is returned, its possible that the window’s alpha channel won’t be honored when displaying the window on the screen: in particular, for X an appropriate windowing manager and compositing manager must be running to provide appropriate display.
 
@@ -160,7 +160,7 @@ sub gdk_screen_get_rgba_visual ( N-GObject $screen )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_screen_is_composited:
 =begin pod
-=head2 [gdk_screen_] is_composited
+=head2 [[gdk_] screen_] is_composited
 
 Returns whether windows with an RGBA visual can reasonably
 be expected to have their alpha channel drawn correctly on
@@ -187,7 +187,7 @@ sub gdk_screen_is_composited ( N-GObject $screen )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_screen_get_root_window:
 =begin pod
-=head2 [gdk_screen_] get_root_window
+=head2 [[gdk_] screen_] get_root_window
 
 Gets the root window of this screen.
 
@@ -208,7 +208,7 @@ sub gdk_screen_get_root_window ( N-GObject $screen )
 #-------------------------------------------------------------------------------
 #TM:1:gdk_screen_get_display:
 =begin pod
-=head2 [gdk_screen_] get_display
+=head2 [[gdk_] screen_] get_display
 
 Gets the display to which the I<screen> belongs.
 
@@ -228,7 +228,7 @@ sub gdk_screen_get_display ( N-GObject $screen )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_screen_list_visuals:
 =begin pod
-=head2 [gdk_screen_] list_visuals
+=head2 [[gdk_] screen_] list_visuals
 
 Lists the available visuals for this screen. A visual describes a hardware image data format. For example, a visual might support 24-bit color, or 8-bit color, and might expect pixels to be in a certain format.
 
@@ -250,7 +250,7 @@ sub gdk_screen_list_visuals ( N-GObject $screen )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_screen_get_toplevel_windows:
 =begin pod
-=head2 [gdk_screen_] get_toplevel_windows
+=head2 [[gdk_] screen_] get_toplevel_windows
 
 Obtains a list of all toplevel windows known to GDK on the screen screen . A toplevel window is a child of the root window (see gdk_get_default_root_window()).
 
@@ -268,7 +268,7 @@ sub gdk_screen_get_toplevel_windows ( N-GObject $screen )
 #-------------------------------------------------------------------------------
 #TM:2:gdk_screen_get_default:new(:default)
 =begin pod
-=head2 [gdk_screen_] get_default
+=head2 [[gdk_] screen_] get_default
 
 Gets the default screen for the default display. (See gdk_display_get_default()).
 
@@ -286,7 +286,7 @@ sub gdk_screen_get_default (  )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_screen_get_setting:
 =begin pod
-=head2 [gdk_screen_] get_setting
+=head2 [[gdk_] screen_] get_setting
 
 Retrieves a desktop-wide setting such as double-click time
 for this screen.
@@ -315,7 +315,7 @@ sub gdk_screen_get_setting ( N-GObject $screen, Str $name, N-GObject $value )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_screen_set_font_options:
 =begin pod
-=head2 [gdk_screen_] set_font_options
+=head2 [[gdk_] screen_] set_font_options
 
 Sets the default font options for the screen. These
 options will be set on any B<PangoContext>’s newly created
@@ -338,7 +338,7 @@ sub gdk_screen_set_font_options ( N-GObject $screen, cairo_font_options_t $optio
 #-------------------------------------------------------------------------------
 #TM:0:gdk_screen_get_font_options:
 =begin pod
-=head2 [gdk_screen_] get_font_options
+=head2 [[gdk_] screen_] get_font_options
 
 Gets any options previously set with C<gdk_screen_set_font_options()>.
 
@@ -360,7 +360,7 @@ sub gdk_screen_get_font_options ( N-GObject $screen )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_screen_set_resolution:
 =begin pod
-=head2 [gdk_screen_] set_resolution
+=head2 [[gdk_] screen_] set_resolution
 
 Since: 2.10
 
@@ -378,7 +378,7 @@ sub gdk_screen_set_resolution ( N-GObject $screen, num64 $dpi )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_screen_get_resolution:
 =begin pod
-=head2 [gdk_screen_] get_resolution
+=head2 [[gdk_] screen_] get_resolution
 
 Gets the resolution for font handling on the screen; see
 C<gdk_screen_set_resolution()> for full details.
@@ -401,7 +401,7 @@ sub gdk_screen_get_resolution ( N-GObject $screen )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_screen_get_window_stack:
 =begin pod
-=head2 [gdk_screen_] get_window_stack
+=head2 [[gdk_] screen_] get_window_stack
 
 Returns a B<GList> of B<Gnome::Gdk3::Windows> representing the current
 window stack.

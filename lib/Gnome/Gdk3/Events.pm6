@@ -2044,7 +2044,7 @@ sub gdk_event_triggers_context_menu ( GdkEvent $event )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_events_get_distance:
 =begin pod
-=head2 [gdk_events_] get_distance
+=head2 [[gdk_] events_] get_distance
 
 If both events have X/Y information, the distance between both coordinates
 (as in a straight line going from I<event1> to I<event2>) will be returned.
@@ -2069,7 +2069,7 @@ sub gdk_events_get_distance ( GdkEvent $event1, GdkEvent $event2, num64 $distanc
 #-------------------------------------------------------------------------------
 #TM:0:gdk_events_get_angle:
 =begin pod
-=head2 [gdk_events_] get_angle
+=head2 [[gdk_] events_] get_angle
 
 If both events contain X/Y information, this function will return C<1>
 and return in I<angle> the relative angle from I<event1> to I<event2>. The rotation
@@ -2096,7 +2096,7 @@ sub gdk_events_get_angle ( GdkEvent $event1, GdkEvent $event2, num64 $angle )
 #-------------------------------------------------------------------------------
 #TM:0:gdk_events_get_center:
 =begin pod
-=head2 [gdk_events_] get_center
+=head2 [[gdk_] events_] get_center
 
 If both events contain X/Y information, the center of both coordinates
 will be returned in I<x> and I<y>.
