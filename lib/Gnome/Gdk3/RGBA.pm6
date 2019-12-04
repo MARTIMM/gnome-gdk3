@@ -312,9 +312,9 @@ sub gdk_rgba_copy ( N-GdkRGBA $rgba ) {
   $clone
 }
 
-#`[[ Not needed because of simulated copy
+#`{{ Not needed because of simulated copy
 #-------------------------------------------------------------------------------
-# TM:0:gdk_rgba_free:
+#TM:FF:gdk_rgba_free:
 =begin pod
 =head2 gdk_rgba_free
 
@@ -331,7 +331,7 @@ Since: 3.0
 sub gdk_rgba_free ( N-GObject $rgba )
   is native(&gdk-lib)
   { * }
-]]
+}}
 
 #-------------------------------------------------------------------------------
 #TM:1:gdk_rgba_hash(UInt):
