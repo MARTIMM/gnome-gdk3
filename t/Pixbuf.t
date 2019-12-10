@@ -35,12 +35,12 @@ subtest 'ISA test', {
   }
 
   throws-like(
-    { $p .= new(:file<t/Data/some-test-file.t>); },
+    { $p .= new(:file<t/Data/some-test-file.xyz>); },
     X::Gnome, 'not an image',
     :message(/:s recognize the image file format for file/)
   );
 
-  $p .= new( :file<t/Data/some-test-file.t>, :!throw);
+  $p .= new( :file<t/Data/some-test-file.xyz>, :!throw);
   $e = $p.last-error;
   if $e.error-is-valid {
     is $quark.to-string($e.domain), 'gdk-pixbuf-error-quark',
