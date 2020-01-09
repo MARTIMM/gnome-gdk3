@@ -1,5 +1,5 @@
 {
-  "description": "Perl6 Gnome gdk api, Please install Gnome::Gtk3",
+  "description": "Raku - Gnome Gdk Interface, Please install Gnome::Gtk3",
   "name": "Gnome::Gdk3",
   "version": "0.15.0.1",
   "authors": [ "Marcel Timmerman"],
@@ -20,7 +20,7 @@
     "Gnome::Gdk3::Window": "lib/Gnome/Gdk3/Window.pm6"
   },
 
-  "source-url": "git://github.com/MARTIMM/perl6-gnome-gdk3.git",
+  "source-url": "git://github.com/MARTIMM/gnome-gdk3.git",
 
   "depends": [ "Gnome::N", "Gnome::Glib", "Gnome::GObject" ],
   "test-depends": [ ],
