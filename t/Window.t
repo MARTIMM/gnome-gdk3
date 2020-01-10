@@ -1,8 +1,8 @@
 use v6;
 use NativeCall;
 use Test;
-#use lib '../perl6-gnome-native/lib';
-#use lib '../perl6-gnome-gobject/lib';
+#use lib '../gnome-native/lib';
+#use lib '../gnome-gobject/lib';
 
 use Gnome::Gdk3::Window;
 

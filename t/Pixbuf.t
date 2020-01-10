@@ -1,5 +1,5 @@
 use v6;
-use lib '../perl6-gnome-native/lib';
+#use lib '../gnome-native/lib';
 use NativeCall;
 use Test;
 
@@ -51,8 +51,8 @@ subtest 'ISA test', {
     like $e.message, /:s recognize the image file format for file/, $e.message;
   }
 
-  $p .= new(:file<t/Data/gtk-perl6.png>);
-  isa-ok $p, Gnome::Gdk3::Pixbuf, '.new(:file<t/Data/gtk-perl6.png>)';
+  $p .= new(:file<t/Data/gtk-raku.png>);
+  isa-ok $p, Gnome::Gdk3::Pixbuf, '.new(:file<t/Data/gtk-raku.png>)';
 }
 
 #-------------------------------------------------------------------------------
