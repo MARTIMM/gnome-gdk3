@@ -1,7 +1,7 @@
 {
   "description": "Raku - Gnome Gdk Interface, Please install Gnome::Gtk3",
   "name": "Gnome::Gdk3",
-  "version": "0.15.0.1",
+  "version": "0.15.1",
   "authors": [ "Marcel Timmerman"],
   "tags": [ "gnome", "gdk"],
 
