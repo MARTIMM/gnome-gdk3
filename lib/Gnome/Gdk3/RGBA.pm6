@@ -126,25 +126,25 @@ submethod BUILD ( *%options ) {
     my Num $blue = %options<blue>.Num // 1.0e1;
     my Num $alpha = %options<alpha>.Num // 1.0e1;
 
-    self.native-gboxed(N-GdkRGBA.new( :$red, :$green, :$blue, :$alpha));
+    self.set-native-object(N-GdkRGBA.new( :$red, :$green, :$blue, :$alpha));
   }
 
   elsif ? %options<rgba> {
     if %options<rgba> ~~ N-GdkRGBA {
-      self.native-gboxed(%options<rgba>);
+      self.set-native-object(%options<rgba>);
     }
 
     elsif %options<rgba> ~~ Gnome::Gdk3::RGBA {
-      self.native-gboxed(%options<rgba>.get-native-gboxed);
+      self.set-native-object(%options<rgba>.get-native-object);
     }
 
     elsif %options<rgba> ~~ Str {
       my N-GdkRGBA $c .= new(
         :red(1.0e0), :green(1.0e0), :blue(1.0e0), :alpha(1.0e0)
       );
-      self.native-gboxed($c);
+      self.set-native-object($c);
       my Int $ok = gdk_rgba_parse( $c, %options<rgba>);
-      self.native-gboxed($c) if $ok;
+      self.set-native-object($c) if $ok;
     }
 
     else {
@@ -195,14 +195,14 @@ method red ( Num $c? is copy --> Num ) {
     $c = 0e0 if $c < 0e0;
     $c = 1e0 if $c > 1e0;
 
-    my N-GdkRGBA $o = self.get-native-gboxed;
+    my N-GdkRGBA $o = self.get-native-object;
     my N-GdkRGBA $clr .= new(
       :red($c), :green($o.green), :blue($o.blue), :alpha($o.alpha)
     );
-    self.native-gboxed($clr);
+    self.set-native-object($clr);
   }
 
-  self.get-native-gboxed.red
+  self.get-native-object.red
 }
 
 #-------------------------------------------------------------------------------
@@ -221,14 +221,14 @@ method green ( Num $c? is copy --> Num ) {
     $c = 0e0 if $c < 0e0;
     $c = 1e0 if $c > 1e0;
 
-    my N-GdkRGBA $o = self.get-native-gboxed;
+    my N-GdkRGBA $o = self.get-native-object;
     my N-GdkRGBA $clr .= new(
       :red($o.red), :green($c), :blue($o.blue), :alpha($o.alpha)
     );
-    self.native-gboxed($clr);
+    self.set-native-object($clr);
   }
 
-  self.get-native-gboxed.green
+  self.get-native-object.green
 }
 
 #-------------------------------------------------------------------------------
@@ -247,14 +247,14 @@ method blue ( Num $c? is copy --> Num ) {
     $c = 0e0 if $c < 0e0;
     $c = 1e0 if $c > 1e0;
 
-    my N-GdkRGBA $o = self.get-native-gboxed;
+    my N-GdkRGBA $o = self.get-native-object;
     my N-GdkRGBA $clr .= new(
       :red($o.red), :green($o.green), :blue($c), :alpha($o.alpha)
     );
-    self.native-gboxed($clr);
+    self.set-native-object($clr);
   }
 
-  self.get-native-gboxed.blue
+  self.get-native-object.blue
 }
 
 #-------------------------------------------------------------------------------
@@ -273,14 +273,14 @@ method alpha ( Num $c? is copy --> Num ) {
     $c = 0e0 if $c < 0e0;
     $c = 1e0 if $c > 1e0;
 
-    my N-GdkRGBA $o = self.get-native-gboxed;
+    my N-GdkRGBA $o = self.get-native-object;
     my N-GdkRGBA $clr .= new(
       :red($o.red), :green($o.green), :blue($o.blue), :alpha($c)
     );
-    self.native-gboxed($clr);
+    self.set-native-object($clr);
   }
 
-  self.get-native-gboxed.alpha
+  self.get-native-object.alpha
 }
 
 #-------------------------------------------------------------------------------
