@@ -1398,7 +1398,7 @@ submethod BUILD ( *%options ) {
 
   # process all named arguments
   if ? %options<event-name> {
-    self.native-gobject(gdk_events_new(%options<event-name>));
+    self.set-native-object(gdk_events_new(%options<event-name>));
   }
 
   elsif ? %options<widget> || %options<build-id> {

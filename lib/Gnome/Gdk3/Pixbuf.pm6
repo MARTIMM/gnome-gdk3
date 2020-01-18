@@ -178,12 +178,12 @@ submethod BUILD ( *%options is copy ) {
     }
 
     else {
-      self.native-gobject($o);
+      self.set-native-object($o);
     }
   }
 
   elsif ? %options<pixbuf> {
-    self.native-gobject(%options<pixbuf>);
+    self.set-native-object(%options<pixbuf>);
   }
 
   elsif %options.keys.elems {

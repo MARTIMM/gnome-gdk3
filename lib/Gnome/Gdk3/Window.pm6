@@ -592,16 +592,16 @@ submethod BUILD ( *%options ) {
     # No parent, no extra attributes, toplevel
     my N-GObject $o = gdk_window_new( Any, $attrs, 0);
 
-    self.native-gobject($o);
+    self.set-native-object($o);
   }
 
   elsif ? %options<window> {
     if %options<window> ~~ N-GObject {
-      self.native-gobject(%options<window>);
+      self.set-native-object(%options<window>);
     }
 
     elsif %options<window> ~~ Gnome::Gdk3::Window {
-      self.native-gobject(%options<window>.get-native-gobject);
+      self.set-native-object(%options<window>.get-native-object);
     }
 
     else {

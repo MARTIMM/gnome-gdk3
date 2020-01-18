@@ -1,4 +1,5 @@
 use v6;
+use lib '../gnome-gobject/lib', '../gnome-native/lib';
 use Test;
 
 use Gnome::N::N-GObject;
@@ -14,11 +15,6 @@ use Gnome::Gdk3::Screen;
 my Gnome::Gdk3::Screen $s;
 #-------------------------------------------------------------------------------
 subtest 'ISA test', {
-  throws-like
-    { $s .= new; },
-    X::Gnome, "No options used",
-    :message('No options used to create or set the native widget');
-
   throws-like
     { $s .= new( :find, :search); },
     X::Gnome, "Wrong options used",

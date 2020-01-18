@@ -12,18 +12,13 @@ use Gnome::Gdk3::Display;
 my Gnome::Gdk3::Display $d;
 #-------------------------------------------------------------------------------
 subtest 'ISA test', {
-  $d .= new(:default);
-  isa-ok $d, Gnome::Gdk3::Display, '.new(:default)';
+  $d .= new;
+  isa-ok $d, Gnome::Gdk3::Display, '.new()';
 }
 
 #-------------------------------------------------------------------------------
 subtest 'Manipulations', {
 #  X::Gnome.debug(:on);
-
-  throws-like
-    { $d .= new; },
-    X::Gnome, "No options used",
-    :message('No options used to create or set the native widget');
 
   throws-like
     { $d .= new( :find, :search); },
@@ -34,7 +29,7 @@ subtest 'Manipulations', {
           [(find||search) ',']+ /
     );
 
-  $d .= new(:default);
+  $d .= new;
   my Str $d-name = $d.get-name();
   like $d-name, /\: \d+/, '.get-name(): ' ~ $d-name;
 

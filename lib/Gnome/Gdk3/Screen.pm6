@@ -78,11 +78,11 @@ submethod BUILD ( *%options ) {
   return unless self.^name eq 'Gnome::Gdk3::Screen';
 
   if ? %options<default> {
-    self.native-gobject(gdk_screen_get_default());
+    self.set-native-object(gdk_screen_get_default());
   }
 
   elsif ? %options<screen> {
-    self.native-gobject(%options<screen>);
+    self.set-native-object(%options<screen>);
   }
 
   elsif %options.keys.elems {
