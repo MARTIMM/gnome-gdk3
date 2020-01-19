@@ -57,7 +57,7 @@ my Bool $signals-added = False;
 
 Create a new plain object with the default screen.
 
-  multi method new ( Bool :default! )
+  multi method new ( )
 
 Create an object using a native screen object from elsewhere.
 
@@ -65,7 +65,7 @@ Create an object using a native screen object from elsewhere.
 
 =end pod
 
-#TM:1:new(:default):
+#TM:1:new():
 #TM:0:new(:screen):
 
 submethod BUILD ( *%options ) {
@@ -78,6 +78,7 @@ submethod BUILD ( *%options ) {
   return unless self.^name eq 'Gnome::Gdk3::Screen';
 
   if ? %options<default> {
+    Gnome::N::deprecate( '.new(:default)', '.new()', '0.15.3', '0.18.0');
     self.set-native-object(gdk_screen_get_default());
   }
 
@@ -93,7 +94,11 @@ submethod BUILD ( *%options ) {
     );
   }
 
-  # only after creating the widget, the gtype is known
+  else {
+    self.set-native-object(gdk_screen_get_default());
+  }
+
+  # only after creating the native-object, the gtype is known
   self.set-class-info('GdkScreen');
 }
 

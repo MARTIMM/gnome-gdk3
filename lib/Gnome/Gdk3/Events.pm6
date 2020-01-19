@@ -1375,7 +1375,7 @@ class GdkEvent is repr('CUnion') is export {
 
 Create a new event object. When successful, the object must be freed explicitly when done using C<gdk_event_free()>.
 
-  multi method new ( Gnome::GObject::Object :$widget! )
+  multi method new ( Gnome::GObject::Object :$native-object! )
 
 Create an object using a native object from elsewhere. See also C<Gnome::GObject::Object>.
 
@@ -1401,7 +1401,7 @@ submethod BUILD ( *%options ) {
     self.set-native-object(gdk_events_new(%options<event-name>));
   }
 
-  elsif ? %options<widget> || %options<build-id> {
+  elsif ? %options<native-object> || ? %options<widget> || %options<build-id> {
     # provided in Gnome::GObject::Object
   }
 
