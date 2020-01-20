@@ -24,13 +24,13 @@ subtest 'ISA test', {
           [(find||search) ',']+/
     );
 
-  $s .= new(:default);
-  isa-ok $s, Gnome::Gdk3::Screen, '.new(:default)';
+  $s .= new;
+  isa-ok $s, Gnome::Gdk3::Screen, '.new';
 }
 
 #-------------------------------------------------------------------------------
 subtest 'Manipulations', {
-  my Gnome::Gdk3::Display $display .= new(:widget($s.get-display));
+  my Gnome::Gdk3::Display $display .= new(:native-object($s.get-display));
   my Str $display-name = $display.get-name();
   like $display-name, /\: \d+/,
        '.get-display(): display name has proper format: ' ~ $display-name;

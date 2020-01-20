@@ -21,7 +21,7 @@ In GTK+ applications the events are handled automatically in C<gtk_main_do_event
 
 =head2 Example
 
-  my Gnome::Gtk3::Window $top-window .= new(:empty);
+  my Gnome::Gtk3::Window $top-window .= new;
   $top-window.set-title('Hello GTK!');
   # ... etcetera ...
 
