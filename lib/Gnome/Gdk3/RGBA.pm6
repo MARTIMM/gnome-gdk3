@@ -103,13 +103,13 @@ Create an object using a string which is parsed with C<gdk_rgba_parse()>. If par
 
 Create an object using a native object from elsewhere.
 
-  multi method new ( Gnome::GObject::Object :$rgba! )
+  multi method new ( Gnome::GObject::Object :$native-object! )
 
 =end pod
 
 #TM:1:new(:red,:green,:blue,:alpha):
-#TM:1:new(:rgba(Gnome::Gdk3::RGBA)):
-#TM:1:new(:rgba(N-GdkRGBA)):
+#TM:1:new(:native-object(Gnome::Gdk3::RGBA)):
+#TM:1:new(:native-object(N-GdkRGBA)):
 #TM:1:new(:rgba(Str)):
 
 submethod BUILD ( *%options ) {
@@ -129,12 +129,28 @@ submethod BUILD ( *%options ) {
     self.set-native-object(N-GdkRGBA.new( :$red, :$green, :$blue, :$alpha));
   }
 
+  elsif ? %options<native-object> {
+    my Any $rgba = %options<native-object>;
+    $rgba .= get-native-object if $rgba ~~ Gnome::Gdk3::RGBA;
+    self.set-native-object($rgba);
+  }
+
   elsif ? %options<rgba> {
     if %options<rgba> ~~ N-GdkRGBA {
+      Gnome::N::deprecate(
+        '.new(:rgba(N-GdkRGBA))', '.new(:native-object(N-GdkRGBA))',
+        '0.15.1', '0.18.0'
+      );
+
       self.set-native-object(%options<rgba>);
     }
 
     elsif %options<rgba> ~~ Gnome::Gdk3::RGBA {
+      Gnome::N::deprecate(
+        '.new(:rgba(Gnome::Gdk3::RGBA))',
+        '.new(:native-object(Gnome::Gdk3::RGBA))', '0.15.1', '0.18.0'
+      );
+
       self.set-native-object(%options<rgba>.get-native-object);
     }
 
@@ -142,13 +158,10 @@ submethod BUILD ( *%options ) {
       my N-GdkRGBA $c .= new(
         :red(1.0e0), :green(1.0e0), :blue(1.0e0), :alpha(1.0e0)
       );
+
       self.set-native-object($c);
       my Int $ok = gdk_rgba_parse( $c, %options<rgba>);
       self.set-native-object($c) if $ok;
-    }
-
-    else {
-      die X::Gnome.new(:message('Improper type for :rgba option'));
     }
   }
 
@@ -162,6 +175,11 @@ submethod BUILD ( *%options ) {
 
   # only after creating the native-object, the gtype is known
   self.set-class-info('GdkRgba');
+}
+
+#-------------------------------------------------------------------------------
+sub DESTROY {
+  self.set-valid(False);
 }
 
 #-------------------------------------------------------------------------------
@@ -312,9 +330,24 @@ sub gdk_rgba_copy ( N-GdkRGBA $rgba ) {
   $clone
 }
 
+#-------------------------------------------------------------------------------
+#TM:1:gdk_rgba_copy:
+=begin pod
+=head2 clear-object
+
+Clear native object and invalidate this object
+
+  method clear-object ( )
+
+=end pod
+
+method clear-object ( ) {
+  self.set-valid(False);
+}
+
 #`{{ Not needed because of simulated copy
 #-------------------------------------------------------------------------------
-#TM:FF:gdk_rgba_free:
+# TM:FF:gdk_rgba_free:
 =begin pod
 =head2 gdk_rgba_free
 
