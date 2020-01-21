@@ -10,10 +10,10 @@ use Gnome::Gdk3::Window;
 #Gnome::N::debug(:on);
 
 #-------------------------------------------------------------------------------
-my Gnome::Gdk3::Window $w .= new(:empty);
+my Gnome::Gdk3::Window $w .= new;
 #-------------------------------------------------------------------------------
 subtest 'ISA test', {
-  my Gnome::Gdk3::Window $w .= new(:empty);
+  my Gnome::Gdk3::Window $w .= new;
   isa-ok $w, Gnome::Gdk3::Window;
 
   my Int $wtype = $w.get-window-type;

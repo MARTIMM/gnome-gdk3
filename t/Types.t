@@ -12,8 +12,8 @@ ok 1, 'load ok';
 my Gnome::Gdk3::Types $t;
 #-------------------------------------------------------------------------------
 subtest 'ISA test', {
-  $t .= new(:empty);
-  isa-ok $t, Gnome::::Types, '.new(:empty)';
+  $t .= new;
+  isa-ok $t, Gnome::::Types, '.new';
 }
 }}
 #`{{

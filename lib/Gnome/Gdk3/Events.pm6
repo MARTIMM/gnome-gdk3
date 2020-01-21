@@ -21,7 +21,7 @@ In GTK+ applications the events are handled automatically in C<gtk_main_do_event
 
 =head2 Example
 
-  my Gnome::Gtk3::Window $top-window .= new(:empty);
+  my Gnome::Gtk3::Window $top-window .= new;
   $top-window.set-title('Hello GTK!');
   # ... etcetera ...
 
@@ -1375,7 +1375,7 @@ class GdkEvent is repr('CUnion') is export {
 
 Create a new event object. When successful, the object must be freed explicitly when done using C<gdk_event_free()>.
 
-  multi method new ( Gnome::GObject::Object :$widget! )
+  multi method new ( Gnome::GObject::Object :$native-object! )
 
 Create an object using a native object from elsewhere. See also C<Gnome::GObject::Object>.
 
@@ -1398,10 +1398,10 @@ submethod BUILD ( *%options ) {
 
   # process all named arguments
   if ? %options<event-name> {
-    self.native-gobject(gdk_events_new(%options<event-name>));
+    self.set-native-object(gdk_events_new(%options<event-name>));
   }
 
-  elsif ? %options<widget> || %options<build-id> {
+  elsif ? %options<native-object> || ? %options<widget> || %options<build-id> {
     # provided in Gnome::GObject::Object
   }
 

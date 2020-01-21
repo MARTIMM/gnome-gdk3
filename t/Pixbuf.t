@@ -12,7 +12,7 @@ use Gnome::Gdk3::Pixbuf;
 
 #-------------------------------------------------------------------------------
 my Gnome::Gdk3::Pixbuf $p;
-my Gnome::Glib::Quark $quark .= new(:empty);
+my Gnome::Glib::Quark $quark .= new;
   my Gnome::Glib::Error $e;
 #-------------------------------------------------------------------------------
 subtest 'ISA test', {

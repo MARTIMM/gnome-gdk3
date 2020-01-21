@@ -1,4 +1,9 @@
 ## Release notes
+* 2020-01-18 0.15.1:
+  * renaming calls to `*native-gobject()` and `*native-gboxed()`.
+  * rename `:widget` to `:native-object`.
+  * remove `:empty` and use empty options hash instead
+
 * 2020-01-10 0.15.0.1:
   * Repo renaming. Perl6 to Raku.
 

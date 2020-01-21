@@ -565,7 +565,7 @@ Create an object using a native window object from elsewhere.
 
 =end pod
 
-#TM:1:new(:empty):
+#TM:1:new():
 #TM:0:new(:window):
 
 submethod BUILD ( *%options ) {
@@ -582,6 +582,8 @@ submethod BUILD ( *%options ) {
 
   # process all named arguments
   if ? %options<empty> {
+    Gnome::N::deprecate( '.new(:empty)', '.new()', '0.15.1', '0.18.1');
+
     # GDK_WINDOW_ROOT cannot be used because it covers the entire
     # screen, and is created by the window system. (there can only be one!).
     my GdkWindowAttr $attrs .= new(
@@ -592,16 +594,16 @@ submethod BUILD ( *%options ) {
     # No parent, no extra attributes, toplevel
     my N-GObject $o = gdk_window_new( Any, $attrs, 0);
 
-    self.native-gobject($o);
+    self.set-native-object($o);
   }
 
   elsif ? %options<window> {
     if %options<window> ~~ N-GObject {
-      self.native-gobject(%options<window>);
+      self.set-native-object(%options<window>);
     }
 
     elsif %options<window> ~~ Gnome::Gdk3::Window {
-      self.native-gobject(%options<window>.get-native-gobject);
+      self.set-native-object(%options<window>.get-native-object);
     }
 
     else {
@@ -617,7 +619,22 @@ submethod BUILD ( *%options ) {
     );
   }
 
-  # only after creating the widget, the gtype is known
+  else { #if ? %options<empty> {
+
+    # GDK_WINDOW_ROOT cannot be used because it covers the entire
+    # screen, and is created by the window system. (there can only be one!).
+    my GdkWindowAttr $attrs .= new(
+      :event_mask(0), :wclass(GDK_INPUT_OUTPUT),
+      :window_type(GDK_WINDOW_TOPLEVEL), :override_redirect(0)
+    );
+
+    # No parent, no extra attributes, toplevel
+    my N-GObject $o = gdk_window_new( Any, $attrs, 0);
+
+    self.set-native-object($o);
+  }
+
+  # only after creating the native-object, the gtype is known
   self.set-class-info('GdkWindow');
 }
 
@@ -637,7 +654,7 @@ method _fallback ( $native-sub is copy --> Callable ) {
 }
 
 #-------------------------------------------------------------------------------
-#TM:2:gdk_window_new:new(:empty)
+#TM:2:gdk_window_new:new()
 =begin pod
 =head2 gdk_window_new
 

@@ -72,13 +72,14 @@ Create a new plain object selecting a display by name.
 
 Create an object using a native object from elsewhere. See also B<Gnome::GObject::Object>.
 
-  multi method new ( N-GObject :$widget! )
+  multi method new ( N-GObject :$native-object! )
 
 =end pod
 
+#TM:1:new():
 #TM:1:new(:default):
 #TM:1:new(:open):
-#TM:0:new(:widget):
+#TM:0:new(:native-object):
 
 submethod BUILD ( *%options ) {
 
@@ -91,14 +92,19 @@ submethod BUILD ( *%options ) {
   return unless self.^name eq 'Gnome::Gdk3::Display';
 
   if ? %options<default> {
-    self.native-gobject(gdk_display_get_default()).defined;
+
+    Gnome::N::deprecate(
+      '.new(:default)', '.new()', '0.15.1', '0.18.0'
+    );
+
+    self.set-native-object(gdk_display_get_default()).defined;
   }
 
   elsif ? %options<open> {
-    self.native-gobject(gdk_display_open(%options<display-name>));
+    self.set-native-object(gdk_display_open(%options<display-name>));
   }
 
-  elsif ? %options<widget> {
+  elsif ? %options<native-object> || ? %options<widget> {
     # provided in GObject
   }
 
@@ -110,7 +116,12 @@ submethod BUILD ( *%options ) {
     );
   }
 
-  # only after creating the widget, the gtype is known
+  # replacement for :default option
+  else {
+    self.set-native-object(gdk_display_get_default()).defined;
+  }
+
+  # only after creating the native-object, the gtype is known
   self.set-class-info('GdkDisplay');
 }
 
