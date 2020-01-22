@@ -178,7 +178,7 @@ submethod BUILD ( *%options ) {
 }
 
 #-------------------------------------------------------------------------------
-sub DESTROY {
+submethod DESTROY {
   self.set-valid(False);
 }
 
