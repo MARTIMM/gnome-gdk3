@@ -64,7 +64,7 @@ my Bool $signals-added = False;
 
 Create a new object with the default display.
 
-  multi method new ( Bool :default! )
+  multi method new ( )
 
 Create a new plain object selecting a display by name.
 
@@ -77,7 +77,7 @@ Create an object using a native object from elsewhere. See also B<Gnome::GObject
 =end pod
 
 #TM:1:new():
-#TM:1:new(:default):
+#TM:1:new():
 #TM:1:new(:open):
 #TM:0:new(:native-object):
 
@@ -92,11 +92,7 @@ submethod BUILD ( *%options ) {
   return unless self.^name eq 'Gnome::Gdk3::Display';
 
   if ? %options<default> {
-
-    Gnome::N::deprecate(
-      '.new(:default)', '.new()', '0.15.1', '0.18.0'
-    );
-
+    Gnome::N::deprecate( '.new(:default)', '.new()', '0.15.1', '0.18.0');
     self.set-native-object(gdk_display_get_default()).defined;
   }
 

@@ -3,6 +3,8 @@
   * renaming calls to `*native-gobject()` and `*native-gboxed()`.
   * rename `:widget` to `:native-object`.
   * remove `:empty` and use empty options hash instead
+  * removed partly `:rgba` in Rgba
+  * add `clear-object()` and `is-valid()` in Rgba
 
 * 2020-01-10 0.15.0.1:
   * Repo renaming. Perl6 to Raku.
