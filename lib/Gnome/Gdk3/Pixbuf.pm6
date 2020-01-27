@@ -142,7 +142,7 @@ enum GdkPixbufError is export (
 );
 
 #-------------------------------------------------------------------------------
-has Gnome::Glib::Error $.last-error .= new(:gerror(N-GError));
+has Gnome::Glib::Error $.last-error .= new(:native-object(N-GError));
 #-------------------------------------------------------------------------------
 =begin pod
 =head1 Methods
@@ -166,7 +166,7 @@ submethod BUILD ( *%options is copy ) {
     my N-GObject $o;
     my Gnome::Glib::Error $e;
     ( $o, $e) = gdk_pixbuf_new_from_file(%options<file>);
-    if $e.error-is-valid {
+    if $e.is-valid {
       $!last-error = $e;
 
       die X::Gnome.new(
@@ -674,7 +674,7 @@ sub gdk_pixbuf_new_from_file ( Str $filename --> List ) {
   my CArray[N-GError] $ga .= new(N-GError);
   my N-GObject $o = _gdk_pixbuf_new_from_file( $filename, $ga);
 
-  ( $o, Gnome::Glib::Error.new(:gerror($ga[0])))
+  ( $o, Gnome::Glib::Error.new(:native-object($ga[0])))
 }
 
 sub _gdk_pixbuf_new_from_file ( Str $filename, CArray[N-GError] $error )
