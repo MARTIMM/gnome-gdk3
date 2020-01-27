@@ -225,7 +225,7 @@ method red ( Num $c? is copy --> Num ) {
 
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 red
+=head2 green
 
 Set the green color to a new value if provided. Returns original or newly set color value.
 
@@ -251,7 +251,7 @@ method green ( Num $c? is copy --> Num ) {
 
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 red
+=head2 blue
 
 Set the blue color to a new value if provided. Returns original or newly set color value.
 

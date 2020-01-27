@@ -24,7 +24,7 @@ subtest 'ISA test', {
 
   $p .= new( :file<t/Data/unknown-image.png>, :!throw);
   $e = $p.last-error;
-  if $e.error-is-valid {
+  if $e.is-valid {
     is $quark.to-string($e.domain), 'g-file-error-quark',
        'domain text is g-file-error-quark';
 
@@ -42,7 +42,7 @@ subtest 'ISA test', {
 
   $p .= new( :file<t/Data/some-test-file.xyz>, :!throw);
   $e = $p.last-error;
-  if $e.error-is-valid {
+  if $e.is-valid {
     is $quark.to-string($e.domain), 'gdk-pixbuf-error-quark',
        'domain text is gdk-pixbuf-error-quark';
     is $e.domain, $p.error-quark, '.error-quark()';
