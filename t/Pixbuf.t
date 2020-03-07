@@ -13,13 +13,12 @@ use Gnome::Gdk3::Pixbuf;
 #-------------------------------------------------------------------------------
 my Gnome::Gdk3::Pixbuf $p;
 my Gnome::Glib::Quark $quark .= new;
-  my Gnome::Glib::Error $e;
+my Gnome::Glib::Error $e;
 #-------------------------------------------------------------------------------
 subtest 'ISA test', {
-  throws-like(
+  dies-ok(
     { $p .= new(:file<t/Data/unknown-image.png>); },
-    X::Gnome, 'image not found',
-    :message(/:s Failed to open file/)
+    'image not found'
   );
 
   $p .= new( :file<t/Data/unknown-image.png>, :!throw);
@@ -31,13 +30,11 @@ subtest 'ISA test', {
     # 4 is value of G_FILE_ERROR_NOENT in enum GFileError (not defined yet)
     # See also https://developer.gnome.org/glib/stable/glib-File-Utilities.html
     is $e.code, 4, 'error code for this error is 4';
-    like $e.message, /:s Failed to open file/, $e.message;
   }
 
-  throws-like(
+  dies-ok(
     { $p .= new(:file<t/Data/some-test-file.xyz>); },
-    X::Gnome, 'not an image',
-    :message(/:s recognize the image file format for file/)
+    'not an image'
   );
 
   $p .= new( :file<t/Data/some-test-file.xyz>, :!throw);
@@ -48,7 +45,6 @@ subtest 'ISA test', {
     is $e.domain, $p.error-quark, '.error-quark()';
     is GdkPixbufError($e.code), GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
        'error code for this error is ' ~ GDK_PIXBUF_ERROR_UNKNOWN_TYPE;
-    like $e.message, /:s recognize the image file format for file/, $e.message;
   }
 
   $p .= new(:file<t/Data/gtk-raku.png>);
