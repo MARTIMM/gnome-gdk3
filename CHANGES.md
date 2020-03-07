@@ -1,6 +1,10 @@
 ## Release notes
+* 2020-03-07 0.15.3:
+  * Bugfixes in test programs
+
 * 2020-01-27 0.15.2:
   * Changes from **Gnome::Glib::Error** incorporated
+
 * 2020-01-18 0.15.1:
   * Renaming calls to `*native-gobject()` and `*native-gboxed()`.
   * Rename `:widget` to `:native-object`.
