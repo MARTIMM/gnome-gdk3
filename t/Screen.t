@@ -15,25 +15,15 @@ use Gnome::Gdk3::Screen;
 my Gnome::Gdk3::Screen $s;
 #-------------------------------------------------------------------------------
 subtest 'ISA test', {
-  throws-like
-    { $s .= new( :find, :search); },
-    X::Gnome, "Wrong options used",
-    :message(
-      /:s Unsupported options for
-          'Gnome::Gdk3::Screen:'
-          [(find||search) ',']+/
-    );
-
   $s .= new;
-  isa-ok $s, Gnome::Gdk3::Screen, '.new';
+  isa-ok $s, Gnome::Gdk3::Screen, '.new()';
 }
 
 #-------------------------------------------------------------------------------
 subtest 'Manipulations', {
   my Gnome::Gdk3::Display $display .= new(:native-object($s.get-display));
   my Str $display-name = $display.get-name();
-  like $display-name, /\: \d+/,
-       '.get-display(): display name has proper format: ' ~ $display-name;
+  like $display-name, /\: \d+/, '.get-display(): ' ~ $display-name;
 }
 
 #`{{

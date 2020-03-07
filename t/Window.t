@@ -17,7 +17,7 @@ subtest 'ISA test', {
   isa-ok $w, Gnome::Gdk3::Window;
 
   my Int $wtype = $w.get-window-type;
-  is GdkWindowType($wtype), GDK_WINDOW_TOPLEVEL, 'toplevel window type';
+  is GdkWindowType($wtype), GDK_WINDOW_TOPLEVEL, '.get-window-type()';
 }
 
 #-------------------------------------------------------------------------------
