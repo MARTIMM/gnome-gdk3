@@ -179,8 +179,9 @@ submethod BUILD ( *%options ) {
 
 #-------------------------------------------------------------------------------
 submethod DESTROY {
-  self.set-valid(False);
+#  self.set-valid(False);
 }
+
 
 #-------------------------------------------------------------------------------
 # no pod. user does not have to know about it.
@@ -331,6 +332,17 @@ sub gdk_rgba_copy ( N-GdkRGBA $rgba ) {
 }
 
 #-------------------------------------------------------------------------------
+# no ref/unref
+method native-object-ref ( $n-native-object --> Any ) {
+  $n-native-object
+}
+
+#-------------------------------------------------------------------------------
+method native-object-unref ( $n-native-object ) {
+}
+
+#`{{
+#-------------------------------------------------------------------------------
 #TM:1:gdk_rgba_copy:
 =begin pod
 =head2 clear-object
@@ -342,8 +354,9 @@ Clear native object and invalidate this object
 =end pod
 
 method clear-object ( ) {
-  self.set-valid(False);
+#  self.set-valid(False);
 }
+}}
 
 #`{{ Not needed because of simulated copy
 #-------------------------------------------------------------------------------
