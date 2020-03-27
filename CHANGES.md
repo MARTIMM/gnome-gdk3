@@ -1,4 +1,7 @@
 ## Release notes
+* 2020-03-25 0.15.4:
+  * Added native-object-ref and native-object-unref in Rgba after changes in Gnome::GObject::Boxed.
+
 * 2020-03-07 0.15.3:
   * Bugfixes in test programs
 
