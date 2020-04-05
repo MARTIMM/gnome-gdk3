@@ -178,12 +178,6 @@ submethod BUILD ( *%options ) {
 }
 
 #-------------------------------------------------------------------------------
-submethod DESTROY {
-#  self.set-valid(False);
-}
-
-
-#-------------------------------------------------------------------------------
 # no pod. user does not have to know about it.
 method _fallback ( $native-sub is copy --> Callable ) {
 
