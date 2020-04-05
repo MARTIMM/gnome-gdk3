@@ -43,7 +43,7 @@ There are always some problems! If you find one, please help by filing an issue 
 
 [//]: # (---- [refs] ----------------------------------------------------------)
 [changes]: https://github.com/MARTIMM/gnome-gdk/blob/master/CHANGES.md
-[logo]: https://github.com/MARTIMM/gnome-gdk/blob/master/doc/images/gtk-logo-100.png
+[logo]: https://martimm.github.io/gnome-gtk3/content-docs/images/gtk-perl6.png
 [issues]: https://github.com/MARTIMM/gnome-gtk3/issues
 
 [GdkDisplay]: https://developer.gnome.org/gdk3/stable/GdkDisplay.html
