@@ -65,6 +65,8 @@ subtest 'Manipulations', {
   is $p.calculate-rowstride( GDK_COLORSPACE_RGB, True, 8, 10, 2), 40,
      '.calculate-rowstride()';                            # 10 * 4
 
+#note "GDK_TYPE_PIXBUF: ", $p.get-type;
+
 #`{{
 Gnome::N::debug(:on);
   my Array[UInt] $pb = $p.get-pixels;
