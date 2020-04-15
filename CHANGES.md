@@ -1,4 +1,7 @@
 ## Release notes
+* 2020-04-15 0.15.5:
+  * Added `gdk_pixbuf_get_type()` to support a missing type GDK_TYPE_PIXBUF. This cannot be encoded because it is not a fundamental type like G_TYPE_INT.
+
 * 2020-03-25 0.15.4:
   * Added native-object-ref and native-object-unref in Rgba after changes in Gnome::GObject::Boxed.
 
