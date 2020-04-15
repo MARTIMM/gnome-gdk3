@@ -462,8 +462,10 @@ enum GdkAxisFlags is export (
 Defines the position and size of a rectangle. It is identical to
 B<cairo_rectangle_int_t>.
 
-
-
+=item Int $.x;
+=item Int $.y;
+=item Int $.width;
+=item Int $.height;
 
 =end pod
 
