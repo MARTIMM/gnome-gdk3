@@ -231,6 +231,20 @@ sub gdk_pixbuf_error_quark (  )
   { * }
 
 #-------------------------------------------------------------------------------
+#TM:1::gdk_pixbuf_get_type
+=begin pod
+=head2 [gdk_pixbuf_] gdk_pixbuf_get_type
+
+  method gdk_pixbuf_get_type ( --> Int )
+
+=end pod
+
+sub gdk_pixbuf_get_type ( )
+  returns int64
+  is native(&gdk-pixbuf-lib)
+  { * }
+
+#-------------------------------------------------------------------------------
 #TM:1:gdk_pixbuf_get_colorspace:
 =begin pod
 =head2 [gdk_pixbuf_] get_colorspace
