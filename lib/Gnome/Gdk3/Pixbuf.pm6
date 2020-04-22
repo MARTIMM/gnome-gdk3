@@ -148,54 +148,164 @@ has Gnome::Glib::Error $.last-error .= new(:native-object(N-GError));
 =head1 Methods
 =head2 new
 
-Create a new plain object and load pixbuf from file.
 
-  multi method new ( Str :$file!, Bool :$throw = True )
+=head3 :$file
+
+Creates a new pixbuf by loading an image from a file. The file format is detected automatically. If image is not found, a broken image icon is loaded instead.
+
+  multi method new ( Str :$file! )
+
+=head3 :$file, :$width, :$height
+
+Creates a new pixbuf by loading an image from a file. The file format is detected automatically. If image is not found, a broken image icon is loaded instead.
+
+The image will be scaled to fit in the requested size, preserving the image's aspect ratio. Note that the returned pixbuf may be smaller than width x height , if the aspect ratio requires it. To load and image at the requested size, regardless of aspect ratio, add :preserve_aspect_ratio, see below.
+
+  method new ( Str :$file, Int :$width, Int :$height )
+
+=head3 :$file, :$width, :$height, :$preserve_aspect_ratio
+
+Creates a new pixbuf by loading an image from a file. The file format is detected automatically. If image is not found, a broken image icon is loaded instead.
+
+When preserving the aspect ratio, a width of -1 will cause the image to be scaled to the exact given height, and a height of -1 will cause the image to be scaled to the exact given width. When not preserving aspect ratio, a width or height of -1 means to not scale the image at all in that dimension.
+
+  method new (
+    Str :$file!, Int :$width!, Int :$height!,
+    Bool :$preserve_aspect_ratio!
+  )
+
+=head3 :$resource
+
+Creates a new pixbuf by loading an image from a Gio resource file. The file format is detected automatically. If image is not found, a broken image icon is loaded instead.
+
+  multi method new ( Str :$resource! )
 
 =end pod
 
 #TM:1:new(:file):
+#TM:1:new(:file,:width,:height):
+#TM:1:new(:file,:width,:height,:preserve_aspect_ratio):
+#TM:0:new(:resource):
+#TM:4:new(:native-object):TopLevelClassSupport
 submethod BUILD ( *%options is copy ) {
 
   # prevent creating wrong widgets
-  return unless self.^name eq 'Gnome::Gdk3::Pixbuf';
+  if self.^name eq 'Gnome::Gdk3::Pixbuf' {
 
-  # process all named arguments
-  %options<throw> //= True;
-  if ? %options<file> {
-    my N-GObject $o;
-    my Gnome::Glib::Error $e;
-    ( $o, $e) = gdk_pixbuf_new_from_file(%options<file>);
-    if $e.is-valid {
-      $!last-error = $e;
+    if self.is-valid { }
 
-      die X::Gnome.new(
-        :message(
-          "Error creating a Pixbuf from file %options<file>, message: " ~
-          $e.message
-        )
-      ) if %options<throw>;
-    }
+    # process all named arguments
+    elsif %options<native-object>:exists or %options<widget>:exists or
+      %options<build-id>:exists { }
 
     else {
-      self.set-native-object($o);
+      my $no;
+
+      # process all named arguments
+      if ? %options<file> and %options<width>:exists and
+           %options<height>:exists {
+
+        my Gnome::Glib::Error $e;
+        my Bool $preserve_aspect_ratio =
+            %options<preserve_aspect_ratio> // Bool;
+
+        if $preserve_aspect_ratio.defined and !$preserve_aspect_ratio {
+          ( $no, $e) = _gdk_pixbuf_new_from_file_at_scale(
+            %options<file>, %options<width> // 0, %options<height> // 0,
+            False
+          );
+        }
+
+        elsif $preserve_aspect_ratio.defined and $preserve_aspect_ratio {
+          ( $no, $e) = _gdk_pixbuf_new_from_file_at_scale(
+            %options<file>, %options<width> // 0, %options<height> // 0,
+            True
+          );
+        }
+
+        else {
+          ( $no, $e) = _gdk_pixbuf_new_from_file_at_size(
+            %options<file>, %options<width> // 0, %options<height> // 0
+          );
+        }
+
+        if $e.is-valid {
+          $!last-error = $e;
+
+          note "Error creating a Pixbuf from file %options<file>, message: " ~
+              $e.message if $Gnome::N::x-debug;
+
+          if $preserve_aspect_ratio.defined and !$preserve_aspect_ratio {
+            ( $no, $e) = _gdk_pixbuf_new_from_file_at_scale(
+              %?RESOURCES<gtk-brokenimage.png>.Str,
+              %options<width> // 0, %options<height> // 0,
+              False
+            );
+          }
+
+          elsif $preserve_aspect_ratio.defined and $preserve_aspect_ratio {
+            ( $no, $e) = _gdk_pixbuf_new_from_file_at_scale(
+              %?RESOURCES<gtk-brokenimage.png>.Str,
+              %options<width> // 0, %options<height> // 0,
+              True
+            );
+          }
+
+          else {
+            ( $no, $e) = _gdk_pixbuf_new_from_file_at_size(
+              %?RESOURCES<gtk-brokenimage.png>.Str,
+              %options<width> // 0, %options<height> // 0
+            );
+          }
+        }
+      }
+
+      elsif ? %options<file> {
+        my N-GObject $o;
+        my Gnome::Glib::Error $e;
+        ( $no, $e) = _gdk_pixbuf_new_from_file(%options<file>);
+        if $e.is-valid {
+          $!last-error = $e;
+
+          note "Error creating a Pixbuf from file %options<file>, message: " ~
+              $e.message if $Gnome::N::x-debug;
+
+          ( $no, $e) = _gdk_pixbuf_new_from_file(
+            %?RESOURCES<gtk-brokenimage.png>.Str
+          );
+        }
+      }
+
+      elsif ? %options<resource> {
+        my N-GObject $o;
+        my Gnome::Glib::Error $e;
+        ( $no, $e) = _gdk_pixbuf_new_from_file(%options<resource>);
+        if $e.is-valid {
+          $!last-error = $e;
+
+          note "Error creating a Pixbuf from file %options<resource>, message: " ~ $e.message if $Gnome::N::x-debug;
+
+          ( $no, $e) = _gdk_pixbuf_new_from_file(
+            %?RESOURCES<gtk-brokenimage.png>.Str
+          );
+        }
+      }
+
+      elsif ? %options<pixbuf> {
+        Gnome::N::deprecate(
+          '.new(:pixbuf)', '.new(:native-object)', '0.15.5', '0.18.0'
+        );
+        $no = %options<pixbuf>;
+        $no .= get-native-object-no-reffing
+          if $no.^can('get-native-object-no-reffing');
+      }
+
+      self.set-native-object($no);
     }
-  }
 
-  elsif ? %options<pixbuf> {
-    self.set-native-object(%options<pixbuf>);
+    # only after creating the native-object, the gtype is known
+    self.set-class-info('GdkPixbuf');
   }
-
-  elsif %options.keys.elems {
-    die X::Gnome.new(
-      :message('Unsupported options for ' ~ self.^name ~
-               ': ' ~ %options.keys.join(', ')
-              )
-    );
-  }
-
-  # only after creating the native-object, the gtype is known
-  self.set-class-info('GdkPixbuf');
 }
 
 #-------------------------------------------------------------------------------
@@ -670,7 +780,8 @@ sub gdk_pixbuf_new_from_file_at_scale_utf8 ( Str $filename, int32 $width, int32 
 }}
 
 #-------------------------------------------------------------------------------
-#TM:2:gdk_pixbuf_new_from_file:new(:file)
+#TM:2:_gdk_pixbuf_new_from_file:new(:file)
+#`{{
 =begin pod
 =head2 [gdk_pixbuf_] new_from_file
 
@@ -682,23 +793,26 @@ Creates a new pixbuf by loading an image from a file. The file format is detecte
 =item N-GError $error;
 
 =end pod
+}}
 
-sub gdk_pixbuf_new_from_file ( Str $filename --> List ) {
+sub _gdk_pixbuf_new_from_file ( Str $filename --> List ) {
   my N-GError $e;
   my CArray[N-GError] $ga .= new(N-GError);
-  my N-GObject $o = _gdk_pixbuf_new_from_file( $filename, $ga);
+  my N-GObject $o = __gdk_pixbuf_new_from_file( $filename, $ga);
 
   ( $o, Gnome::Glib::Error.new(:native-object($ga[0])))
 }
 
-sub _gdk_pixbuf_new_from_file ( Str $filename, CArray[N-GError] $error )
-  returns N-GObject
-  is native(&gdk-pixbuf-lib)
+sub __gdk_pixbuf_new_from_file (
+  Str $filename, CArray[N-GError] $error
+  --> N-GObject
+) is native(&gdk-pixbuf-lib)
   is symbol('gdk_pixbuf_new_from_file')
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:gdk_pixbuf_new_from_file_at_size:
+#TM:2:_gdk_pixbuf_new_from_file_at_size:new()
+#`{{
 =begin pod
 =head2 [gdk_pixbuf_] new_from_file_at_size
 
@@ -714,14 +828,31 @@ The image will be scaled to fit in the requested size, preserving the image's as
 =item N-GError $error;
 
 =end pod
+}}
 
-sub gdk_pixbuf_new_from_file_at_size ( Str $filename, int32 $width, int32 $height, N-GError $error )
-  returns N-GObject
-  is native(&gdk-pixbuf-lib)
+sub _gdk_pixbuf_new_from_file_at_size (
+  Str $filename, Int $width, Int $height
+  --> List
+) {
+  my N-GError $e;
+  my CArray[N-GError] $ga .= new(N-GError);
+  my N-GObject $o = __gdk_pixbuf_new_from_file_at_size(
+    $filename, $width, $height, $ga
+  );
+
+  ( $o, Gnome::Glib::Error.new(:native-object($ga[0])))
+}
+
+sub __gdk_pixbuf_new_from_file_at_size (
+  Str $filename, int32 $width, int32 $height, CArray[N-GError] $error
+  --> N-GObject
+) is native(&gdk-pixbuf-lib)
+  is symbol('gdk_pixbuf_new_from_file_at_size')
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:gdk_pixbuf_new_from_file_at_scale:
+#TM:2:_gdk_pixbuf_new_from_file_at_scale:new()
+#`{{
 =begin pod
 =head2 [gdk_pixbuf_] new_from_file_at_scale
 
@@ -738,18 +869,34 @@ When preserving the aspect ratio, a width of -1 will cause the image to be scale
 =item N-GError $error;
 
 =end pod
+}}
 
-sub gdk_pixbuf_new_from_file_at_scale ( Str $filename, int32 $width, int32 $height, int32 $preserve_aspect_ratio, N-GError $error )
-  returns N-GObject
-  is native(&gdk-pixbuf-lib)
+sub _gdk_pixbuf_new_from_file_at_scale (
+  Str $filename, Int $width, Int $height, Int $preserve_aspect_ratio
+  --> List
+) {
+  my N-GError $e;
+  my CArray[N-GError] $ga .= new(N-GError);
+  my N-GObject $o = __gdk_pixbuf_new_from_file_at_scale(
+    $filename, $width, $height, $preserve_aspect_ratio, $ga
+  );
+
+  ( $o, Gnome::Glib::Error.new(:native-object($ga[0])))
+}
+
+sub __gdk_pixbuf_new_from_file_at_scale (
+  Str $filename, int32 $width, int32 $height, int32 $preserve_aspect_ratio,
+  CArray[N-GError] $error
+  --> N-GObject
+) is native(&gdk-pixbuf-lib)
+  is symbol('gdk_pixbuf_new_from_file_at_scale')
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:gdk_pixbuf_new_from_resource:
+#TM:0:_gdk_pixbuf_new_from_resource:
+#`{{
 =begin pod
 =head2 [gdk_pixbuf_] new_from_resource
-
-
 
   method gdk_pixbuf_new_from_resource ( Str $resource_path, N-GError $error --> N-GObject  )
 
@@ -757,10 +904,22 @@ sub gdk_pixbuf_new_from_file_at_scale ( Str $filename, int32 $width, int32 $heig
 =item N-GError $error;
 
 =end pod
+}}
 
-sub gdk_pixbuf_new_from_resource ( Str $resource_path, N-GError $error )
+sub _gdk_pixbuf_new_from_resource ( Str $resource-path --> List ) {
+  my N-GError $e;
+  my CArray[N-GError] $ga .= new(N-GError);
+  my N-GObject $o = __gdk_pixbuf_new_from_resource(
+    $resource-path, $ga
+  );
+
+  ( $o, Gnome::Glib::Error.new(:native-object($ga[0])))
+}
+
+sub __gdk_pixbuf_new_from_resource ( Str $resource_path, CArray[N-GError] $error )
   returns N-GObject
   is native(&gdk-pixbuf-lib)
+  is symbol('gdk_pixbuf_new_from_resource')
   { * }
 
 #`{{
