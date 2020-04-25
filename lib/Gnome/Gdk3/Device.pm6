@@ -1028,12 +1028,12 @@ B<Gnome::Gdk3::Devices> whenever tools enter or leave proximity.
 Since: 3.22
 
   method handler (
-    N-GObject #`{{ native Gnome::Gdk3::DeviceTool }} $tool,
+    N-GObject $tool,
     Gnome::GObject::Object :widget($device),
     *%user-options
   );
 
-=item $device; the B<Gnome::Gdk3::Device> that changed.
+=item $device; the native object for B<Gnome::Gdk3::Device> that changed.
 
 =item $tool; The new current tool
 

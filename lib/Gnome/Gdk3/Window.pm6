@@ -4361,8 +4361,8 @@ embedded child at I<x>, I<y>, or C<Any>
 Since: 2.18
 
   method handler (
-    num64 #`{{use NativeCall}} $x,
-    num64 #`{{use NativeCall}} $y,
+    num64 $x,
+    num64 $y,
     Gnome::GObject::Object :widget($window),
     *%user-options
     --> Unknown type GDK_TYPE_WINDOW
@@ -4374,7 +4374,7 @@ Since: 2.18
 
 =item $y; y coordinate in the window
 
-
+=begin comment
 =comment #TS:0:to-embedder:
 =head3 to-embedder
 
@@ -4386,8 +4386,8 @@ See also  I<from-embedder>.
 Since: 2.18
 
   method handler (
-    num64 #`{{use NativeCall}} $offscreen_x,
-    num64 #`{{use NativeCall}} $offscreen_y,
+    num64 $offscreen_x,
+    num64 $offscreen_y,
     Unknown type G_TYPE_POINTER $embedder_x,
     Unknown type G_TYPE_POINTER $embedder_y,
     Gnome::GObject::Object :widget($window),
@@ -4404,7 +4404,9 @@ Since: 2.18
 coordinate in the embedder window
 =item $embedder_y; (out) (type double): return location for the y
 coordinate in the embedder window
+=end comment
 
+=begin comment
 =comment #TS:0:from-embedder:
 =head3 from-embedder
 
@@ -4416,8 +4418,8 @@ See also  I<to-embedder>.
 Since: 2.18
 
   method handler (
-    num64 #`{{use NativeCall}} $embedder_x,
-    num64 #`{{use NativeCall}} $embedder_y,
+    num64 $embedder_x,
+    num64 $embedder_y,
     Unknown type G_TYPE_POINTER $offscreen_x,
     Unknown type G_TYPE_POINTER $offscreen_y,
     Gnome::GObject::Object :widget($window),
@@ -4434,6 +4436,7 @@ Since: 2.18
 coordinate in the offscreen window
 =item $offscreen_y; (out) (type double): return location for the y
 coordinate in the offscreen window
+=end comment
 
 =begin comment
 =comment #TS:0:create-surface:
