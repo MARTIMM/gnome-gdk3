@@ -23,14 +23,11 @@ You can also copy an existing pixbuf with the C<gdk_pixbuf_copy()> function.  Th
 
 
 
-=begin comment
 =head2 Implemented Interfaces
 
 Gnome::Gdk3::Pixbuf implements
 =comment ?? item Gnome::Gio::GIcon
 =comment ?? item Gnome::Gio::GLoadableIcon
-
-=end comment
 
 =head2 See Also
 
@@ -57,18 +54,11 @@ use Gnome::N::N-GObject;
 use Gnome::GObject::Object;
 use Gnome::Glib::Error;
 
-#use Gnome::Gtk3::Orientable;
-#use Gnome::Gtk3::Buildable;
-
 #-------------------------------------------------------------------------------
 # /usr/include/gtk-3.0/gtk/INCLUDE
 # https://developer.gnome.org/WWW
 unit class Gnome::Gdk3::Pixbuf:auth<github:MARTIMM>;
 also is Gnome::GObject::Object;
-
-#also does Gnome::Gtk3::Buildable;
-#also does Gnome::Gtk3::Orientable;
-
 
 #-------------------------------------------------------------------------------
 =begin pod
@@ -316,8 +306,6 @@ method _fallback ( $native-sub is copy --> Callable ) {
   try { $s = &::("gdk_pixbuf_$native-sub"); };
   try { $s = &::("gdk_$native-sub"); } unless ?$s;
   try { $s = &::($native-sub); } if !$s and $native-sub ~~ m/^ 'gdk_' /;
-#  $s = self._buildable_interface($native-sub) unless ?$s;
-#  $s = self._orientable_interface($native-sub) unless ?$s;
 
   self.set-class-name-of-sub('GdkPixbuf');
   $s = callsame unless ?$s;
