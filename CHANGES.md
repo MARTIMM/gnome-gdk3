@@ -1,4 +1,7 @@
 ## Release notes
+* 2020-04-24 0.17.0:
+  * Introduction to Cairo
+
 * 2020-04-22 0.15.6:
   * Modified and extended **Gnome::Gdk3::Pixbuf**.
 
