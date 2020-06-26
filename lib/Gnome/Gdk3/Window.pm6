@@ -61,11 +61,18 @@ use NativeCall;
 use Gnome::N::X;
 use Gnome::N::NativeLib;
 use Gnome::N::N-GObject;
+
 use Gnome::Glib::Error;
 use Gnome::Glib::List;
+
 use Gnome::GObject::Object;
+
 use Gnome::Gdk3::Types;
 use Gnome::Gdk3::Events;
+
+#use Gnome::Cairo;
+use Gnome::Cairo::Types;
+use Gnome::Cairo::Enums;
 
 #-------------------------------------------------------------------------------
 # /usr/include/gtk-3.0/gdk/gdkwindow.h
@@ -555,18 +562,24 @@ my Bool $signals-added = False;
 =head1 Methods
 =head2 new
 
-  multi method new ( Bool :$empty! )
+=begin comment
+=head3 new( :event_mask, :wclass, :window_type, :override_redirect)
 
-Create a new plain object. The value doesn't have to be True nor False. The name only will suffice.
+Creates a new B<Gnome::Gdk3::Window> using the attributes from I<attributes>. See B<Gnome::Gdk3::WindowAttr> and B<Gnome::Gdk3::WindowAttributesType> for
+more details.  Note: to use this on displays other than the default
+display, I<parent> must be specified.
 
-  multi method new ( Gnome::GObject::Object :$window! )
+Returns: (transfer full): the new B<Gnome::Gdk3::Window>
 
-Create an object using a native window object from elsewhere.
+  method gdk_window_new ( GdkWindowAttr $attributes, Int $attributes_mask --> N-GObject  )
 
+=item GdkWindowAttr $attributes; attributes of the new window
+=item Int $attributes_mask; (type B<Gnome::Gdk3::WindowAttributesType>): mask indicating which fields in I<attributes> are valid
+=end comment
 =end pod
 
 #TM:1:new():
-#TM:0:new(:window):
+#TM:0:new(:):
 
 submethod BUILD ( *%options ) {
 
@@ -578,64 +591,67 @@ submethod BUILD ( *%options ) {
   ) unless $signals-added;
 
   # prevent creating wrong widgets
-  return unless self.^name eq 'Gnome::Gdk3::Window';
+  if self.^name eq 'Gnome::Gdk3::Window' #`{{ or %options<GdkWindow> }} {
 
-  # process all named arguments
-  if ? %options<empty> {
-    Gnome::N::deprecate( '.new(:empty)', '.new()', '0.15.1', '0.18.1');
+    if self.is-valid { }
 
-    # GDK_WINDOW_ROOT cannot be used because it covers the entire
-    # screen, and is created by the window system. (there can only be one!).
-    my GdkWindowAttr $attrs .= new(
-      :event_mask(0), :wclass(GDK_INPUT_OUTPUT),
-      :window_type(GDK_WINDOW_TOPLEVEL), :override_redirect(0)
-    );
-
-    # No parent, no extra attributes, toplevel
-    my N-GObject $o = gdk_window_new( Any, $attrs, 0);
-
-    self.set-native-object($o);
-  }
-
-  elsif ? %options<window> {
-    if %options<window> ~~ N-GObject {
-      self.set-native-object(%options<window>);
-    }
-
-    elsif %options<window> ~~ Gnome::Gdk3::Window {
-      self.set-native-object(%options<window>.get-native-object);
-    }
+    # process all named arguments
+    elsif %options<native-object>:exists { }
 
     else {
-      die X::Gnome.new(:message('Wrong type for :window option'))
+      my $no;
+
+      if ? %options<empty> {
+        Gnome::N::deprecate( '.new(:empty)', '.new()', '0.15.1', '0.18.0');
+
+        # GDK_WINDOW_ROOT cannot be used because it covers the entire
+        # screen, and is created by the window system. (there can only be one!).
+        my GdkWindowAttr $attrs .= new(
+          :event_mask(0), :wclass(GDK_INPUT_OUTPUT),
+          :window_type(GDK_WINDOW_TOPLEVEL), :override_redirect(0)
+        );
+
+        # No parent, no extra attributes, toplevel
+        $no = _gdk_window_new( Any, $attrs, 0);
+      }
+
+      elsif ? %options<window> {
+        Gnome::N::deprecate(
+          '.new(:window)', '.new(:native-object)', '0.16.0', '0.18.0'
+        );
+
+        $no = %options<window>;
+        $no .= get-native-object-no-reffing
+          if $no.^can('get-native-object-no-reffing');
+      }
+
+      elsif %options.keys.elems {
+        die X::Gnome.new(
+          :message('Unsupported options for ' ~ self.^name ~
+                   ': ' ~ %options.keys.join(', ')
+                  )
+        );
+      }
+
+      else { #if ? %options<empty> {
+
+        # GDK_WINDOW_ROOT cannot be used because it covers the entire
+        # screen, and is created by the window system. (there can only be one!).
+        my GdkWindowAttr $attrs .= new(
+          :event_mask(0), :wclass(GDK_INPUT_OUTPUT),
+          :window_type(GDK_WINDOW_TOPLEVEL), :override_redirect(0)
+        );
+
+        # No parent, no extra attributes, toplevel
+        $no = _gdk_window_new( Any, $attrs, 0);
+      }
+
+      self.set-native-object($no);
     }
+
+    # only after creating the native-object, the gtype is known
+    self.set-class-info('GdkWindow');
   }
-
-  elsif %options.keys.elems {
-    die X::Gnome.new(
-      :message('Unsupported options for ' ~ self.^name ~
-               ': ' ~ %options.keys.join(', ')
-              )
-    );
-  }
-
-  else { #if ? %options<empty> {
-
-    # GDK_WINDOW_ROOT cannot be used because it covers the entire
-    # screen, and is created by the window system. (there can only be one!).
-    my GdkWindowAttr $attrs .= new(
-      :event_mask(0), :wclass(GDK_INPUT_OUTPUT),
-      :window_type(GDK_WINDOW_TOPLEVEL), :override_redirect(0)
-    );
-
-    # No parent, no extra attributes, toplevel
-    my N-GObject $o = gdk_window_new( Any, $attrs, 0);
-
-    self.set-native-object($o);
-  }
-
-  # only after creating the native-object, the gtype is known
-  self.set-class-info('GdkWindow');
 }
 
 #-------------------------------------------------------------------------------
@@ -654,7 +670,8 @@ method _fallback ( $native-sub is copy --> Callable ) {
 }
 
 #-------------------------------------------------------------------------------
-#TM:2:gdk_window_new:new()
+#TM:2:_gdk_window_new:new()
+#`{{
 =begin pod
 =head2 gdk_window_new
 
@@ -671,10 +688,11 @@ Returns: (transfer full): the new B<Gnome::Gdk3::Window>
 =item Int $attributes_mask; (type B<Gnome::Gdk3::WindowAttributesType>): mask indicating which fields in I<attributes> are valid
 
 =end pod
+}}
 
-sub gdk_window_new ( N-GObject $parent, GdkWindowAttr $attributes, int32 $attributes_mask )
-  returns N-GObject
+sub _gdk_window_new ( N-GObject $parent, GdkWindowAttr $attributes, int32 $attributes_mask --> N-GObject)
   is native(&gdk-lib)
+  is symbol('gdk_window_new')
   { * }
 
 #-------------------------------------------------------------------------------
@@ -741,8 +759,6 @@ sub gdk_window_is_destroyed ( N-GObject $window )
 
 Gets the B<Gnome::Gdk3::Visual> describing the pixel format of I<window>.
 
-Returns: (transfer none): a B<Gnome::Gdk3::Visual>
-
 Since: 2.24
 
   method gdk_window_get_visual ( --> N-GObject  )
@@ -761,8 +777,6 @@ sub gdk_window_get_visual ( N-GObject $window )
 =head2 [[gdk_] window_] get_screen
 
 Gets the B<Gnome::Gdk3::Screen> associated with a B<Gnome::Gdk3::Window>.
-
-Returns: (transfer none): the B<Gnome::Gdk3::Screen> associated with I<window>
 
 Since: 2.24
 
@@ -809,8 +823,7 @@ Z-order).
 This function maps a window so it’s visible onscreen. Its opposite
 is C<gdk_window_hide()>.
 
-When implementing a B<Gnome::Gtk3::Widget>, you should call this function on the widget's
-B<Gnome::Gdk3::Window> as part of the “map” method.
+When implementing a B<Gnome::Gtk3::Widget>, you should call this function on the widget's B<Gnome::Gdk3::Window> as part of the “map” method.
 
   method gdk_window_show ( )
 
@@ -3195,43 +3208,35 @@ sub gdk_window_set_functions ( N-GObject $window, int32 $functions )
   { * }
 
 
-#`{{
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_create_similar_surface:
 =begin pod
 =head2 [[gdk_] window_] create_similar_surface
 
-Create a new surface that is as compatible as possible with the
-given I<window>. For example the new surface will have the same
-fallback resolution and font options as I<window>. Generally, the new
-surface will also use the same backend as I<window>, unless that is
-not possible for some reason. The type of the returned surface may
-be examined with C<cairo_surface_get_type()>.
+Create a new surface that is as compatible as possible with the given I<window>. For example the new surface will have the same fallback resolution and font options as I<window>. Generally, the new surface will also use the same backend as I<window>, unless that is not possible for some reason. The type of the returned surface may be examined with C<cairo_surface_get_type()>.
 
-Initially the surface contents are all 0 (transparent if contents
-have transparency, black otherwise.)
+Initially the surface contents are all 0 (transparent if contents have transparency, black otherwise.)
 
-Returns: a pointer to the newly allocated surface. The caller
-owns the surface and should call C<cairo_surface_destroy()> when done
-with it.
+Returns: a pointer to the newly allocated surface. The caller owns the surface and should call C<cairo_surface_destroy()> when done with it.
 
-This function always returns a valid pointer, but it will return a
-pointer to a “nil” surface if I<other> is already in an error state
-or any other error occurs.
+This function always returns a valid pointer, but it will return a pointer to a “nil” surface if the surface of this Window is already in an error state or any other error occurs.
 
-Since: 2.22
 
-  method gdk_window_create_similar_surface ( cairo_content_t $content, int32 $width, int32 $height --> cairo_surface_t  )
+  method gdk_window_create_similar_surface (
+    cairo_content_t $content, int32 $width, int32 $height
+    --> cairo_surface_t
+  )
 
-=item cairo_content_t $content; the content for the new surface
+=item cairo_content_t $content; an enum describing the content for the new surface
 =item int32 $width; width of the new surface
 =item int32 $height; height of the new surface
 
 =end pod
 
-sub gdk_window_create_similar_surface ( N-GObject $window, cairo_content_t $content, int32 $width, int32 $height )
-  returns cairo_surface_t
-  is native(&gdk-lib)
+sub gdk_window_create_similar_surface (
+  N-GObject $window, int32 $content, int32 $width, int32 $height
+  --> cairo_surface_t
+) is native(&gdk-lib)
   { * }
 
 #-------------------------------------------------------------------------------
@@ -3239,18 +3244,13 @@ sub gdk_window_create_similar_surface ( N-GObject $window, cairo_content_t $cont
 =begin pod
 =head2 [[gdk_] window_] create_similar_image_surface
 
-Create a new image surface that is efficient to draw on the
-given I<window>.
+Create a new image surface that is efficient to draw on the given I<window>.
 
-Initially the surface contents are all 0 (transparent if contents
-have transparency, black otherwise.)
+Initially the surface contents are all 0 (transparent if contents have transparency, black otherwise.)
 
-The I<width> and I<height> of the new surface are not affected by
-the scaling factor of the I<window>, or by the I<scale> argument; they
-are the size of the surface in device pixels. If you wish to create
-an image surface capable of holding the contents of I<window> you can
-use:
+The I<width> and I<height> of the new surface are not affected by the scaling factor of the I<window>, or by the I<scale> argument; they are the size of the surface in device pixels. If you wish to create an image surface capable of holding the contents of I<window> you can use:
 
+=begin comment
 |[<!-- language="C" -->
 int scale = gdk_window_get_scale_factor (window);
 int width = gdk_window_get_width (window) * scale;
@@ -3263,31 +3263,32 @@ format,
 width, height,
 scale);
 ]|
+=end comment
 
-Returns: a pointer to the newly allocated surface. The caller
-owns the surface and should call C<cairo_surface_destroy()> when done
-with it.
+Returns: a pointer to the newly allocated surface. The caller owns the surface and should call C<cairo_surface_destroy()> when done with it.
 
-This function always returns a valid pointer, but it will return a
-pointer to a “nil” surface if I<other> is already in an error state
-or any other error occurs.
+This function always returns a valid pointer, but it will return a pointer to a “nil” surface if I<other> is already in an error state or any other error occurs.
 
 Since: 3.10
 
-  method gdk_window_create_similar_image_surface ( cairo_format_t $format, int32 $width, int32 $height, int32 $scale --> cairo_surface_t  )
+  method gdk_window_create_similar_image_surface (
+    cairo_format_t $format, int32 $width, int32 $height, int32 $scale
+    --> cairo_surface_t
+  )
 
-=item cairo_format_t $format; (type int): the format for the new surface
+=item cairo_format_t $format; the format for the new surface
 =item int32 $width; width of the new surface
 =item int32 $height; height of the new surface
 =item int32 $scale; the scale of the new surface, or 0 to use same as I<window>
 
 =end pod
 
-sub gdk_window_create_similar_image_surface ( N-GObject $window, cairo_format_t $format, int32 $width, int32 $height, int32 $scale )
-  returns cairo_surface_t
-  is native(&gdk-lib)
+sub gdk_window_create_similar_image_surface (
+  N-GObject $window, int32 $format,
+  int32 $width, int32 $height, int32 $scale
+  --> cairo_surface_t
+) is native(&gdk-lib)
   { * }
-}}
 
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_beep:
