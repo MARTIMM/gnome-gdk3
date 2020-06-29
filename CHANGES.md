@@ -1,6 +1,8 @@
 ## Release notes
 * 2020-04-24 0.17.0:
   * Introduction to Cairo
+  * Added `gdk_window_create_similar_surface()` and `gdk_window_create_similar_image_surface()` to **Gnome::Gdk3::Window**.
+  * Added `new(:window)` and `new(:surface)` to **Gnome::Gdk3::Pixbuf**.
 
 * 2020-04-22 0.15.6:
   * Modified and extended **Gnome::Gdk3::Pixbuf**.
