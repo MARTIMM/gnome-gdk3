@@ -1011,14 +1011,13 @@ known to the windowing system.
 Since: 3.20
 
   method handler (
-    N-GObject #`{{ native Gnome::Gdk3::Seat }} $seat,
+    N-GObject $seat,
     Gnome::GObject::Object :widget($display),
     *%user-options
   );
 
 =item $display; the object on which the signal is emitted
-
-=item $seat; the seat that was just added
+=item $seat; the native seat for Gnome::Gdk3::Seat that was just added
 
 
 =comment #TS:0:seat-removed:
@@ -1030,14 +1029,13 @@ by the windowing system.
 Since: 3.20
 
   method handler (
-    N-GObject #`{{ native Gnome::Gdk3::Seat }} $seat,
+    N-GObject $seat,
     Gnome::GObject::Object :widget($display),
     *%user-options
   );
 
 =item $display; the object on which the signal is emitted
-
-=item $seat; the seat that was just removed
+=item $seat; the native seat for Gnome::Gdk3::Seatthat was just removed
 
 
 =comment #TS:0:monitor-added:
@@ -1049,14 +1047,13 @@ added.
 Since: 3.22
 
   method handler (
-    N-GObject #`{{ native Gnome::Gdk3::Monitor }} $monitor,
+    N-GObject $monitor,
     Gnome::GObject::Object :widget($display),
     *%user-options
   );
 
 =item $display; the objedct on which the signal is emitted
-
-=item $monitor; the monitor that was just added
+=item $monitor; the native monitor Gnome::Gdk3::Monitor that was just added
 
 
 =comment #TS:0:monitor-removed:
@@ -1068,14 +1065,13 @@ removed.
 Since: 3.22
 
   method handler (
-    N-GObject #`{{ native Gnome::Gdk3::Monitor }} $monitor,
+    N-GObject $monitor,
     Gnome::GObject::Object :widget($display),
     *%user-options
   );
 
 =item $display; the object on which the signal is emitted
-
-=item $monitor; the monitor that was just removed
+=item $monitor; the native monitor Gnome::Gdk3::Monitor that was just removed
 
 
 =end pod

@@ -18,24 +18,16 @@ subtest 'ISA test', {
 
 #-------------------------------------------------------------------------------
 subtest 'Manipulations', {
-#  X::Gnome.debug(:on);
-
-  throws-like
-    { $d .= new( :find, :search); },
-    X::Gnome, "Wrong options used",
-    :message(
-      /:s Unsupported options for
-          'Gnome::Gdk3::Display:'
-          [(find||search) ',']+ /
-    );
 
   $d .= new;
   my Str $d-name = $d.get-name();
-  like $d-name, /\: \d+/, '.get-name(): ' ~ $d-name;
+  ok ?$d-name, ".get-name\(): '$d-name'";
+  #like $d-name, /\: \d+/, '.get-name(): ' ~ $d-name;
 
   $d .= new( :open, :display-name($d-name));
   $d-name = $d.get-name();
-  like $d-name, /\: \d+/, '.new( :open, :display-name): ' ~ $d-name;
+  ok ?$d-name, ":.new\( :open, :display-name): '$d-name'";
+  #like $d-name, /\: \d+/, '.new( :open, :display-name): ' ~ $d-name;
 
 
   nok $d.is-closed, '.is-closed()';

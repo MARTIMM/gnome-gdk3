@@ -23,7 +23,7 @@ subtest 'ISA test', {
 subtest 'Manipulations', {
   my Gnome::Gdk3::Display $display .= new(:native-object($s.get-display));
   my Str $display-name = $display.get-name();
-  like $display-name, /\: \d+/, '.get-display(): ' ~ $display-name;
+  ok ?$display-name, '.get-display(): ' ~ "'$display-name'";
 }
 
 #`{{

@@ -16,12 +16,8 @@ my Gnome::Glib::Quark $quark .= new;
 my Gnome::Glib::Error $e;
 #-------------------------------------------------------------------------------
 subtest 'ISA test', {
-  dies-ok(
-    { $p .= new(:file<t/Data/unknown-image.png>); },
-    'image not found'
-  );
 
-  $p .= new( :file<t/Data/unknown-image.png>, :!throw);
+  $p .= new( :file<t/Data/unknown-image.png>);
   $e = $p.last-error;
   if $e.is-valid {
     is $quark.to-string($e.domain), 'g-file-error-quark',
@@ -32,12 +28,7 @@ subtest 'ISA test', {
     is $e.code, 4, 'error code for this error is 4';
   }
 
-  dies-ok(
-    { $p .= new(:file<t/Data/some-test-file.xyz>); },
-    'not an image'
-  );
-
-  $p .= new( :file<t/Data/some-test-file.xyz>, :!throw);
+  $p .= new(:file<t/Data/some-test-file.xyz>);
   $e = $p.last-error;
   if $e.is-valid {
     is $quark.to-string($e.domain), 'gdk-pixbuf-error-quark',
@@ -48,11 +39,23 @@ subtest 'ISA test', {
   }
 
   $p .= new(:file<t/Data/gtk-raku.png>);
-  isa-ok $p, Gnome::Gdk3::Pixbuf, '.new(:file<t/Data/gtk-raku.png>)';
+  isa-ok $p, Gnome::Gdk3::Pixbuf, '.new(:file)';
+
+  $p .= new( :file<t/Data/gtk-raku.png>, :100width, :100height);
+  isa-ok $p, Gnome::Gdk3::Pixbuf, '.new(:file, :width, :height)';
+
+  $p .= new(
+    :file<t/Data/gtk-raku.png>, :100width, :100height,
+    :!preserve_aspect_ratio
+  );
+  isa-ok $p, Gnome::Gdk3::Pixbuf,
+         '.new(:file, :width, :height, :preserve_aspect_ratio)';
 }
 
 #-------------------------------------------------------------------------------
 subtest 'Manipulations', {
+  $p .= new(:file<t/Data/gtk-raku.png>);
+
   is GdkColorspace($p.get-colorspace), GDK_COLORSPACE_RGB, '.get-colorspace()';
   is $p.get-n-channels, 4, '.get-n-channels()';           # rgb + alpha
   ok $p.get-has-alpha, '.get-has-alpha()';                # yes
@@ -83,7 +86,7 @@ Gnome::N::debug(:on);
 
 #Gnome::N::debug(:on);
   my Gnome::Gdk3::Pixbuf $p-part .= new(
-    :pixbuf($p.new-subpixbuf( 80, 100, 10, 10))
+    :native-object($p.new-subpixbuf( 80, 100, 10, 10))
   );
 #  is $p-part.get-rowstride, 40, '.new-subpixbuf()';
   is $p-part.get-width, 10, '.new-subpixbuf()';

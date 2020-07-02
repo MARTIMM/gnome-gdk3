@@ -1,7 +1,7 @@
 {
   "description": "Raku - Gnome Gdk Interface, Please install Gnome::Gtk3",
   "name": "Gnome::Gdk3",
-  "version": "0.15.5",
+  "version": "0.16.0",
   "authors": [ "Marcel Timmerman"],
   "tags": [ "gnome", "gdk"],
 
@@ -22,8 +22,8 @@
 
   "source-url": "git://github.com/MARTIMM/gnome-gdk3.git",
 
-  "depends": [ "Gnome::N", "Gnome::Glib", "Gnome::GObject" ],
+  "depends": [ "Gnome::N", "Gnome::Glib", "Gnome::GObject", "Gnome::Cairo" ],
   "test-depends": [ ],
   "build-depends": [ ],
-  "resources": [ ]
+  "resources": [ "gtk-brokenimage.png"]
 }
