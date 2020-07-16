@@ -1,5 +1,8 @@
 ## Release notes
-* 2020-04-24 0.17.0:
+* 2020-07-16 0.17.1:
+  * Modified the structure types of `GdkEvent*`into `N-GdkEvent*`. The older types are deprecated and are removed in version 0.20.0.
+
+* 2020-07-10 0.17.0:
   * Introduction to Cairo
   * Added `gdk_window_create_similar_surface()` and `gdk_window_create_similar_image_surface()` to **Gnome::Gdk3::Window**.
   * Added `new(:window)` and `new(:surface)` to **Gnome::Gdk3::Pixbuf**.
