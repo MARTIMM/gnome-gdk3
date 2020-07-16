@@ -978,7 +978,7 @@ There are two ways to connect to a signal. The first option you have is to use C
 The positional arguments of the signal handler are all obligatory as well as their types. The named attributes C<:$widget> and user data are optional.
 
   # handler method
-  method mouse-event ( GdkEvent $event, :$widget ) { ... }
+  method mouse-event ( N-GdkEvent $event, :$widget ) { ... }
 
   # connect a signal on window object
   my Gnome::Gtk3::Window $w .= new( ... );
@@ -988,7 +988,7 @@ The positional arguments of the signal handler are all obligatory as well as the
 
   my Gnome::Gtk3::Window $w .= new( ... );
   my Callable $handler = sub (
-    N-GObject $native, GdkEvent $event, OpaquePointer $data
+    N-GObject $native, N-GdkEvent $event, OpaquePointer $data
   ) {
     ...
   }
@@ -1012,7 +1012,8 @@ master device will change to reflect the new slave device
 axes and keys.
 
   method handler (
-    Gnome::GObject::Object :widget($device),
+    Int :$_handler_id,
+    Gnome::GObject::Object :_widget($device),
     *%user-options
   );
 
@@ -1028,8 +1029,8 @@ B<Gnome::Gdk3::Devices> whenever tools enter or leave proximity.
 Since: 3.22
 
   method handler (
-    N-GObject $tool,
-    Gnome::GObject::Object :widget($device),
+    Int :$_handler_id,
+    Gnome::GObject::Object :_widget($device),
     *%user-options
   );
 

@@ -220,7 +220,7 @@ enum GdkGrabOwnership is export (
 
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 enum GdkEventMask
+=head2 enum N-GdkEventMask
 
 A set of bit-flags to indicate which events a window is to receive.
 Most of these masks map onto one or more of the B<Gnome::Gdk3::EventType> event types
@@ -279,8 +279,8 @@ events, so different sequences may be distinguished.
 
 =end pod
 
-#TE:0:GdkEventMask:
-enum GdkEventMask is export (
+#TE:0:N-GdkEventMask:
+enum N-GdkEventMask is export (
   'GDK_EXPOSURE_MASK'             => 1 +< 1,
   'GDK_POINTER_MOTION_MASK'       => 1 +< 2,
   'GDK_POINTER_MOTION_HINT_MASK'  => 1 +< 3,
