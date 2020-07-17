@@ -342,13 +342,13 @@ with C<gdk_event_free()>.
 
 Since: 2.2
 
-  method gdk_display_get_event ( --> GdkEvent  )
+  method gdk_display_get_event ( --> N-GdkEvent  )
 
 
 =end pod
 
 sub gdk_display_get_event ( N-GObject $display )
-  returns GdkEvent
+  returns N-GdkEvent
   is native(&gdk-lib)
   { * }
 
@@ -368,13 +368,13 @@ B<Gnome::Gdk3::Event> should be freed with C<gdk_event_free()>.
 
 Since: 2.2
 
-  method gdk_display_peek_event ( --> GdkEvent  )
+  method gdk_display_peek_event ( --> N-GdkEvent  )
 
 
 =end pod
 
 sub gdk_display_peek_event ( N-GObject $display )
-  returns GdkEvent
+  returns N-GdkEvent
   is native(&gdk-lib)
   { * }
 
@@ -388,13 +388,13 @@ queue for I<display>.
 
 Since: 2.2
 
-  method gdk_display_put_event ( GdkEvent $event )
+  method gdk_display_put_event ( N-GdkEvent $event )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>.
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>.
 
 =end pod
 
-sub gdk_display_put_event ( N-GObject $display, GdkEvent $event )
+sub gdk_display_put_event ( N-GObject $display, N-GdkEvent $event )
   is native(&gdk-lib)
   { * }
 
@@ -947,7 +947,7 @@ There are two ways to connect to a signal. The first option you have is to use C
 The positional arguments of the signal handler are all obligatory as well as their types. The named attributes C<:$widget> and user data are optional.
 
   # handler method
-  method mouse-event ( GdkEvent $event, :$widget ) { ... }
+  method mouse-event ( N-GdkEvent $event, :$widget ) { ... }
 
   # connect a signal on window object
   my Gnome::Gtk3::Window $w .= new( ... );
@@ -957,7 +957,7 @@ The positional arguments of the signal handler are all obligatory as well as the
 
   my Gnome::Gtk3::Window $w .= new( ... );
   my Callable $handler = sub (
-    N-GObject $native, GdkEvent $event, OpaquePointer $data
+    N-GObject $native, N-GdkEvent $event, OpaquePointer $data
   ) {
     ...
   }
@@ -976,7 +976,8 @@ The I<opened> signal is emitted when the connection to the windowing
 system for I<display> is opened.
 
   method handler (
-    Gnome::GObject::Object :widget($display),
+    Int :$_handler_id,
+    Gnome::GObject::Object :_widget($display),
     *%user-options
   );
 
@@ -993,7 +994,8 @@ Since: 2.2
 
   method handler (
     Int $is_error,
-    Gnome::GObject::Object :widget($display),
+    Int :$_handler_id,
+    Gnome::GObject::Object :_widget($display),
     *%user-options
   );
 
@@ -1012,7 +1014,8 @@ Since: 3.20
 
   method handler (
     N-GObject $seat,
-    Gnome::GObject::Object :widget($display),
+    Int :$_handler_id,
+    Gnome::GObject::Object :_widget($display),
     *%user-options
   );
 
@@ -1030,7 +1033,8 @@ Since: 3.20
 
   method handler (
     N-GObject $seat,
-    Gnome::GObject::Object :widget($display),
+    Int :$_handler_id,
+    Gnome::GObject::Object :_widget($display),
     *%user-options
   );
 
@@ -1048,7 +1052,8 @@ Since: 3.22
 
   method handler (
     N-GObject $monitor,
-    Gnome::GObject::Object :widget($display),
+    Int :$_handler_id,
+    Gnome::GObject::Object :_widget($display),
     *%user-options
   );
 
@@ -1066,7 +1071,8 @@ Since: 3.22
 
   method handler (
     N-GObject $monitor,
-    Gnome::GObject::Object :widget($display),
+    Int :$_handler_id,
+    Gnome::GObject::Object :_widget($display),
     *%user-options
   );
 

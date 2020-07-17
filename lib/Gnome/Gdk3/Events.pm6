@@ -26,9 +26,9 @@ In GTK+ applications the events are handled automatically in C<gtk_main_do_event
   # ... etcetera ...
 
   # Define a handler method
-  method handle-keypress ( GdkEvent $event, :$widget ) {
+  method handle-keypress ( N-GdkEvent $event, :$widget ) {
     if $event.event-any.type ~~ GDK_KEY_PRESS {
-      my GdkEventKey $event-key = $event;
+      my N-GdkEventKey $event-key = $event;
       if $event.event-key.keyval eq 's' {
         # key 's' pressed, stop process ...
       }
@@ -40,7 +40,7 @@ In GTK+ applications the events are handled automatically in C<gtk_main_do_event
 
 If the handler handles only one event type, the method can also be defined as
 
-  method handle-keypress ( GdkEventKey $event-key, :$widget ) {
+  method handle-keypress ( N-GdkEventKey $event-key, :$widget ) {
     if $event-key.type ~~ GDK_KEY_PRESS and $event-key.keyval eq 's' {
       # key 's' pressed, stop process ...
     }
@@ -459,7 +459,9 @@ enum GdkOwnerChange is export (
 
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventAny
+=head1 Types
+
+=head2 class N-GdkEventAny
 
 Contains the fields which are common to all event structs.
 Any event pointer can safely be cast to a pointer to a C<Gnome::Gdk3::EventAny> to
@@ -474,16 +476,18 @@ access these fields.
 =end pod
 
 #TT:0:N-GdkEventAny:
-class GdkEventAny is export is repr('CStruct') {
+class N-GdkEventAny is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
 }
 
+my constant GdkEventAny is export = N-GdkEventAny;
+
 #`{{
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventExpose
+=head2 class N-GdkEventExpose
 
 Generated when all or part of a window becomes visible and needs to be
 redrawn.
@@ -500,7 +504,7 @@ redrawn.
 =end pod
 
 #TT:0:N-GdkEventExpose:
-class GdkEventExpose is export is repr('CStruct') {
+class N-GdkEventExpose is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -511,7 +515,7 @@ class GdkEventExpose is export is repr('CStruct') {
 
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventVisibility
+=head2 class N-GdkEventVisibility
 
 Generated when the window visibility status has changed.
 
@@ -530,16 +534,18 @@ information.
 =end pod
 
 #TT:0:N-GdkEventVisibility:
-class GdkEventVisibility is export is repr('CStruct') {
+class N-GdkEventVisibility is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
   has int32 $.state;
 }
 
+my constant GdkEventVisibility is export = N-GdkEventVisibility;
+
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventMotion
+=head2 class N-GdkEventMotion
 
 Generated when the pointer moves.
 
@@ -561,7 +567,7 @@ Generated when the pointer moves.
 =end pod
 
 #TT:0:N-GdkEventMotion:
-class GdkEventMotion is export is repr('CStruct') {
+class N-GdkEventMotion is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -576,9 +582,11 @@ class GdkEventMotion is export is repr('CStruct') {
   has num64 $.y_root;
 }
 
+my constant GdkEventMotion is export = N-GdkEventMotion;
+
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventButton
+=head2 class N-GdkEventButton
 
 Used for button press and button release events. The
 I<type> field will be one of C<GDK_BUTTON_PRESS>,
@@ -632,7 +640,7 @@ button press must also occur within 1/2 second of the first button press.
 =end pod
 
 #TT:0:N-GdkEventButton:
-class GdkEventButton is export is repr('CStruct') {
+class N-GdkEventButton is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -647,10 +655,12 @@ class GdkEventButton is export is repr('CStruct') {
   has num64 $.y_root;
 }
 
+my constant GdkEventButton is export = N-GdkEventButton;
+
 #`{{
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventTouch
+=head2 class N-GdkEventTouch
 
 Used for touch events.
 I<type> field will be one of C<GDK_TOUCH_BEGIN>, C<GDK_TOUCH_UPDATE>,
@@ -682,7 +692,7 @@ several active sequences at the same time.
 =end pod
 
 #TT:0:N-GdkEventTouch:
-class GdkEventTouch is export is repr('CStruct') {
+class N-GdkEventTouch is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -691,7 +701,7 @@ class GdkEventTouch is export is repr('CStruct') {
   has num64 $.y;
   has num64 $.axes;
   has uint32 $.state;
-  has GdkEventSequence $.sequence;
+  has N-GdkEventSequence $.sequence;
   has int32 $.emulating_pointer;
   has N-GObject $.device;
   has num64 $.x_root;
@@ -701,7 +711,7 @@ class GdkEventTouch is export is repr('CStruct') {
 
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventScroll
+=head2 class N-GdkEventScroll
 
 Generated from button presses for the buttons 4 to 7. Wheel mice are
 usually configured to generate button press events for buttons 4 and 5
@@ -731,7 +741,7 @@ C<gdk_event_get_scroll_deltas()>.
 =end pod
 
 #TT:0:N-GdkEventScroll:
-class GdkEventScroll is export is repr('CStruct') {
+class N-GdkEventScroll is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -748,9 +758,11 @@ class GdkEventScroll is export is repr('CStruct') {
   has uint32 $.is_stop;
 }
 
+my constant GdkEventScroll is export = N-GdkEventScroll;
+
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventKey
+=head2 class N-GdkEventKey
 
 Describes a key press or key release event.
 
@@ -771,7 +783,7 @@ Describes a key press or key release event.
 =end pod
 
 #TT:0:N-GdkEventKey:
-class GdkEventKey is export is repr('CStruct') {
+class N-GdkEventKey is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -785,9 +797,11 @@ class GdkEventKey is export is repr('CStruct') {
   has uint32 $.is_modifier;
 }
 
+my constant GdkEventKey is export = N-GdkEventKey;
+
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventCrossing
+=head2 class N-GdkEventCrossing
 
 Generated when the pointer enters or leaves a window.
 
@@ -810,7 +824,7 @@ Generated when the pointer enters or leaves a window.
 =end pod
 
 #TT:0:N-GdkEventCrossing:
-class GdkEventCrossing is export is repr('CStruct') {
+class N-GdkEventCrossing is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -826,9 +840,11 @@ class GdkEventCrossing is export is repr('CStruct') {
   has uint32 $.state;
 }
 
+my constant GdkEventCrossing is export = N-GdkEventCrossing;
+
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventFocus
+=head2 class N-GdkEventFocus
 
 Describes a change of keyboard focus.
 
@@ -842,16 +858,18 @@ Describes a change of keyboard focus.
 =end pod
 
 #TT:0:N-GdkEventFocus:
-class GdkEventFocus is export is repr('CStruct') {
+class N-GdkEventFocus is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
   has int16 $.in;
 }
 
+my constant GdkEventFocus is export = N-GdkEventFocus;
+
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventConfigure
+=head2 class N-GdkEventConfigure
 
 Generated when a window size or position has changed.
 
@@ -867,7 +885,7 @@ Generated when a window size or position has changed.
 =end pod
 
 #TT:0:N-GdkEventConfigure:
-class GdkEventConfigure is export is repr('CStruct') {
+class N-GdkEventConfigure is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -877,10 +895,12 @@ class GdkEventConfigure is export is repr('CStruct') {
   has int32 $.height;
 }
 
+my constant GdkEventConfigure is export = N-GdkEventConfigure;
+
 #`{{
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventProperty
+=head2 class N-GdkEventProperty
 
 Describes a property change on a window.
 
@@ -896,7 +916,7 @@ Describes a property change on a window.
 =end pod
 
 #TT:0:N-GdkEventProperty:
-class GdkEventProperty is export is repr('CStruct') {
+class N-GdkEventProperty is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -909,7 +929,7 @@ class GdkEventProperty is export is repr('CStruct') {
 #`{{
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventSelection
+=head2 class N-GdkEventSelection
 
 Generated when a selection is requested or ownership of a selection
 is taken over by another client application.
@@ -928,7 +948,7 @@ is taken over by another client application.
 =end pod
 
 #TT:0:N-GdkEventSelection:
-class GdkEventSelection is export is repr('CStruct') {
+class N-GdkEventSelection is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -943,7 +963,7 @@ class GdkEventSelection is export is repr('CStruct') {
 #`{{
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventOwnerChange
+=head2 class N-GdkEventOwnerChange
 
 Generated when the owner of a selection changes. On X11, this
 information is only available if the X server supports the XFIXES
@@ -965,7 +985,7 @@ Since: 2.6
 =end pod
 
 #TT:0:N-GdkEventOwnerChange:
-class GdkEventOwnerChange is export is repr('CStruct') {
+class N-GdkEventOwnerChange is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -979,7 +999,7 @@ class GdkEventOwnerChange is export is repr('CStruct') {
 
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventProximity
+=head2 class N-GdkEventProximity
 
 Proximity events are generated when using GDK’s wrapper for the
 XInput extension. The XInput extension is an add-on for standard X
@@ -1002,7 +1022,7 @@ XInput aware programs that are drawing their own cursor.
 =end pod
 
 #TT:0:N-GdkEventProximity:
-class GdkEventProximity is export is repr('CStruct') {
+class N-GdkEventProximity is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -1010,9 +1030,11 @@ class GdkEventProximity is export is repr('CStruct') {
   has N-GObject $.device;
 }
 
+my constant GdkEventProximity is export = N-GdkEventProximity;
+
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventSetting
+=head2 class N-GdkEventSetting
 
 Generated when a setting is modified.
 
@@ -1027,7 +1049,7 @@ Generated when a setting is modified.
 =end pod
 
 #TT:0:N-GdkEventSetting:
-class GdkEventSetting is export is repr('CStruct') {
+class N-GdkEventSetting is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -1035,9 +1057,11 @@ class GdkEventSetting is export is repr('CStruct') {
   has Str $.name;
 }
 
+my constant GdkEventSetting is export = N-GdkEventSetting;
+
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventWindowState
+=head2 class N-GdkEventWindowState
 
 Generated when the state of a toplevel window changes.
 
@@ -1052,7 +1076,7 @@ Generated when the state of a toplevel window changes.
 =end pod
 
 #TT:0:N-GdkEventWindowState:
-class GdkEventWindowState is export is repr('CStruct') {
+class N-GdkEventWindowState is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -1060,15 +1084,17 @@ class GdkEventWindowState is export is repr('CStruct') {
   has int32 $.new_window_state;
 }
 
+my constant GdkEventWindowState is export = N-GdkEventWindowState;
+
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventGrabBroken
+=head2 class N-GdkEventGrabBroken
 
 Generated when a pointer or keyboard grab is broken. On X11, this happens
 when the grab window becomes unviewable (i.e. it or one of its ancestors
 is unmapped), or if the same application grabs the pointer or keyboard
 again. Note that implicit grabs (which are initiated by button presses)
-can also cause C<GdkEventGrabBroken> events.
+can also cause C<N-GdkEventGrabBroken> events.
 
 Since: 2.8
 
@@ -1084,7 +1110,7 @@ Since: 2.8
 =end pod
 
 #TT:0:N-GdkEventGrabBroken:
-class GdkEventGrabBroken is export is repr('CStruct') {
+class N-GdkEventGrabBroken is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -1093,10 +1119,12 @@ class GdkEventGrabBroken is export is repr('CStruct') {
   has N-GObject $.grab_window;
 }
 
+my constant GdkEventGrabBroken is export = N-GdkEventGrabBroken;
+
 #`{{
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventDND
+=head2 class N-GdkEventDND
 
 Generated during DND operations.
 
@@ -1113,7 +1141,7 @@ Generated during DND operations.
 =end pod
 
 #TT:0:N-GdkEventDND:
-class GdkEventDND is export is repr('CStruct') {
+class N-GdkEventDND is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -1126,7 +1154,7 @@ class GdkEventDND is export is repr('CStruct') {
 
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventTouchpadSwipe
+=head2 class N-GdkEventTouchpadSwipe
 
 Generated during touchpad swipe gestures.
 
@@ -1149,7 +1177,7 @@ Generated during touchpad swipe gestures.
 =end pod
 
 #TT:0:N-GdkEventTouchpadSwipe:
-class GdkEventTouchpadSwipe is export is repr('CStruct') {
+class N-GdkEventTouchpadSwipe is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -1165,9 +1193,11 @@ class GdkEventTouchpadSwipe is export is repr('CStruct') {
   has uint32 $.state;
 }
 
+my constant GdkEventTouchpadSwipe is export = N-GdkEventTouchpadSwipe;
+
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventTouchpadPinch
+=head2 class N-GdkEventTouchpadPinch
 
 Generated during touchpad swipe gestures.
 
@@ -1192,7 +1222,7 @@ Generated during touchpad swipe gestures.
 =end pod
 
 #TT:0:N-GdkEventTouchpadPinch:
-class GdkEventTouchpadPinch is export is repr('CStruct') {
+class N-GdkEventTouchpadPinch is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -1210,9 +1240,11 @@ class GdkEventTouchpadPinch is export is repr('CStruct') {
   has uint32 $.state;
 }
 
+my constant GdkEventTouchpadPinch is export = N-GdkEventTouchpadPinch;
+
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventPadButton
+=head2 class N-GdkEventPadButton
 
 Generated during C<GDK_SOURCE_TABLET_PAD> button presses and releases.
 
@@ -1231,7 +1263,7 @@ Since: 3.22
 =end pod
 
 #TT:0:N-GdkEventPadButton:
-class GdkEventPadButton is export is repr('CStruct') {
+class N-GdkEventPadButton is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -1241,9 +1273,11 @@ class GdkEventPadButton is export is repr('CStruct') {
   has uint32 $.mode;
 }
 
+my constant GdkEventPadButton is export = N-GdkEventPadButton;
+
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventPadAxis
+=head2 class N-GdkEventPadAxis
 
 Generated during C<GDK_SOURCE_TABLET_PAD> interaction with tactile sensors.
 
@@ -1262,7 +1296,7 @@ Since: 3.22
 =end pod
 
 #TT:0:N-GdkEventPadAxis:
-class GdkEventPadAxis is export is repr('CStruct') {
+class N-GdkEventPadAxis is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -1273,9 +1307,11 @@ class GdkEventPadAxis is export is repr('CStruct') {
   has num64 $.value;
 }
 
+my constant GdkEventPadAxis is export = N-GdkEventPadAxis;
+
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEventPadGroupMode
+=head2 class N-GdkEventPadGroupMode
 
 Generated during C<GDK_SOURCE_TABLET_PAD> mode switches in a group.
 
@@ -1291,7 +1327,7 @@ Since: 3.22
 =end pod
 
 #TT:0:N-GdkEventPadGroupMode:
-class GdkEventPadGroupMode is export is repr('CStruct') {
+class N-GdkEventPadGroupMode is export is repr('CStruct') {
   has int32 $.type;
   has N-GObject $.window;
   has int8 $.send_event;
@@ -1300,22 +1336,24 @@ class GdkEventPadGroupMode is export is repr('CStruct') {
   has uint32 $.mode;
 }
 
+my constant GdkEventPadGroupMode is export = N-GdkEventPadGroupMode;
+
 #-------------------------------------------------------------------------------
 =begin pod
-=head2 class GdkEvent
+=head2 class N-GdkEvent
 
-A C<GdkEvent> contains a union of all of the event types, and allows access to the data fields in a number of ways.
+A C<N-GdkEvent> contains a union of all of the event types, and allows access to the data fields in a number of ways.
 
 The event type is always the first field in all of the event types, and can always be accessed with the following code, no matter what type of event it is:
 
-  method my-handler ( GdkEvent $event ) {
+  method my-handler ( N-GdkEvent $event ) {
     if $event.type ~~ GDK_BUTTON_PRESS {
-      my GdkEventButton $event-button = $event;
+      my N-GdkEventButton $event-button := $event-button;
       ...
     }
 
     elsif $event.type ~~ GDK_KEY_RELEASE {
-      my GdkEventKey $event-key = $event;
+      my N-GdkEventKey $event-key := $event-key;
       ...
     }
   }
@@ -1324,42 +1362,43 @@ The event structures contain data specific to each type of event in GDK. The typ
 
 =end pod
 
-#TT:2:GdkEvent:*
-class GdkEvent is repr('CUnion') is export {
-  HAS GdkEventAny $.event-any;
-#  HAS GdkEventExpose $.event-expose;
-  HAS GdkEventVisibility $.visibility;
-  HAS GdkEventMotion $.event-motion;
-  HAS GdkEventButton $.event-button;
-#  HAS GdkEventTouch $.event-touch;
-  HAS GdkEventScroll $.event-scroll;
-  HAS GdkEventKey $.event-key;
-  HAS GdkEventCrossing $.event-crossing;
-  HAS GdkEventFocus $.event-focus;
-  HAS GdkEventConfigure $.event-configure;
-#  HAS GdkEventProperty $.property;
-#  HAS GdkEventSelection $.selection;
-#  HAS GdkEventOwnerChange $.owner_change;
-  HAS GdkEventProximity $.proximity;
-#  HAS GdkEventDND $.dnd;
-  HAS GdkEventWindowState $.window_state;
-  HAS GdkEventSetting $.setting;
-  HAS GdkEventGrabBroken $.grab_broken;
-  HAS GdkEventTouchpadSwipe $.touchpad_swipe;
-  HAS GdkEventTouchpadPinch $.touchpad_pinch;
-  HAS GdkEventPadButton $.pad_button;
-  HAS GdkEventPadAxis $.pad_axis;
-  HAS GdkEventPadGroupMode $.pad_group_mode;
+#TT:2:N-GdkEvent:*
+class N-GdkEvent is repr('CUnion') is export {
+  HAS N-GdkEventAny $.event-any;
+#  HAS N-GdkEventExpose $.event-expose;
+  HAS N-GdkEventVisibility $.visibility;
+  HAS N-GdkEventMotion $.event-motion;
+  HAS N-GdkEventButton $.event-button;
+#  HAS N-GdkEventTouch $.event-touch;
+  HAS N-GdkEventScroll $.event-scroll;
+  HAS N-GdkEventKey $.event-key;
+  HAS N-GdkEventCrossing $.event-crossing;
+  HAS N-GdkEventFocus $.event-focus;
+  HAS N-GdkEventConfigure $.event-configure;
+#  HAS N-GdkEventProperty $.property;
+#  HAS N-GdkEventSelection $.selection;
+#  HAS N-GdkEventOwnerChange $.owner_change;
+  HAS N-GdkEventProximity $.proximity;
+#  HAS N-GdkEventDND $.dnd;
+  HAS N-GdkEventWindowState $.window_state;
+  HAS N-GdkEventSetting $.setting;
+  HAS N-GdkEventGrabBroken $.grab_broken;
+  HAS N-GdkEventTouchpadSwipe $.touchpad_swipe;
+  HAS N-GdkEventTouchpadPinch $.touchpad_pinch;
+  HAS N-GdkEventPadButton $.pad_button;
+  HAS N-GdkEventPadAxis $.pad_axis;
+  HAS N-GdkEventPadGroupMode $.pad_group_mode;
 }
 
+my constant GdkEvent is export = N-GdkEvent;
+
 =begin pod
-=head2 Not yet implemented event structures
-=head3 struct GdkEventExpose
-=head3 struct GdkEventTouch
-=head3 struct GdkEventSelection
-=head3 struct GdkEventProperty
-=head3 struct GdkEventOwnerChange
-=head3 struct GdkEventDND
+=head3 struct N-GdkEventExpose B<I<this event structure is not yet implemented>>
+=head3 struct N-GdkEventTouch B<I<this event structure is not yet implemented>>
+=head3 struct N-GdkEventSelection B<I<this event structure is not yet implemented>>
+=head3 struct N-GdkEventProperty B<I<this event structure is not yet implemented>>
+=head3 struct N-GdkEventOwnerChange B<I<this event structure is not yet implemented>>
+=head3 struct N-GdkEventDND B<I<this event structure is not yet implemented>>
 
 =end pod
 
@@ -1415,11 +1454,13 @@ submethod BUILD ( *%options ) {
 }
 }}
 
+#`{{
 submethod BUILD ( *%options ) {
 
   # prevent creating wrong widgets
   #return unless self.^name eq 'Gnome::Gdk3::Events';
 }
+}}
 
 #-------------------------------------------------------------------------------
 # no pod. user does not have to know about it.
@@ -1454,6 +1495,7 @@ sub gdk_events_pending (  )
   is native(&gdk-lib)
   { * }
 
+#`{{ drop
 #-------------------------------------------------------------------------------
 #TM:0:gdk_event_get:
 =begin pod
@@ -1467,13 +1509,13 @@ Returns: (nullable): the next B<Gnome::Gdk3::Event> to be processed, or C<Any>
 if no events are pending. The returned B<Gnome::Gdk3::Event> should be freed
 with C<gdk_event_free()>.
 
-  method gdk_event_get ( --> GdkEvent  )
+  method gdk_event_get ( --> N-GdkEvent  )
 
 
 =end pod
 
 sub gdk_event_get (  )
-  returns GdkEvent
+  returns N-GdkEvent
   is native(&gdk-lib)
   { * }
 
@@ -1489,15 +1531,16 @@ Returns: (nullable): a copy of the first B<Gnome::Gdk3::Event> on some event
 queue, or C<Any> if no events are in any queues. The returned
 B<Gnome::Gdk3::Event> should be freed with C<gdk_event_free()>.
 
-  method gdk_event_peek ( --> GdkEvent  )
+  method gdk_event_peek ( --> N-GdkEvent  )
 
 
 =end pod
 
 sub gdk_event_peek (  )
-  returns GdkEvent
+  returns N-GdkEvent
   is native(&gdk-lib)
   { * }
+}}
 
 #-------------------------------------------------------------------------------
 #TM:0:gdk_event_put:
@@ -1508,13 +1551,13 @@ Appends a copy of the given event onto the front of the event
 queue for event->any.window’s display, or the default event
 queue if event->any.window is C<Any>. See C<gdk_display_put_event()>.
 
-  method gdk_event_put ( GdkEvent $event )
+  method gdk_event_put ( N-GdkEvent $event )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>.
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>.
 
 =end pod
 
-sub gdk_event_put ( GdkEvent $event )
+sub gdk_event_put ( N-GdkEvent $event )
   is native(&gdk-lib)
   { * }
 
@@ -1530,17 +1573,18 @@ should be freed with C<gdk_event_free()>.
 
 Since: 2.2
 
-  method gdk_event_new ( GdkEventType $type --> GdkEvent  )
+  method gdk_event_new ( GdkEventType $type --> N-GdkEvent  )
 
 =item GdkEventType $type; a B<Gnome::Gdk3::EventType>
 
 =end pod
 
 sub gdk_event_new ( int32 $type )
-  returns GdkEvent
+  returns N-GdkEvent
   is native(&gdk-lib)
   { * }
 
+#`{{ drop
 #-------------------------------------------------------------------------------
 #TM:0:gdk_event_copy:
 =begin pod
@@ -1552,14 +1596,14 @@ resources associated with it (e.g. B<Gnome::Gdk3::Window>’s and strings).
 Returns: a copy of I<event>. The returned B<Gnome::Gdk3::Event> should be freed with
 C<gdk_event_free()>.
 
-  method gdk_event_copy ( GdkEvent $event --> GdkEvent  )
+  method gdk_event_copy ( N-GdkEvent $event --> N-GdkEvent  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 
 =end pod
 
-sub gdk_event_copy ( GdkEvent $event )
-  returns GdkEvent
+sub gdk_event_copy ( N-GdkEvent $event )
+  returns N-GdkEvent
   is native(&gdk-lib)
   { * }
 
@@ -1573,15 +1617,16 @@ Note that this function should only be called with events returned from
 functions such as C<gdk_event_peek()>, C<gdk_event_get()>, C<gdk_event_copy()>
 and C<gdk_event_new()>.
 
-  method gdk_event_free ( GdkEvent $event )
+  method gdk_event_free ( N-GdkEvent $event )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>.
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>.
 
 =end pod
 
-sub gdk_event_free ( GdkEvent $event )
+sub gdk_event_free ( N-GdkEvent $event )
   is native(&gdk-lib)
   { * }
+}}
 
 #-------------------------------------------------------------------------------
 #TM:0:gdk_event_get_window:
@@ -1594,13 +1639,13 @@ Returns: (transfer none): The B<Gnome::Gdk3::Window> associated with the event
 
 Since: 3.10
 
-  method gdk_event_get_window ( GdkEvent $event --> N-GObject  )
+  method gdk_event_get_window ( N-GdkEvent $event --> N-GObject  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 
 =end pod
 
-sub gdk_event_get_window ( GdkEvent $event )
+sub gdk_event_get_window ( N-GdkEvent $event )
   returns N-GObject
   is native(&gdk-lib)
   { * }
@@ -1615,13 +1660,13 @@ returns B<GDK_CURRENT_TIME>. If I<event> is C<Any>, returns B<GDK_CURRENT_TIME>.
 
 Returns: time stamp field from I<event>
 
-  method gdk_event_get_time ( GdkEvent $event --> UInt  )
+  method gdk_event_get_time ( N-GdkEvent $event --> UInt  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 
 =end pod
 
-sub gdk_event_get_time ( GdkEvent $event )
+sub gdk_event_get_time ( N-GdkEvent $event )
   returns uint32
   is native(&gdk-lib)
   { * }
@@ -1638,14 +1683,14 @@ as if the event had no state field.
 
 Returns: C<1> if there was a state field in the event
 
-  method gdk_event_get_state ( GdkEvent $event, GdkModifierType $state --> Int  )
+  method gdk_event_get_state ( N-GdkEvent $event, GdkModifierType $state --> Int  )
 
-=item GdkEvent $event; (allow-none): a B<Gnome::Gdk3::Event> or C<Any>
+=item N-GdkEvent $event; (allow-none): a B<Gnome::Gdk3::Event> or C<Any>
 =item GdkModifierType $state; (out): return location for state
 
 =end pod
 
-sub gdk_event_get_state ( GdkEvent $event, int32 $state )
+sub gdk_event_get_state ( N-GdkEvent $event, int32 $state )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -1659,15 +1704,15 @@ Extract the event window relative x/y coordinates from an event.
 
 Returns: C<1> if the event delivered event window coordinates
 
-  method gdk_event_get_coords ( GdkEvent $event, Num $x_win, Num $y_win --> Int  )
+  method gdk_event_get_coords ( N-GdkEvent $event, Num $x_win, Num $y_win --> Int  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 =item Num $x_win; (out) (optional): location to put event window x coordinate
 =item Num $y_win; (out) (optional): location to put event window y coordinate
 
 =end pod
 
-sub gdk_event_get_coords ( GdkEvent $event, num64 $x_win, num64 $y_win )
+sub gdk_event_get_coords ( N-GdkEvent $event, num64 $x_win, num64 $y_win )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -1681,15 +1726,15 @@ Extract the root window relative x/y coordinates from an event.
 
 Returns: C<1> if the event delivered root window coordinates
 
-  method gdk_event_get_root_coords ( GdkEvent $event, Num $x_root, Num $y_root --> Int  )
+  method gdk_event_get_root_coords ( N-GdkEvent $event, Num $x_root, Num $y_root --> Int  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 =item Num $x_root; (out) (optional): location to put root window x coordinate
 =item Num $y_root; (out) (optional): location to put root window y coordinate
 
 =end pod
 
-sub gdk_event_get_root_coords ( GdkEvent $event, num64 $x_root, num64 $y_root )
+sub gdk_event_get_root_coords ( N-GdkEvent $event, num64 $x_root, num64 $y_root )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -1705,14 +1750,14 @@ Returns: C<1> if the event delivered a button number
 
 Since: 3.2
 
-  method gdk_event_get_button ( GdkEvent $event, UInt $button --> Int  )
+  method gdk_event_get_button ( N-GdkEvent $event, UInt $button --> Int  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 =item UInt $button; (out): location to store mouse button number
 
 =end pod
 
-sub gdk_event_get_button ( GdkEvent $event, uint32 $button )
+sub gdk_event_get_button ( N-GdkEvent $event, uint32 $button )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -1728,14 +1773,14 @@ Returns: C<1> if the event delivered a click count
 
 Since: 3.2
 
-  method gdk_event_get_click_count ( GdkEvent $event, UInt $click_count --> Int  )
+  method gdk_event_get_click_count ( N-GdkEvent $event, UInt $click_count --> Int  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 =item UInt $click_count; (out): location to store click count
 
 =end pod
 
-sub gdk_event_get_click_count ( GdkEvent $event, uint32 $click_count )
+sub gdk_event_get_click_count ( N-GdkEvent $event, uint32 $click_count )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -1751,14 +1796,14 @@ Returns: C<1> if the event delivered a key symbol
 
 Since: 3.2
 
-  method gdk_event_get_keyval ( GdkEvent $event, UInt $keyval --> Int  )
+  method gdk_event_get_keyval ( N-GdkEvent $event, UInt $keyval --> Int  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 =item UInt $keyval; (out): location to store the keyval
 
 =end pod
 
-sub gdk_event_get_keyval ( GdkEvent $event, uint32 $keyval )
+sub gdk_event_get_keyval ( N-GdkEvent $event, uint32 $keyval )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -1776,14 +1821,14 @@ Returns: C<1> if the event delivered a hardware keycode
 
 Since: 3.2
 
-  method gdk_event_get_keycode ( GdkEvent $event, UInt $keycode --> Int  )
+  method gdk_event_get_keycode ( N-GdkEvent $event, UInt $keycode --> Int  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 =item UInt $keycode; (out): location to store the keycode
 
 =end pod
 
-sub gdk_event_get_keycode ( GdkEvent $event, uint16 $keycode )
+sub gdk_event_get_keycode ( N-GdkEvent $event, uint16 $keycode )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -1799,14 +1844,14 @@ Returns: C<1> if the event delivered a scroll direction
 
 Since: 3.2
 
-  method gdk_event_get_scroll_direction ( GdkEvent $event, GdkScrollDirection $direction --> Int  )
+  method gdk_event_get_scroll_direction ( N-GdkEvent $event, GdkScrollDirection $direction --> Int  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 =item GdkScrollDirection $direction; (out): location to store the scroll direction
 
 =end pod
 
-sub gdk_event_get_scroll_direction ( GdkEvent $event, int32 $direction )
+sub gdk_event_get_scroll_direction ( N-GdkEvent $event, int32 $direction )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -1822,15 +1867,15 @@ Returns: C<1> if the event contains smooth scroll information
 
 Since: 3.4
 
-  method gdk_event_get_scroll_deltas ( GdkEvent $event, Num $delta_x, Num $delta_y --> Int  )
+  method gdk_event_get_scroll_deltas ( N-GdkEvent $event, Num $delta_x, Num $delta_y --> Int  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 =item Num $delta_x; (out): return location for X delta
 =item Num $delta_y; (out): return location for Y delta
 
 =end pod
 
-sub gdk_event_get_scroll_deltas ( GdkEvent $event, num64 $delta_x, num64 $delta_y )
+sub gdk_event_get_scroll_deltas ( N-GdkEvent $event, num64 $delta_x, num64 $delta_y )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -1842,13 +1887,13 @@ sub gdk_event_get_scroll_deltas ( GdkEvent $event, num64 $delta_x, num64 $delta_
 
 
 
-  method gdk_event_is_scroll_stop_event ( GdkEvent $event --> Int  )
+  method gdk_event_is_scroll_stop_event ( N-GdkEvent $event --> Int  )
 
-=item GdkEvent $event;
+=item N-GdkEvent $event;
 
 =end pod
 
-sub gdk_event_is_scroll_stop_event ( GdkEvent $event )
+sub gdk_event_is_scroll_stop_event ( N-GdkEvent $event )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -1864,15 +1909,15 @@ an event structure.
 
 Returns: C<1> if the specified axis was found, otherwise C<0>
 
-  method gdk_event_get_axis ( GdkEvent $event, GdkAxisUse $axis_use, Num $value --> Int  )
+  method gdk_event_get_axis ( N-GdkEvent $event, GdkAxisUse $axis_use, Num $value --> Int  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 =item GdkAxisUse $axis_use; the axis use to look for
 =item Num $value; (out): location to store the value found
 
 =end pod
 
-sub gdk_event_get_axis ( GdkEvent $event, GdkAxisUse $axis_use, num64 $value )
+sub gdk_event_get_axis ( N-GdkEvent $event, GdkAxisUse $axis_use, num64 $value )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -1889,14 +1934,14 @@ C<gdk_event_copy()>.
 
 Since: 3.0
 
-  method gdk_event_set_device ( GdkEvent $event, N-GObject $device )
+  method gdk_event_set_device ( N-GdkEvent $event, N-GObject $device )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 =item N-GObject $device; a B<Gnome::Gdk3::Device>
 
 =end pod
 
-sub gdk_event_set_device ( GdkEvent $event, N-GObject $device )
+sub gdk_event_set_device ( N-GdkEvent $event, N-GObject $device )
   is native(&gdk-lib)
   { * }
 
@@ -1912,13 +1957,13 @@ Returns: (nullable) (transfer none): a B<Gnome::Gdk3::Device>, or C<Any>.
 
 Since: 3.0
 
-  method gdk_event_get_device ( GdkEvent $event --> N-GObject  )
+  method gdk_event_get_device ( N-GdkEvent $event --> N-GObject  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>.
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>.
 
 =end pod
 
-sub gdk_event_get_device ( GdkEvent $event )
+sub gdk_event_get_device ( N-GdkEvent $event )
   returns N-GObject
   is native(&gdk-lib)
   { * }
@@ -1935,14 +1980,14 @@ for instance by C<gdk_event_copy()>.
 
 Since: 3.0
 
-  method gdk_event_set_source_device ( GdkEvent $event, N-GObject $device )
+  method gdk_event_set_source_device ( N-GdkEvent $event, N-GObject $device )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 =item N-GObject $device; a B<Gnome::Gdk3::Device>
 
 =end pod
 
-sub gdk_event_set_source_device ( GdkEvent $event, N-GObject $device )
+sub gdk_event_set_source_device ( N-GdkEvent $event, N-GObject $device )
   is native(&gdk-lib)
   { * }
 
@@ -1965,13 +2010,13 @@ Returns: (nullable) (transfer none): a B<Gnome::Gdk3::Device>, or C<Any>.
 
 Since: 3.0
 
-  method gdk_event_get_source_device ( GdkEvent $event --> N-GObject  )
+  method gdk_event_get_source_device ( N-GdkEvent $event --> N-GObject  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 
 =end pod
 
-sub gdk_event_get_source_device ( GdkEvent $event )
+sub gdk_event_get_source_device ( N-GdkEvent $event )
   returns N-GObject
   is native(&gdk-lib)
   { * }
@@ -2001,13 +2046,13 @@ gdk_event_request_motions (motion_event); // handles is_hint events
 
 Since: 2.12
 
-  method gdk_event_request_motions ( GdkEventMotion $event )
+  method gdk_event_request_motions ( N-GdkEventMotion $event )
 
-=item GdkEventMotion $event; a valid B<Gnome::Gdk3::Event>
+=item N-GdkEventMotion $event; a valid B<Gnome::Gdk3::Event>
 
 =end pod
 
-sub gdk_event_request_motions ( GdkEventMotion $event )
+sub gdk_event_request_motions ( N-GdkEventMotion $event )
   is native(&gdk-lib)
   { * }
 
@@ -2030,13 +2075,13 @@ Returns: C<1> if the event should trigger a context menu.
 
 Since: 3.4
 
-  method gdk_event_triggers_context_menu ( GdkEvent $event --> Int  )
+  method gdk_event_triggers_context_menu ( N-GdkEvent $event --> Int  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>, currently only button events are meaningful values
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>, currently only button events are meaningful values
 
 =end pod
 
-sub gdk_event_triggers_context_menu ( GdkEvent $event )
+sub gdk_event_triggers_context_menu ( N-GdkEvent $event )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -2053,15 +2098,15 @@ Returns: C<1> if the distance could be calculated.
 
 Since: 3.0
 
-  method gdk_events_get_distance ( GdkEvent $event1, GdkEvent $event2, Num $distance --> Int  )
+  method gdk_events_get_distance ( N-GdkEvent $event1, N-GdkEvent $event2, Num $distance --> Int  )
 
-=item GdkEvent $event1; first B<Gnome::Gdk3::Event>
-=item GdkEvent $event2; second B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event1; first B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event2; second B<Gnome::Gdk3::Event>
 =item Num $distance; (out): return location for the distance
 
 =end pod
 
-sub gdk_events_get_distance ( GdkEvent $event1, GdkEvent $event2, num64 $distance )
+sub gdk_events_get_distance ( N-GdkEvent $event1, N-GdkEvent $event2, num64 $distance )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -2080,15 +2125,15 @@ Returns: C<1> if the angle could be calculated.
 
 Since: 3.0
 
-  method gdk_events_get_angle ( GdkEvent $event1, GdkEvent $event2, Num $angle --> Int  )
+  method gdk_events_get_angle ( N-GdkEvent $event1, N-GdkEvent $event2, Num $angle --> Int  )
 
-=item GdkEvent $event1; first B<Gnome::Gdk3::Event>
-=item GdkEvent $event2; second B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event1; first B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event2; second B<Gnome::Gdk3::Event>
 =item Num $angle; (out): return location for the relative angle between both events
 
 =end pod
 
-sub gdk_events_get_angle ( GdkEvent $event1, GdkEvent $event2, num64 $angle )
+sub gdk_events_get_angle ( N-GdkEvent $event1, N-GdkEvent $event2, num64 $angle )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -2105,16 +2150,16 @@ Returns: C<1> if the center could be calculated.
 
 Since: 3.0
 
-  method gdk_events_get_center ( GdkEvent $event1, GdkEvent $event2, Num $x, Num $y --> Int  )
+  method gdk_events_get_center ( N-GdkEvent $event1, N-GdkEvent $event2, Num $x, Num $y --> Int  )
 
-=item GdkEvent $event1; first B<Gnome::Gdk3::Event>
-=item GdkEvent $event2; second B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event1; first B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event2; second B<Gnome::Gdk3::Event>
 =item Num $x; (out): return location for the X coordinate of the center
 =item Num $y; (out): return location for the Y coordinate of the center
 
 =end pod
 
-sub gdk_events_get_center ( GdkEvent $event1, GdkEvent $event2, num64 $x, num64 $y )
+sub gdk_events_get_center ( N-GdkEvent $event1, N-GdkEvent $event2, num64 $x, num64 $y )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -2132,15 +2177,15 @@ usually not useful for GTK+ applications. (Although an application
 can call this function then call C<gtk_main_do_event()> to pass
 events to GTK+.)
 
-  method gdk_event_handler_set ( GdkEventFunc $func, Pointer $data, GDestroyNotify $notify )
+  method gdk_event_handler_set ( N-GdkEventFunc $func, Pointer $data, GDestroyNotify $notify )
 
-=item GdkEventFunc $func; the function to call to handle events from GDK.
+=item N-GdkEventFunc $func; the function to call to handle events from GDK.
 =item Pointer $data; user data to pass to the function.
 =item GDestroyNotify $notify; the function to call when the handler function is removed, i.e. when C<gdk_event_handler_set()> is called with another event handler.
 
 =end pod
 
-sub gdk_event_handler_set ( GdkEventFunc $func, Pointer $data, GDestroyNotify $notify )
+sub gdk_event_handler_set ( N-GdkEventFunc $func, Pointer $data, GDestroyNotify $notify )
   is native(&gdk-lib)
   { * }
 }}
@@ -2155,14 +2200,14 @@ C<gdk_event_copy()>.
 
 Since: 2.2
 
-  method gdk_event_set_screen ( GdkEvent $event, N-GObject $screen )
+  method gdk_event_set_screen ( N-GdkEvent $event, N-GObject $screen )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 =item N-GObject $screen; a B<Gnome::Gdk3::Screen>
 
 =end pod
 
-sub gdk_event_set_screen ( GdkEvent $event, N-GObject $screen )
+sub gdk_event_set_screen ( N-GdkEvent $event, N-GObject $screen )
   is native(&gdk-lib)
   { * }
 
@@ -2183,13 +2228,13 @@ Returns: (transfer none): the screen for the event
 
 Since: 2.2
 
-  method gdk_event_get_screen ( GdkEvent $event --> N-GObject  )
+  method gdk_event_get_screen ( N-GdkEvent $event --> N-GObject  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 
 =end pod
 
-sub gdk_event_get_screen ( GdkEvent $event )
+sub gdk_event_get_screen ( N-GdkEvent $event )
   returns N-GObject
   is native(&gdk-lib)
   { * }
@@ -2208,14 +2253,14 @@ Returns: (transfer none): the event sequence that the event belongs to
 
 Since: 3.4
 
-  method gdk_event_get_event_sequence ( GdkEvent $event --> GdkEventSequence  )
+  method gdk_event_get_event_sequence ( N-GdkEvent $event --> N-GdkEventSequence  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 
 =end pod
 
-sub gdk_event_get_event_sequence ( GdkEvent $event )
-  returns GdkEventSequence
+sub gdk_event_get_event_sequence ( N-GdkEvent $event )
+  returns N-GdkEventSequence
   is native(&gdk-lib)
   { * }
 }}
@@ -2231,13 +2276,13 @@ Returns: a B<Gnome::Gdk3::EventType>
 
 Since: 3.10
 
-  method gdk_event_get_event_type ( GdkEvent $event --> GdkEventType  )
+  method gdk_event_get_event_type ( N-GdkEvent $event --> GdkEventType  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 
 =end pod
 
-sub gdk_event_get_event_type ( GdkEvent $event )
+sub gdk_event_get_event_type ( N-GdkEvent $event )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -2253,13 +2298,13 @@ Returns: (transfer none): The B<Gnome::Gdk3::Seat> of this event
 
 Since: 3.20
 
-  method gdk_event_get_seat ( GdkEvent $event --> N-GObject  )
+  method gdk_event_get_seat ( N-GdkEvent $event --> N-GObject  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 
 =end pod
 
-sub gdk_event_get_seat ( GdkEvent $event )
+sub gdk_event_get_seat ( N-GdkEvent $event )
   returns N-GObject
   is native(&gdk-lib)
   { * }
@@ -2344,13 +2389,13 @@ Returns: (transfer none): The current device tool, or C<Any>
 
 Since: 3.22
 
-  method gdk_event_get_device_tool ( GdkEvent $event --> N-GObject  )
+  method gdk_event_get_device_tool ( N-GdkEvent $event --> N-GObject  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 
 =end pod
 
-sub gdk_event_get_device_tool ( GdkEvent $event )
+sub gdk_event_get_device_tool ( N-GdkEvent $event )
   returns N-GObject
   is native(&gdk-lib)
   { * }
@@ -2364,14 +2409,14 @@ Sets the device tool for this event, should be rarely used.
 
 Since: 3.22
 
-  method gdk_event_set_device_tool ( GdkEvent $event, N-GObject $tool )
+  method gdk_event_set_device_tool ( N-GdkEvent $event, N-GObject $tool )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 =item N-GObject $tool; (nullable): tool to set on the event, or C<Any>
 
 =end pod
 
-sub gdk_event_set_device_tool ( GdkEvent $event, N-GObject $tool )
+sub gdk_event_set_device_tool ( N-GdkEvent $event, N-GObject $tool )
   is native(&gdk-lib)
   { * }
 
@@ -2390,13 +2435,13 @@ Returns: The associated keyboard scancode or 0
 
 Since: 3.22
 
-  method gdk_event_get_scancode ( GdkEvent $event --> int32  )
+  method gdk_event_get_scancode ( N-GdkEvent $event --> int32  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event>
 
 =end pod
 
-sub gdk_event_get_scancode ( GdkEvent $event )
+sub gdk_event_get_scancode ( N-GdkEvent $event )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -2413,13 +2458,13 @@ Returns: C<1> if this event is emulated
 
 Since: 3.22
 
-  method gdk_event_get_pointer_emulated ( GdkEvent $event --> Int  )
+  method gdk_event_get_pointer_emulated ( N-GdkEvent $event --> Int  )
 
-=item GdkEvent $event;  B<event>: a B<Gnome::Gdk3::Event>
+=item N-GdkEvent $event;  B<event>: a B<Gnome::Gdk3::Event>
 
 =end pod
 
-sub gdk_event_get_pointer_emulated ( GdkEvent $event )
+sub gdk_event_get_pointer_emulated ( N-GdkEvent $event )
   returns int32
   is native(&gdk-lib)
   { * }

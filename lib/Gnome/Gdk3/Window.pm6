@@ -2854,7 +2854,7 @@ C<gdk_window_set_events()>.
 
 Returns: event mask for I<window>
 
-  method gdk_window_get_events ( --> GdkEventMask  )
+  method gdk_window_get_events ( --> N-GdkEventMask  )
 
 
 =end pod
@@ -2877,9 +2877,9 @@ B<Gnome::Gdk3::EventMask> enumeration.
 
 See the [input handling overview][event-masks] for details.
 
-  method gdk_window_set_events ( GdkEventMask $event_mask )
+  method gdk_window_set_events ( N-GdkEventMask $event_mask )
 
-=item GdkEventMask $event_mask; event mask for I<window>
+=item N-GdkEventMask $event_mask; event mask for I<window>
 
 =end pod
 
@@ -2901,10 +2901,10 @@ B<Gnome::Gdk3::EventMask> enumeration.
 See the [input handling overview][event-masks] for details.
 
 
-  method gdk_window_set_device_events ( N-GObject $device, GdkEventMask $event_mask )
+  method gdk_window_set_device_events ( N-GObject $device, N-GdkEventMask $event_mask )
 
 =item N-GObject $device; B<Gnome::Gdk3::Device> to enable events for.
-=item GdkEventMask $event_mask; event mask for I<window>
+=item N-GdkEventMask $event_mask; event mask for I<window>
 
 =end pod
 
@@ -2922,7 +2922,7 @@ Returns the event mask for I<window> corresponding to an specific device.
 Returns: device event mask for I<window>
 
 
-  method gdk_window_get_device_events ( N-GObject $device --> GdkEventMask  )
+  method gdk_window_get_device_events ( N-GObject $device --> N-GdkEventMask  )
 
 =item N-GObject $device; a B<Gnome::Gdk3::Device>.
 
@@ -2944,10 +2944,10 @@ mask will be applied both to currently existing, newly added devices
 after this call, and devices being attached/detached.
 
 
-  method gdk_window_set_source_events ( GdkInputSource $source, GdkEventMask $event_mask )
+  method gdk_window_set_source_events ( GdkInputSource $source, N-GdkEventMask $event_mask )
 
 =item GdkInputSource $source; a B<Gnome::Gdk3::InputSource> to define the source class.
-=item GdkEventMask $event_mask; event mask for I<window>
+=item N-GdkEventMask $event_mask; event mask for I<window>
 
 =end pod
 
@@ -2965,7 +2965,7 @@ by I<source>.
 
 Returns: source event mask for I<window>
 
-  method gdk_window_get_source_events ( GdkInputSource $source --> GdkEventMask  )
+  method gdk_window_get_source_events ( GdkInputSource $source --> N-GdkEventMask  )
 
 =item GdkInputSource $source; a B<Gnome::Gdk3::InputSource> to define the source class.
 
@@ -4281,13 +4281,13 @@ on the window decorations.
 Returns: C<1> if the window menu was shown and C<0> otherwise.
 
 
-  method gdk_window_show_window_menu ( GdkEvent $event --> Int  )
+  method gdk_window_show_window_menu ( N-GdkEvent $event --> Int  )
 
-=item GdkEvent $event; a B<Gnome::Gdk3::Event> to show the menu for
+=item N-GdkEvent $event; a B<Gnome::Gdk3::Event> to show the menu for
 
 =end pod
 
-sub gdk_window_show_window_menu ( N-GObject $window, GdkEvent $event )
+sub gdk_window_show_window_menu ( N-GObject $window, N-GdkEvent $event )
   returns int32
   is native(&gdk-lib)
   { * }
@@ -4332,7 +4332,7 @@ There are two ways to connect to a signal. The first option you have is to use C
 The positional arguments of the signal handler are all obligatory as well as their types. The named attributes C<:$widget> and user data are optional.
 
   # handler method
-  method mouse-event ( GdkEvent $event, :$widget ) { ... }
+  method mouse-event ( N-GdkEvent $event, :$widget ) { ... }
 
   # connect a signal on window object
   my Gnome::Gtk3::Window $w .= new( ... );
@@ -4342,7 +4342,7 @@ The positional arguments of the signal handler are all obligatory as well as the
 
   my Gnome::Gtk3::Window $w .= new( ... );
   my Callable $handler = sub (
-    N-GObject $native, GdkEvent $event, OpaquePointer $data
+    N-GObject $native, N-GdkEvent $event, OpaquePointer $data
   ) {
     ...
   }
@@ -4367,7 +4367,8 @@ embedded child at I<x>, I<y>, or C<Any>
   method handler (
     num64 $x,
     num64 $y,
-    Gnome::GObject::Object :widget($window),
+    Int :$_handler_id,
+    Gnome::GObject::Object :_widget($window),
     *%user-options
     --> Unknown type GDK_TYPE_WINDOW
   );
@@ -4392,7 +4393,8 @@ See also  I<from-embedder>.
     num64 $offscreen_x,
     num64 $offscreen_y,
     Unknown type G_TYPE_POINTER $embedder_x,
-    Unknown type G_TYPE_POINTER $embedder_y,
+    Int :$_handler_id,
+    Gnome::GObject::Object :_widget(bedder_y,
     Gnome::GObject::Object :widget($window),
     *%user-options
   );
@@ -4422,7 +4424,8 @@ See also  I<to-embedder>.
   method handler (
     num64 $embedder_x,
     num64 $embedder_y,
-    Unknown type G_TYPE_POINTER $offscreen_x,
+    Int :$_handler_id,
+    Gnome::GObject::Object :_widget(fscreen_x,
     Unknown type G_TYPE_POINTER $offscreen_y,
     Gnome::GObject::Object :widget($window),
     *%user-options
@@ -4458,7 +4461,8 @@ C<gdk_offscreen_window_get_surface()> will lead to a crash.
 Returns: the newly created B<cairo_surface_t> for the offscreen window
 
 
-  method handler (
+  meInt :$_handler_id,
+    Gnome::GObject::Object :_widget(
     Int $width,
     Int $height,
     Gnome::GObject::Object :widget($window),
@@ -4492,7 +4496,8 @@ keeping I<window> on-screen.
 Stability: Private
 
   method handler (
-    Unknown type G_TYPE_POINTER $flipped_rect,
+    Int :$_handler_id,
+    Gnome::GObject::Object :_widget(ipped_rect,
     Unknown type G_TYPE_POINTER $final_rect,
     Int $flipped_x,
     Int $flipped_y,
