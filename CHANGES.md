@@ -1,4 +1,7 @@
 ## Release notes
+* 2020-12-16 0.17.2:
+  * Also this package is now tested on Travis-ci and Appveyor.
+
 * 2020-07-16 0.17.1:
   * Modified the structure types of `GdkEvent*`into `N-GdkEvent*`. The older types are deprecated and are removed in version 0.20.0.
 
