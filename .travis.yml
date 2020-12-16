@@ -1,0 +1,13 @@
+branches:
+  only:
+    - master
+#    - module
+
+language: perl6
+
+perl6:
+  - latest
+
+install:
+  - rakudobrew build zef
+  - zef --depsonly install .
