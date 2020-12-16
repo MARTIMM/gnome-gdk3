@@ -29,7 +29,7 @@ In GTK+ applications the events are handled automatically in C<gtk_main_do_event
   method handle-keypress ( N-GdkEvent $event, :$widget ) {
     if $event.event-any.type ~~ GDK_KEY_PRESS {
       my N-GdkEventKey $event-key = $event;
-      if $event.event-key.keyval eq 's' {
+      if Buf.new($event.event-key.keyval).decode eq 's' {
         # key 's' pressed, stop process ...
       }
     }
@@ -41,7 +41,8 @@ In GTK+ applications the events are handled automatically in C<gtk_main_do_event
 If the handler handles only one event type, the method can also be defined as
 
   method handle-keypress ( N-GdkEventKey $event-key, :$widget ) {
-    if $event-key.type ~~ GDK_KEY_PRESS and $event-key.keyval eq 's' {
+    if $event-key.type ~~ GDK_KEY_PRESS and
+      Buf.new($event-key.keyval).decode eq 's' {
       # key 's' pressed, stop process ...
     }
   }
@@ -1606,16 +1607,15 @@ sub gdk_event_copy ( N-GdkEvent $event )
   returns N-GdkEvent
   is native(&gdk-lib)
   { * }
+}}
 
+#`{{
 #-------------------------------------------------------------------------------
 #TM:0:gdk_event_free:
 =begin pod
 =head2 gdk_event_free
 
-Frees a B<Gnome::Gdk3::Event>, freeing or decrementing any resources associated with it.
-Note that this function should only be called with events returned from
-functions such as C<gdk_event_peek()>, C<gdk_event_get()>, C<gdk_event_copy()>
-and C<gdk_event_new()>.
+Frees a native B<Gnome::Gdk3::Event>, freeing or decrementing any resources associated with it. Note that this function should only be called with events returned from functions such as C<gdk_event_peek()>, C<gdk_event_get()>, C<gdk_event_copy()> and C<gdk_event_new()>.
 
   method gdk_event_free ( N-GdkEvent $event )
 

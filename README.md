@@ -1,13 +1,28 @@
 ![gtk logo][logo]
-
+<!--
+[![License](http://martimm.github.io/label/License-label.svg)](http://www.perlfoundation.org/artistic_license_2_0)
+-->
 # Gnome Gdk - Low-level abstraction for the windowing system
 
-[![License](http://martimm.github.io/label/License-label.svg)](http://www.perlfoundation.org/artistic_license_2_0)
+![T][travis-svg] ![A][appveyor-svg] ![L][license-svg]
 
-# Description
+[travis-svg]: https://travis-ci.org/MARTIMM/gnome-gdk3.svg?branch=master
+[travis-run]: https://travis-ci.org/MARTIMM/gnome-gdk3
+
+[appveyor-svg]: https://ci.appveyor.com/api/projects/status/github/MARTIMM/gnome-gdk3?branch=master&passingText=Windows%20-%20OK&failingText=Windows%20-%20FAIL&pendingText=Windows%20-%20pending&svg=true
+[appveyor-run]: https://ci.appveyor.com/project/MARTIMM/gnome-gdk3/branch/master
+
+[license-svg]: http://martimm.github.io/label/License-label.svg
+[licence-lnk]: http://www.perlfoundation.org/artistic_license_2_0
 
 # Documentation
+* [ 🔗 Website](https://martimm.github.io/gnome-gtk3/content-docs/reference-gdk3.html)
+* [ 🔗 Travis-ci run on master branch][travis-run]
+* [ 🔗 Appveyor run on master branch][appveyor-run]
+* [ 🔗 License document][licence-lnk]
+* [ 🔗 Release notes][changes]
 
+<!--
 | Pdf from pod | Link to Gnome Developer |
 |-------|--------------|
 | Gnome::Gdk3::Display | [Controls a set of Screens and their associated input devices][GdkDisplay]
@@ -20,6 +35,7 @@
 
 ## Release notes
 * [Release notes][changes]
+-->
 
 # Installation
 Do not install this package on its own. Instead install `Gnome::Gtk3`.
