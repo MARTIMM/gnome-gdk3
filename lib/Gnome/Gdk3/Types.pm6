@@ -278,7 +278,6 @@ events, so different sequences may be distinguished.
 
 
 =end pod
-
 #TE:0:N-GdkEventMask:
 enum N-GdkEventMask is export (
   'GDK_EXPOSURE_MASK'             => 1 +< 1,
@@ -314,8 +313,6 @@ enum N-GdkEventMask is export (
 =head2 enum GdkGLError
 
 Error enumeration for B<Gnome::Gdk3::GLContext>.
-
-Since: 3.16
 
 
 =item GDK_GL_ERROR_NOT_AVAILABLE: OpenGL support is not available
