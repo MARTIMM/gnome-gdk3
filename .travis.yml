@@ -2,12 +2,19 @@ branches:
   only:
     - master
 #    - module
+#    - xyz
 
 language: perl6
-
 perl6:
   - latest
 
+env:
+  - raku_test_all=1 travis_ci_tests=1
+
+dist: xenial
+services:
+  - xvfb
+
 install:
   - rakudobrew build zef
-  - zef --depsonly install .
+  - zef --depsonly --/test install .
