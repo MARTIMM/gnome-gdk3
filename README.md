@@ -21,6 +21,7 @@
 * [ 🔗 Appveyor run on master branch][appveyor-run]
 * [ 🔗 License document][licence-lnk]
 * [ 🔗 Release notes][changes]
+* [ 🔗 Issues](https://github.com/MARTIMM/gnome-gtk3/issues)
 
 <!--
 | Pdf from pod | Link to Gnome Developer |
