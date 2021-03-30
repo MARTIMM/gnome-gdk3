@@ -83,6 +83,9 @@ submethod BUILD ( *%options ) {
   }
 
   elsif ? %options<screen> {
+    Gnome::N::deprecate(
+      '.new(:screen)', '.new(:native-object)', '0.15.3', '0.18.0'
+    );
     self.set-native-object(%options<screen>);
   }
 
