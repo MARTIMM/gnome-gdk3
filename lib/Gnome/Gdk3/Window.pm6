@@ -2854,8 +2854,7 @@ C<gdk_window_set_events()>.
 
 Returns: event mask for I<window>
 
-  method gdk_window_get_events ( --> N-GdkEventMask  )
-
+  method gdk_window_get_events ( --> Int )
 
 =end pod
 
@@ -2869,17 +2868,13 @@ sub gdk_window_get_events ( N-GObject $window )
 =begin pod
 =head2 [[gdk_] window_] set_events
 
-The event mask for a window determines which events will be reported
-for that window from all master input devices. For example, an event mask
-including B<GDK_BUTTON_PRESS_MASK> means the window should report button
-press events. The event mask is the bitwise OR of values from the
-B<Gnome::Gdk3::EventMask> enumeration.
+The event mask for a window determines which events will be reported for that window from all master input devices. For example, an event mask including B<GDK_BUTTON_PRESS_MASK> means the window should report button press events. The event mask is the bitwise OR of values from the B<Gnome::Gdk3::EventMask> enumeration.
 
 See the [input handling overview][event-masks] for details.
 
-  method gdk_window_set_events ( N-GdkEventMask $event_mask )
+  method gdk_window_set_events ( Int $event_mask )
 
-=item N-GdkEventMask $event_mask; event mask for I<window>
+=item Int $event_mask; event mask for I<window>. The values are from C<GdkEventMask>.
 
 =end pod
 
@@ -2901,10 +2896,10 @@ B<Gnome::Gdk3::EventMask> enumeration.
 See the [input handling overview][event-masks] for details.
 
 
-  method gdk_window_set_device_events ( N-GObject $device, N-GdkEventMask $event_mask )
+  method gdk_window_set_device_events ( N-GObject $device, Int $event_mask )
 
 =item N-GObject $device; B<Gnome::Gdk3::Device> to enable events for.
-=item N-GdkEventMask $event_mask; event mask for I<window>
+=item Int $event_mask; event mask for I<window>. Values are from GdkEventMask.
 
 =end pod
 
@@ -2919,10 +2914,9 @@ sub gdk_window_set_device_events ( N-GObject $window, N-GObject $device, int32 $
 
 Returns the event mask for I<window> corresponding to an specific device.
 
-Returns: device event mask for I<window>
+Returns: device event mask for I<window> with mask values from GdkEventMask.
 
-
-  method gdk_window_get_device_events ( N-GObject $device --> N-GdkEventMask  )
+  method gdk_window_get_device_events ( N-GObject $device --> Int )
 
 =item N-GObject $device; a B<Gnome::Gdk3::Device>.
 
@@ -2944,10 +2938,10 @@ mask will be applied both to currently existing, newly added devices
 after this call, and devices being attached/detached.
 
 
-  method gdk_window_set_source_events ( GdkInputSource $source, N-GdkEventMask $event_mask )
+  method gdk_window_set_source_events ( GdkInputSource $source, Int $event_mask )
 
 =item GdkInputSource $source; a B<Gnome::Gdk3::InputSource> to define the source class.
-=item N-GdkEventMask $event_mask; event mask for I<window>
+=item Int $event_mask; event mask for I<window>. Mask bit values are from GdkEventMask.
 
 =end pod
 
@@ -2955,6 +2949,7 @@ sub gdk_window_set_source_events ( N-GObject $window, int32 $source, int32 $even
   is native(&gdk-lib)
   { * }
 
+#`{{
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_get_source_events:
 =begin pod
@@ -2965,7 +2960,7 @@ by I<source>.
 
 Returns: source event mask for I<window>
 
-  method gdk_window_get_source_events ( GdkInputSource $source --> N-GdkEventMask  )
+  method gdk_window_get_source_events ( GdkInputSource $source --> Int )
 
 =item GdkInputSource $source; a B<Gnome::Gdk3::InputSource> to define the source class.
 
@@ -2975,6 +2970,7 @@ sub gdk_window_get_source_events ( N-GObject $window, int32 $source )
   returns int32
   is native(&gdk-lib)
   { * }
+}}
 
 #-------------------------------------------------------------------------------
 #TM:0:gdk_window_set_icon_list:
