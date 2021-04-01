@@ -10,12 +10,9 @@ Object representing an input device
 
 =head1 Description
 
-The B<Gnome::Gdk3::Device> object represents a single input device, such
-as a keyboard, a mouse, a touchpad, etc.
+The B<Gnome::Gdk3::Device> object represents a single input device, such as a keyboard, a mouse, a touchpad, etc.
 
-See the B<Gnome::Gdk3::DeviceManager> documentation for more information
-about the various kinds of master and slave devices, and their
-relationships.
+See the B<Gnome::Gdk3::DeviceManager> documentation for more information about the various kinds of master and slave devices, and their relationships.
 
 =head2 See Also
 
@@ -179,9 +176,9 @@ submethod BUILD ( *%options ) {
 
   elsif %options.keys.elems {
     die X::Gnome.new(
-      :message('Unsupported options for ' ~ self.^name ~
-               ': ' ~ %options.keys.join(', ')
-              )
+      :message(
+        "Unsupported options for {self.^name}: %options.keys.join(', ')"
+      )
     );
   }
 
