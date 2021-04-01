@@ -14,9 +14,11 @@ The B<Gnome::Gdk3::Device> object represents a single input device, such as a ke
 
 See the B<Gnome::Gdk3::DeviceManager> documentation for more information about the various kinds of master and slave devices, and their relationships.
 
+=begin comment
 =head2 See Also
 
 B<Gnome::Gdk3::DeviceManager>
+=end comment
 
 =head1 Synopsis
 =head2 Declaration
