@@ -29,6 +29,7 @@ B<Gnome::Gdk3::DeviceManager>
 =comment head2 Example
 
 =end pod
+
 #-------------------------------------------------------------------------------
 use NativeCall;
 
