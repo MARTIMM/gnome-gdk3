@@ -1,7 +1,7 @@
 {
   "description": "Raku - Gnome Gdk Interface, Please install Gnome::Gtk3",
   "name": "Gnome::Gdk3",
-  "version": "0.17.3",
+  "version": "0.18.0",
   "authors": [ "Marcel Timmerman"],
   "tags": [ "gnome", "gdk"],
 
@@ -17,6 +17,7 @@
     "Gnome::Gdk3::RGBA": "lib/Gnome/Gdk3/RGBA.pm6",
     "Gnome::Gdk3::Screen": "lib/Gnome/Gdk3/Screen.pm6",
     "Gnome::Gdk3::Types": "lib/Gnome/Gdk3/Types.pm6",
+    "Gnome::Gdk3::Visual": "lib/Gnome/Gdk3/Visual.pm6",
     "Gnome::Gdk3::Window": "lib/Gnome/Gdk3/Window.pm6"
   },
 

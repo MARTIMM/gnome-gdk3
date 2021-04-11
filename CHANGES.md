@@ -1,4 +1,8 @@
 ## Release notes
+* 2021-04-11 0.18.0:
+  * Add module **Gnome::Gdk3::Visual**.
+  * Bugfixes in **Gnome::Gdk3::Screen**. option `:native-object` for `.new()` was not recognized.
+
 * 2021-04-01 0.17.3:
   * Enumerated type `N-GdkEventMask` has a wrong name and is renamed to `GdkEventMask`. All enumerated types are without the leading N-. The N- prefix is used for native structures and classes like `N-GObject`, `N-GError`, `N-GdkRectangle`, etcetera. It won't break anything because it is not used as a type on parameters. It is mainly used for its members which are or'ed into a mask and sent/received as an `Int`.
   * Window was using the N-GdkEventMask parameter wrongly. It must use `Int` because it is a mask of flags from the now renamed enum `GdkEventMask`.
