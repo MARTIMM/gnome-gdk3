@@ -1,11 +1,12 @@
 use v6;
-use NativeCall;
+#use lib '../gnome-native/lib';
+#use NativeCall;
 use Test;
 
+
 use Gnome::Gdk3::Visual;
+use Gnome::Gdk3::Screen;
 ok 1, 'nome::Gdk3::Visual loads ok';
-done-testing;
-=finish
 
 
 #use Gnome::N::X;
@@ -13,10 +14,34 @@ done-testing;
 
 #-------------------------------------------------------------------------------
 my Gnome::Gdk3::Visual $v;
+my Gnome::Gdk3::Screen $s;
 #-------------------------------------------------------------------------------
-subtest 'ISA test', {
-  $v .= new;
-  isa-ok $v, Gnome::Gdk3::Visual, '.new()';
+#subtest 'ISA test', {
+#  $v .= new;
+#  isa-ok $v, Gnome::Gdk3::Visual, '.new()';
+#}
+
+#-------------------------------------------------------------------------------
+subtest 'Manipulations', {
+  $s .= new;
+  $v = $s.get-rgba-visual;
+  lives-ok { diag 'rgb: ' ~ $v.get-depth; }, '.get-rgba-visual()';
+  lives-ok { diag 'blue pix: ' ~ $v.get-blue-pixel-details; },
+    '.get-blue-pixel-details()';
+  lives-ok { diag 'green pix: ' ~ $v.get-green-pixel-details; },
+    '.get-green-pixel-details()';
+  lives-ok { diag 'red pix: ' ~ $v.get-red-pixel-details; },
+    '.get-red-pixel-details()';
+
+  my Gnome::Gdk3::Screen $s2 .= new(:native-object($v.get-screen-no));
+  lives-ok { diag 'display name: ' ~ $s2.get-display.get-name;},
+    '.get-screen-no()';
+
+# TODO Error in Visual; No such symbol 'Gnome::Gdk3::Screen' error
+#  $s2 = $v.get-screen;
+#  lives-ok { diag 'display name: ' ~ $s2.get-display.get-name;},
+#    '.get-screen()';
+  lives-ok { diag 'visual type: ' ~ $v.get-visual-type;}, '.get-visual-type()';
 }
 
 #-------------------------------------------------------------------------------
@@ -29,11 +54,6 @@ done-testing;
 unless %*ENV<raku_test_all>:exists {
   done-testing;
   exit;
-}
-
-#-------------------------------------------------------------------------------
-subtest 'Manipulations', {
-
 }
 
 #-------------------------------------------------------------------------------

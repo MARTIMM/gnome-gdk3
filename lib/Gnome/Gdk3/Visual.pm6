@@ -1,6 +1,6 @@
 #TL:1:Gnome::Gdk3::Visual:
 
-use v6;
+use v6.d;
 #-------------------------------------------------------------------------------
 =begin pod
 
@@ -24,7 +24,6 @@ A number of functions are provided for determining the “best” available visu
 
   unit class Gnome::Gdk3::Visual;
   also is Gnome::GObject::Object;
-
 
 
 =comment head2 Uml Diagram
@@ -58,12 +57,14 @@ Inheriting is done in a special way in that it needs a call from new() to get th
 #-------------------------------------------------------------------------------
 use NativeCall;
 
+use Gnome::GObject::Object;
+
 #use Gnome::N::X;
 use Gnome::N::NativeLib;
 use Gnome::N::N-GObject;
 use Gnome::N::GlibToRakuTypes;
 
-use Gnome::GObject::Object;
+#use Gnome::Gdk3::Screen;
 
 #-------------------------------------------------------------------------------
 unit class Gnome::Gdk3::Visual:auth<github:MARTIMM>:ver<0.1.0>;
@@ -99,7 +100,6 @@ enum GdkVisualType is export (
 );
 
 #-------------------------------------------------------------------------------
-
 =begin pod
 =head1 Methods
 =head2 new
@@ -175,36 +175,38 @@ submethod BUILD ( *%options ) {
   }
 }
 
-#`{{
 #-------------------------------------------------------------------------------
-#TM:0:get-blue-pixel-details:
+#TM:1:get-blue-pixel-details:
 =begin pod
 =head2 get-blue-pixel-details
 
 Obtains values that are needed to calculate blue pixel values in TrueColor and DirectColor. The “mask” is the significant bits within the pixel. The “shift” is the number of bits left we must shift a primary for it to be in position (according to the "mask"). Finally, "precision" refers to how much precision the pixel value contains for a particular primary.
 
-  method get-blue-pixel-details ( UInt $mask )
+  method get-blue-pixel-details ( --> List )
 
-=item UInt $mask; A pointer to a B<guint32> to be filled in, or C<undefined>
-=item Int $shift; A pointer to a B<gint> to be filled in, or C<undefined>
-=item Int $precision; A pointer to a B<gint> to be filled in, or C<undefined>
+List returns the following;
+=item UInt mask;
+=item Int shift;
+=item Int precision;
 =end pod
 
-method get-blue-pixel-details ( UInt $mask ) {
-
+method get-blue-pixel-details ( --> List ) {
   gdk_visual_get_blue_pixel_details(
-    self.get-native-object-no-reffing, $mask, my gint $shift, my gint $precision
+    self.get-native-object-no-reffing,
+    my guint32 $mask, my gint $shift, my gint $precision
   );
+
+  ( $mask, $shift, $precision)
 }
 
 sub gdk_visual_get_blue_pixel_details (
-  N-GObject $visual, guint32 $mask, gint $shift is rw, gint $precision is rw
+  N-GObject $visual, guint32 $mask is rw,
+  gint $shift is rw, gint $precision is rw
 ) is native(&gdk-lib)
   { * }
-}}
 
 #-------------------------------------------------------------------------------
-#TM:2:get-depth:
+#TM:1:get-depth:
 =begin pod
 =head2 get-depth
 
@@ -223,78 +225,105 @@ sub gdk_visual_get_depth (
 ) is native(&gdk-lib)
   { * }
 
-#`{{
 #-------------------------------------------------------------------------------
-#TM:0:get-green-pixel-details:
+#TM:1:get-green-pixel-details:
 =begin pod
 =head2 get-green-pixel-details
 
 Obtains values that are needed to calculate green pixel values in TrueColor and DirectColor. The “mask” is the significant bits within the pixel. The “shift” is the number of bits left we must shift a primary for it to be in position (according to the "mask"). Finally, "precision" refers to how much precision the pixel value contains for a particular primary.
 
-  method get-green-pixel-details ( UInt $mask )
+  method get-green-pixel-details ( --> List )
 
-=item UInt $mask; A pointer to a B<guint32> to be filled in, or C<undefined>
-=item Int $shift; A pointer to a B<gint> to be filled in, or C<undefined>
-=item Int $precision; A pointer to a B<gint> to be filled in, or C<undefined>
+List returns the following;
+=item UInt mask;
+=item Int shift;
+=item Int precision;
 =end pod
 
-method get-green-pixel-details ( UInt $mask ) {
-
+method get-green-pixel-details ( --> List  ) {
   gdk_visual_get_green_pixel_details(
-    self.get-native-object-no-reffing, $mask, my gint $shift, my gint $precision
+    self.get-native-object-no-reffing,
+    my guint32 $mask, my gint $shift, my gint $precision
   );
+
+  ( $mask, $shift, $precision)
 }
 
 sub gdk_visual_get_green_pixel_details (
-  N-GObject $visual, guint32 $mask, gint $shift is rw, gint $precision is rw
+  N-GObject $visual, guint32 $mask is rw, gint $shift is rw, gint $precision is rw
 ) is native(&gdk-lib)
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:get-red-pixel-details:
+#TM:1:get-red-pixel-details:
 =begin pod
 =head2 get-red-pixel-details
 
 Obtains values that are needed to calculate red pixel values in TrueColor and DirectColor. The “mask” is the significant bits within the pixel. The “shift” is the number of bits left we must shift a primary for it to be in position (according to the "mask"). Finally, "precision" refers to how much precision the pixel value contains for a particular primary.
 
-  method get-red-pixel-details ( UInt $mask )
+  method get-red-pixel-details ( --> List )
 
-=item UInt $mask; A pointer to a B<guint32> to be filled in, or C<undefined>
-=item Int $shift; A pointer to a B<gint> to be filled in, or C<undefined>
-=item Int $precision; A pointer to a B<gint> to be filled in, or C<undefined>
+List returns the following;
+=item UInt mask;
+=item Int shift;
+=item Int precision;
 =end pod
 
-method get-red-pixel-details ( UInt $mask ) {
-
+method get-red-pixel-details ( --> List ) {
   gdk_visual_get_red_pixel_details(
-    self.get-native-object-no-reffing, $mask, my gint $shift, my gint $precision
+    self.get-native-object-no-reffing,
+    my guint $mask, my gint $shift, my gint $precision
   );
+
+  ( $mask, $shift, $precision)
 }
 
 sub gdk_visual_get_red_pixel_details (
-  N-GObject $visual, guint32 $mask, gint $shift is rw, gint $precision is rw
+  N-GObject $visual, guint32 $mask is rw, gint $shift is rw, gint $precision is rw
 ) is native(&gdk-lib)
   { * }
-}}
 
 #-------------------------------------------------------------------------------
-#TM:0:get-screen:
+#TM:1:get-screen:
 =begin pod
 =head2 get-screen
 
 Gets the screen to which this visual belongs
 
-Returns: the screen to which this visual belongs.
+Returns: the screen to which this visual belongs. Although, at this point, the return type is known, it is not possible to return a B<Gnome::Gdk3::Screen> raku object because of code fails to require a raku object. The caller must do the following C<Gnome::Gdk3::Screen.new(:native-object($v.get-screen))> locally to get the raku object.
 
-  method get-screen ( --> N-GObject )
+=comment TODO  method get-screen ( --> Gnome::Gdk3::Screen )
+  method get-screen-no ( --> N-GObject )
 
 =end pod
 
-method get-screen ( --> N-GObject ) {
-
-  gdk_visual_get_screen(
-    self.get-native-object-no-reffing,
+#`{{ TODO No such symbol 'Gnome::Gdk3::Screen' error
+method get-screen ( --> Any ) {
+  self._wrap-native-type(
+    'Gnome::Gdk3::Screen',
+    gdk_visual_get_screen(self.get-native-object-no-reffing)
   )
+}
+}}
+
+#`{{
+method get-screen ( --> Any ) {
+  note self._get_no_type_info(
+    gdk_visual_get_screen(self.get-native-object-no-reffing),
+    :check('GdkScreen')
+  );
+
+  # the native object's name is GdkX11Screen on my system. To get the raku
+  # class name replace 'GdkX11' with 'Gdk3::'. 'Gnome::' is prefixed in the
+  # wrapper method. (Only needed when classes are not provided!)
+  self._wrap-native-type-from-no(
+    gdk_visual_get_screen(self.get-native-object-no-reffing), 'GdkX11', 'Gdk3::'
+  )
+}
+}}
+
+method get-screen-no ( --> N-GObject ) {
+  gdk_visual_get_screen(self.get-native-object-no-reffing)
 }
 
 sub gdk_visual_get_screen (
@@ -303,7 +332,7 @@ sub gdk_visual_get_screen (
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:get-visual-type:
+#TM:1:get-visual-type:
 =begin pod
 =head2 get-visual-type
 
