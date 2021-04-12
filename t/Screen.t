@@ -1,6 +1,8 @@
 use v6;
 #use lib '../gnome-gobject/lib', '../gnome-native/lib';
+#use lib '../gnome-native/lib';
 use Test;
+
 
 use Gnome::N::N-GObject;
 
@@ -31,18 +33,6 @@ unless %*ENV<raku_test_all>:exists {
 
 #-------------------------------------------------------------------------------
 subtest 'Manipulations', {
-
-#`{{
-# TODO move to other place - testje with types
-
-  my Gnome::GObject::Type $t .= new;
-  note $t.name-from-instance($s.get-display-no);  # GdkX11Display
-
-  note $t.check-instance-is-a(                    # 1 (true)
-    $s.get-display-no, $t.from-name('GdkDisplay')
-  );
-}}
-
   lives-ok {
     diag 'display name: ' ~ Gnome::Gdk3::Display.new(
       :native-object($s.get-display-no)
@@ -74,27 +64,8 @@ done-testing;
 
 =finish
 
-
-#-------------------------------------------------------------------------------
-subtest 'Inherit Gnome::Gdk3::Screen', {
-  class MyClass is Gnome::Gdk3::Screen {
-    method new ( |c ) {
-      self.bless( :GdkScreen, |c);
-    }
-
-    submethod BUILD ( *%options ) {
-
-    }
-  }
-
-  my MyClass $mgc .= new;
-  isa-ok $mgc, Gnome::Gdk3::Screen, '.new()';
-}
-
-#-------------------------------------------------------------------------------
-subtest 'Interface ...', {
-}
-
+# Some props are tests but still not on travis tests because devices may return
+# different values and therefore fail.
 #-------------------------------------------------------------------------------
 subtest 'Properties ...', {
   use Gnome::GObject::Value;
@@ -135,7 +106,33 @@ subtest 'Properties ...', {
   # example calls
   #test-property( G_TYPE_BOOLEAN, 'homogeneous', 'get-boolean', 0);
   #test-property( G_TYPE_STRING, 'label', 'get-string', '...');
-  #test-property( G_TYPE_FLOAT, 'xalign', 'get-float', 23e-2, :approx);
+  test-property( G_TYPE_FLOAT, 'resolution', 'get-float', 96e0, :approx);
+}
+
+#-------------------------------------------------------------------------------
+done-testing;
+
+=finish
+
+
+#-------------------------------------------------------------------------------
+subtest 'Inherit Gnome::Gdk3::Screen', {
+  class MyClass is Gnome::Gdk3::Screen {
+    method new ( |c ) {
+      self.bless( :GdkScreen, |c);
+    }
+
+    submethod BUILD ( *%options ) {
+
+    }
+  }
+
+  my MyClass $mgc .= new;
+  isa-ok $mgc, Gnome::Gdk3::Screen, '.new()';
+}
+
+#-------------------------------------------------------------------------------
+subtest 'Interface ...', {
 }
 
 #-------------------------------------------------------------------------------

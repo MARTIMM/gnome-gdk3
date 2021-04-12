@@ -1,6 +1,6 @@
 #TL:1:Gnome::Gdk3::Screen:
 
-use v6;
+use v6.d;
 #-------------------------------------------------------------------------------
 =begin pod
 
@@ -35,17 +35,13 @@ use Gnome::Glib::List;
 
 use Gnome::GObject::Object;
 
-use Gnome::Gdk3::Display;
-use Gnome::Gdk3::Visual;
-use Gnome::Gdk3::Window;
-
 use Gnome::Cairo;
 use Gnome::Cairo::Types;
 
 #-------------------------------------------------------------------------------
 # See /usr/include/gtk-3.0/gdk/gdkscreen.h
 # https://developer.gnome.org/gdk3/stable/GdkScreen.html
-unit class Gnome::Gdk3::Screen:auth<github:MARTIMM>;
+unit class Gnome::Gdk3::Screen:auth<github:MARTIMM>:ver<0.2.0>;
 also is Gnome::GObject::Object;
 
 #-------------------------------------------------------------------------------
@@ -152,9 +148,10 @@ Returns: the display to which I<screen> belongs
 
 =end pod
 
-method get-display ( --> Gnome::Gdk3::Display ) {
-  Gnome::Gdk3::Display.new(
-    :native-object(gdk_screen_get_display(self.get-native-object-no-reffing))
+method get-display ( --> Any ) {
+  self._wrap-native-type(
+    'Gnome::Gdk3::Display',
+    gdk_screen_get_display(self.get-native-object-no-reffing)
   )
 }
 
@@ -229,11 +226,10 @@ Returns: a visual to use for windows with an alpha channel or C<undefined> if th
 
 =end pod
 
-method get-rgba-visual ( --> Gnome::Gdk3::Visual ) {
-  Gnome::Gdk3::Visual.new(
-    :native-object(
-      gdk_screen_get_rgba_visual(self.get-native-object-no-reffing)
-    )
+method get-rgba-visual ( --> Any ) {
+  self._wrap-native-type(
+    'Gnome::Gdk3::Visual',
+    gdk_screen_get_rgba_visual(self.get-native-object-no-reffing)
   )
 }
 
@@ -260,11 +256,10 @@ Returns: the root window
 
 =end pod
 
-method get-root-window ( --> Gnome::Gdk3::Window ) {
-  Gnome::Gdk3::Window.new(
-    :native-object(
-      gdk_screen_get_root_window(self.get-native-object-no-reffing)
-    )
+method get-root-window ( --> Any ) {
+  self._wrap-native-type(
+    'Gnome::Gdk3::Window',
+    gdk_screen_get_root_window(self.get-native-object-no-reffing)
   )
 }
 
@@ -323,11 +318,10 @@ Returns: the system visual
 
 =end pod
 
-method get-system-visual ( --> Gnome::Gdk3::Visual ) {
-  Gnome::Gdk3::Visual.new(
-    :native-object(
-      gdk_screen_get_system_visual(self.get-native-object-no-reffing)
-    )
+method get-system-visual ( --> Any ) {
+  self._wrap-native-type(
+    'Gnome::Gdk3::Visual',
+    gdk_screen_get_system_visual(self.get-native-object-no-reffing)
   )
 }
 
@@ -638,7 +632,7 @@ An example of using a string type property of a B<Gnome::Gtk3::Label> object. Th
 The B<Gnome::GObject::Value> type of property I<font-options> is C<G_TYPE_POINTER>.
 
 =comment -----------------------------------------------------------------------
-=comment #TP:0:resolution:
+=comment #TP:1:resolution:
 =head3 Font resolution: resolution
 
 
