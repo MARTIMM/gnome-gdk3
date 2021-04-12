@@ -65,8 +65,14 @@ subtest 'Manipulations', {
   is $p.get-rowstride, 192 * 4, '.get-rowstride()';       # width * 4 bytes
   is $p.get-byte-length, 192 * 197 * 4, '.get-byte-length()';
 
-  is $p.calculate-rowstride( GDK_COLORSPACE_RGB, True, 8, 10, 2), 40,
-     '.calculate-rowstride()';                            # 10 * 4
+  if %*ENV<travis_ci_tests> {
+    skip 1, 'rowstride not known';
+  }
+
+  else {
+    is $p.calculate-rowstride( GDK_COLORSPACE_RGB, True, 8, 10, 2), 40,
+       '.calculate-rowstride()';                            # 10 * 4
+  }
 
 #note "GDK_TYPE_PIXBUF: ", $p.get-type;
 
