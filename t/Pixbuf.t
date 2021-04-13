@@ -66,7 +66,7 @@ subtest 'Manipulations', {
   is $p.get-byte-length, 192 * 197 * 4, '.get-byte-length()';
 
   if %*ENV<travis_ci_tests> {
-    skip 1, '.calculate-rowstride() not known';
+    skip '.calculate-rowstride() not known';
   }
 
   else {
