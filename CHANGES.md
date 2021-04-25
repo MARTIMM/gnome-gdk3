@@ -1,4 +1,7 @@
 ## Release notes
+* 2021-04-25 0.18.1:
+  * Changed  **Gnome::Gdk3::Screen** and **Gnome::Gdk3::Visual** for remarks made in release notes of Gtk3.
+
 * 2021-04-11 0.18.0:
   * Add module **Gnome::Gdk3::Visual**.
   * Bugfixes in **Gnome::Gdk3::Screen**. option `:native-object` for `.new()` was not recognized.
