@@ -137,25 +137,26 @@ method _fallback ( $native-sub is copy --> Callable ) {
 #-------------------------------------------------------------------------------
 #TM:1:get-display:
 =begin pod
-=head2 get-display
+=head2 get-display, get-display-rk
 
 Gets the display to which the I<screen> belongs.
 
 Returns: the display to which I<screen> belongs
 
-  method get-display ( --> Gnome::Gdk3::Display )
-  method get-display-no ( --> N-GObject )
+  method get-display-rk ( --> Gnome::Gdk3::Display )
+  method get-display ( --> N-GObject )
 
 =end pod
 
-method get-display ( --> Any ) {
+# Used Any to prevent loading and circular dependencies
+method get-display-rk ( --> Any ) {
   self._wrap-native-type(
     'Gnome::Gdk3::Display',
     gdk_screen_get_display(self.get-native-object-no-reffing)
   )
 }
 
-method get-display-no ( --> N-GObject ) {
+method get-display ( --> N-GObject ) {
   gdk_screen_get_display(self.get-native-object-no-reffing)
 }
 
@@ -211,7 +212,7 @@ sub gdk_screen_get_resolution (
 #-------------------------------------------------------------------------------
 #TM:1:get-rgba-visual:
 =begin pod
-=head2 get-rgba-visual
+=head2 get-rgba-visual, get-rgba-visual-rk
 
 Gets a visual to use for creating windows with an alpha channel. The windowing system on which GTK+ is running may not support this capability, in which case C<undefined> will be returned. Even if a non-C<undefined> value is returned, its possible that the window’s alpha channel won’t be honored when displaying the window on the screen: in particular, for X an appropriate windowing manager and compositing manager must be running to provide appropriate display.
 
@@ -221,19 +222,19 @@ For setting an overall opacity for a top-level window, see C<gdk-window-set-opac
 
 Returns: a visual to use for windows with an alpha channel or C<undefined> if the capability is not available.
 
-  method get-rgba-visual ( --> Gnome::Gdk3::Visual )
-  method get-rgba-visual-no ( --> N-GObject )
+  method get-rgba-visual-rk ( --> Gnome::Gdk3::Visual )
+  method get-rgba-visual ( --> N-GObject )
 
 =end pod
 
-method get-rgba-visual ( --> Any ) {
+method get-rgba-visual-rk ( --> Any ) {
   self._wrap-native-type(
     'Gnome::Gdk3::Visual',
     gdk_screen_get_rgba_visual(self.get-native-object-no-reffing)
   )
 }
 
-method get-rgba-visual-no ( --> N-GObject ) {
+method get-rgba-visual ( --> N-GObject ) {
   gdk_screen_get_rgba_visual(self.get-native-object-no-reffing)
 }
 
@@ -245,25 +246,25 @@ sub gdk_screen_get_rgba_visual (
 #-------------------------------------------------------------------------------
 #TM:1:get-root-window:
 =begin pod
-=head2 get-root-window
+=head2 get-root-window, get-root-window-rk
 
 Gets the root window of I<screen>.
 
 Returns: the root window
 
-  method get-root-window ( --> Gnome::Gdk3::Window )
-  method get-root-window-no ( --> N-GObject )
+  method get-root-window-rk ( --> Gnome::Gdk3::Window )
+  method get-root-window ( --> N-GObject )
 
 =end pod
 
-method get-root-window ( --> Any ) {
+method get-root-window-rk ( --> Any ) {
   self._wrap-native-type(
     'Gnome::Gdk3::Window',
     gdk_screen_get_root_window(self.get-native-object-no-reffing)
   )
 }
 
-method get-root-window-no ( --> N-GObject ) {
+method get-root-window ( --> N-GObject ) {
   gdk_screen_get_root_window(self.get-native-object-no-reffing)
 }
 
@@ -307,25 +308,25 @@ sub gdk_screen_get_setting (
 #-------------------------------------------------------------------------------
 #TM:1:get-system-visual:
 =begin pod
-=head2 get-system-visual
+=head2 get-system-visual, get-system-visual-rk
 
 Get the system’s default visual for I<screen>. This is the visual for the root window of the display. The return value should not be freed.
 
 Returns: the system visual
 
-  method get-system-visual ( --> Gnome::Gdk3::Visual )
-  method get-system-visual-no ( --> N-GObject )
+  method get-system-visual-rk ( --> Gnome::Gdk3::Visual )
+  method get-system-visual ( --> N-GObject )
 
 =end pod
 
-method get-system-visual ( --> Any ) {
+method get-system-visual-rk ( --> Any ) {
   self._wrap-native-type(
     'Gnome::Gdk3::Visual',
     gdk_screen_get_system_visual(self.get-native-object-no-reffing)
   )
 }
 
-method get-system-visual-no ( --> N-GObject ) {
+method get-system-visual ( --> N-GObject ) {
   gdk_screen_get_system_visual(self.get-native-object-no-reffing)
 }
 
@@ -337,14 +338,14 @@ sub gdk_screen_get_system_visual (
 #-------------------------------------------------------------------------------
 #TM:1:get-toplevel-windows:
 =begin pod
-=head2 get-toplevel-windows
+=head2 get-toplevel-windows, get-toplevel-windows-rk
 
-  method get-toplevel-windows ( --> Gnome::Glib::List )
-  method get-toplevel-windows-no ( --> N-GList )
+  method get-toplevel-windows-rk ( --> Gnome::Glib::List )
+  method get-toplevel-windows ( --> N-GList )
 
 =end pod
 
-method get-toplevel-windows ( --> Gnome::Glib::List ) {
+method get-toplevel-windows-rk ( --> Gnome::Glib::List ) {
   Gnome::Glib::List.new(
     :native-object(
       gdk_screen_get_toplevel_windows(self.get-native-object-no-reffing)
@@ -352,7 +353,7 @@ method get-toplevel-windows ( --> Gnome::Glib::List ) {
   )
 }
 
-method get-toplevel-windows-no ( --> N-GList ) {
+method get-toplevel-windows ( --> N-GList ) {
   gdk_screen_get_toplevel_windows(self.get-native-object-no-reffing)
 }
 
@@ -364,7 +365,7 @@ sub gdk_screen_get_toplevel_windows (
 #-------------------------------------------------------------------------------
 #TM:1:get-window-stack:
 =begin pod
-=head2 get-window-stack
+=head2 get-window-stack, get-window-stack-rk
 
 Returns a B<Gnome::Gdk3::List> of B<Gnome::Gdk3::Windows> representing the current window stack.
 
@@ -376,12 +377,12 @@ The returned list is newly allocated and owns references to the windows it conta
 
 Returns:   (element-type GdkWindow): a list of B<Gnome::Gdk3::Windows> for the current window stack, or C<undefined>.
 
-  method get-window-stack ( --> Gnome::Glib::List )
-  method get-window-stack-no ( --> N-GList )
+  method get-window-stack-rk ( --> Gnome::Glib::List )
+  method get-window-stack ( --> N-GList )
 
 =end pod
 
-method get-window-stack ( --> Gnome::Glib::List ) {
+method get-window-stack-rk ( --> Gnome::Glib::List ) {
   Gnome::Glib::List.new(
     :native-object(
       gdk_screen_get_window_stack(self.get-native-object-no-reffing)
@@ -389,7 +390,7 @@ method get-window-stack ( --> Gnome::Glib::List ) {
   )
 }
 
-method get-window-stack-no ( --> N-GList ) {
+method get-window-stack ( --> N-GList ) {
   gdk_screen_get_window_stack(self.get-native-object-no-reffing)
 }
 
@@ -425,7 +426,7 @@ sub gdk_screen_is_composited (
 #-------------------------------------------------------------------------------
 #TM:1:list-visuals:
 =begin pod
-=head2 list-visuals
+=head2 list-visuals, list-visuals-rk
 
 Lists the available visuals for the specified I<screen>. A visual describes a hardware image data format. For example, a visual might support 24-bit color, or 8-bit color, and might expect pixels to be in a certain format.
 
@@ -433,12 +434,12 @@ Call C<g-list-free()> on the return value when you’re finished with it.
 
 Returns: (transfer container) (element-type GdkVisual): a list of visuals; the list must be freed, but not its contents
 
-  method list-visuals ( --> Gnome::Glib::List )
-  method list-visuals-no ( --> N-GList )
+  method list-visuals-rk ( --> Gnome::Glib::List )
+  method list-visuals ( --> N-GList )
 
 =end pod
 
-method list-visuals ( --> Gnome::Glib::List ) {
+method list-visuals-rk ( --> Gnome::Glib::List ) {
   Gnome::Glib::List.new(
     :native-object(
       gdk_screen_list_visuals(self.get-native-object-no-reffing)
@@ -446,7 +447,7 @@ method list-visuals ( --> Gnome::Glib::List ) {
   )
 }
 
-method list-visuals-no ( --> N-GList ) {
+method list-visuals ( --> N-GList ) {
   gdk_screen_list_visuals(self.get-native-object-no-reffing)
 }
 

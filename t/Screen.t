@@ -35,25 +35,25 @@ unless %*ENV<raku_test_all>:exists {
 subtest 'Manipulations', {
   lives-ok {
     diag 'display name: ' ~ Gnome::Gdk3::Display.new(
-      :native-object($s.get-display-no)
+      :native-object($s.get-display)
     ).get-name;
-  }, '.get-display-no()';
+  }, '.get-display()';
 
-  lives-ok { diag 'display name: ' ~ $s.get-display.get-name;},
+  lives-ok { diag 'display name: ' ~ $s.get-display-rk.get-name;},
     '.get-display()';
 
   lives-ok { diag 'resolution: ' ~ $s.get-resolution; }, '.get-resolution()';
-  lives-ok { diag 'rgb: ' ~ $s.get-rgba-visual.get-depth; },
+  lives-ok { diag 'rgb: ' ~ $s.get-rgba-visual-rk.get-depth; },
     '.get-rgba-visual()';
-  lives-ok { $s.get-root-window.beep; }, '.get-root-window()';
-  lives-ok { diag 'sys: ' ~ $s.get-system-visual.get-depth; },
+  lives-ok { $s.get-root-window-rk.beep; }, '.get-root-window()';
+  lives-ok { diag 'sys: ' ~ $s.get-system-visual-rk.get-depth; },
     '.get-system-visual()';
-  lives-ok { diag 'toplevels: ' ~ $s.get-toplevel-windows.length; },
+  lives-ok { diag 'toplevels: ' ~ $s.get-toplevel-windows-rk.length; },
     '.get-toplevel-windows()';
-  lives-ok { diag 'win stack: ' ~ $s.get-window-stack.length; },
+  lives-ok { diag 'win stack: ' ~ $s.get-window-stack-rk.length; },
     '.get-window-stack()';
   ok 1, '.is-composited(): ' ~ $s.is-composited;
-  lives-ok { diag 'list visuals: ' ~ $s.list-visuals.length; },
+  lives-ok { diag 'list visuals: ' ~ $s.list-visuals-rk.length; },
     '.list-visuals()';
 
   lives-ok {$s.set-resolution('96.0');}, '.set-resolution()';

@@ -286,25 +286,25 @@ sub gdk_visual_get_red_pixel_details (
 #-------------------------------------------------------------------------------
 #TM:1:get-screen:
 =begin pod
-=head2 get-screen
+=head2 get-screen, get-screen-rk
 
 Gets the screen to which this visual belongs
 
-Returns: the screen to which this visual belongs. Although, at this point, the return type is known, it is not possible to return a B<Gnome::Gdk3::Screen> raku object because of code fails to require a raku object. The caller must do the following C<Gnome::Gdk3::Screen.new(:native-object($v.get-screen))> locally to get the raku object.
+=comment Returns: the screen to which this visual belongs. Although, at this point, the return type is known, it is not possible to return a B<Gnome::Gdk3::Screen> raku object because of code fails to require a raku object. The caller must do the following C<Gnome::Gdk3::Screen.new(:native-object($v.get-screen))> locally to get the raku object.
 
-=comment TODO  method get-screen ( --> Gnome::Gdk3::Screen )
-  method get-screen-no ( --> N-GObject )
+  method get-screen-rk ( --> Gnome::Gdk3::Screen )
+  method get-screen ( --> N-GObject )
 
 =end pod
 
-#`{{ TODO No such symbol 'Gnome::Gdk3::Screen' error
-method get-screen ( --> Any ) {
+#`{{ TODO No such symbol 'Gnome::Gdk3::Screen' error }}
+method get-screen-rk ( --> Any ) {
   self._wrap-native-type(
     'Gnome::Gdk3::Screen',
     gdk_visual_get_screen(self.get-native-object-no-reffing)
   )
 }
-}}
+
 
 #`{{
 method get-screen ( --> Any ) {
@@ -322,7 +322,7 @@ method get-screen ( --> Any ) {
 }
 }}
 
-method get-screen-no ( --> N-GObject ) {
+method get-screen ( --> N-GObject ) {
   gdk_visual_get_screen(self.get-native-object-no-reffing)
 }
 

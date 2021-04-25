@@ -24,7 +24,7 @@ my Gnome::Gdk3::Screen $s;
 #-------------------------------------------------------------------------------
 subtest 'Manipulations', {
   $s .= new;
-  $v = $s.get-rgba-visual;
+  $v = $s.get-rgba-visual-rk;
   lives-ok { diag 'rgb: ' ~ $v.get-depth; }, '.get-rgba-visual()';
   lives-ok { diag 'blue pix: ' ~ $v.get-blue-pixel-details; },
     '.get-blue-pixel-details()';
@@ -33,9 +33,9 @@ subtest 'Manipulations', {
   lives-ok { diag 'red pix: ' ~ $v.get-red-pixel-details; },
     '.get-red-pixel-details()';
 
-  my Gnome::Gdk3::Screen $s2 .= new(:native-object($v.get-screen-no));
-  lives-ok { diag 'display name: ' ~ $s2.get-display.get-name;},
-    '.get-screen-no()';
+  my Gnome::Gdk3::Screen $s2 .= new(:native-object($v.get-screen));
+  lives-ok { diag 'display name: ' ~ $s2.get-display-rk.get-name;},
+    '.get-screen()';
 
 # TODO Error in Visual; No such symbol 'Gnome::Gdk3::Screen' error
 #  $s2 = $v.get-screen;
