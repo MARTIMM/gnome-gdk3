@@ -313,11 +313,8 @@ method get-screen ( --> Any ) {
     :check('GdkScreen')
   );
 
-  # the native object's name is GdkX11Screen on my system. To get the raku
-  # class name replace 'GdkX11' with 'Gdk3::'. 'Gnome::' is prefixed in the
-  # wrapper method. (Only needed when classes are not provided!)
   self._wrap-native-type-from-no(
-    gdk_visual_get_screen(self.get-native-object-no-reffing), 'GdkX11', 'Gdk3::'
+    gdk_visual_get_screen(self.get-native-object-no-reffing)
   )
 }
 }}
