@@ -106,7 +106,7 @@ be set.
 
 =end pod
 
-#TE:0:GdkModifierType:
+#TE:1:GdkModifierType:
 enum GdkModifierType is export (
   GDK_SHIFT_MASK    => 1 +< 0,
   GDK_LOCK_MASK     => 1 +< 1,
