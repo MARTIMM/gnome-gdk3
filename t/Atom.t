@@ -1,0 +1,202 @@
+use v6;
+use NativeCall;
+use Test;
+
+use Gnome::Gdk3::Atom;
+use Gnome::Gdk3::Window;
+
+#use Gnome::N::X;
+#Gnome::N::debug(:on);
+
+#-------------------------------------------------------------------------------
+my Gnome::Gdk3::Atom $a;
+#-------------------------------------------------------------------------------
+subtest 'ISA test', {
+  $a .= new(:intern<burp>);
+  isa-ok $a, Gnome::Gdk3::Atom, '.new(:intern)';
+}
+
+
+#-------------------------------------------------------------------------------
+# set environment variable 'raku-test-all' if rest must be tested too.
+unless %*ENV<raku_test_all>:exists {
+  done-testing;
+  exit;
+}
+
+#-------------------------------------------------------------------------------
+subtest 'Manipulations', {
+  my Gnome::Gdk3::Window $w .= new;
+  my Gnome::Gdk3::Atom $property .= new(:intern<mimetype>);
+  my Gnome::Gdk3::Atom $type .= new(:intern<string>);
+
+  lives-ok {
+    $a.property-change(
+      $w, $property, $type, 8, GDK_PROP_MODE_REPLACE, 'text/css'
+    );
+
+    $a.property-change(
+      $w, $property, $type, 8, GDK_PROP_MODE_APPEND, 'text/doc'
+    );
+  }, '.property-change()';
+
+  my List $r = $a.property-get( $w, $property, $type, 0, 2);
+
+  # TODO does not seem to set props on a window
+  diag "List: " ~ $r.gist;
+  ok $r[0], '.property-get()';
+
+  lives-ok {
+    $property .= new(:intern<mimetype>);
+    $a.property-delete( $w, $property);
+  }, '.property-delete()';
+
+  lives-ok { $a.utf8-to-string-target('a … ü ñ'); },
+    '.utf8-to-string-target()';
+
+  is $property.name, 'mimetype', '.name()';
+}
+
+#-------------------------------------------------------------------------------
+done-testing;
+
+=finish
+
+#-------------------------------------------------------------------------------
+subtest 'Inherit Gnome::Gdk3::Atom', {
+  class MyClass is Gnome::Gdk3::Atom {
+    method new ( |c ) {
+      self.bless( :GdkAtom, |c);
+    }
+
+    submethod BUILD ( *%options ) {
+
+    }
+  }
+
+  my MyClass $mgc .= new;
+  isa-ok $mgc, Gnome::Gdk3::Atom, '.new()';
+}
+
+#-------------------------------------------------------------------------------
+subtest 'Interface ...', {
+}
+
+#-------------------------------------------------------------------------------
+subtest 'Properties ...', {
+  use Gnome::GObject::Value;
+  use Gnome::GObject::Type;
+
+  #my Gnome::Gdk3::Atom $a .= new;
+
+  sub test-property (
+    $type, Str $prop, Str $routine, $value,
+    Bool :$approx = False, Bool :$is-local = False
+  ) {
+    my Gnome::GObject::Value $gv .= new(:init($type));
+    $a.get-property( $prop, $gv);
+    my $gv-value = $gv."$routine"();
+    if $approx {
+      is-approx $gv-value, $value,
+        "property $prop, value: " ~ $gv-value;
+    }
+
+    # dependency on local settings might result in different values
+    elsif $is-local {
+      if $gv-value ~~ /$value/ {
+        like $gv-value, /$value/, "property $prop, value: " ~ $gv-value;
+      }
+
+      else {
+        ok 1, "property $prop, value: " ~ $gv-value;
+      }
+    }
+
+    else {
+      is $gv-value, $value,
+        "property $prop, value: " ~ $gv-value;
+    }
+    $gv.clear-object;
+  }
+
+  # example calls
+  #test-property( G_TYPE_BOOLEAN, 'homogeneous', 'get-boolean', 0);
+  #test-property( G_TYPE_STRING, 'label', 'get-string', '...');
+  #test-property( G_TYPE_FLOAT, 'xalign', 'get-float', 23e-2, :approx);
+}
+
+#-------------------------------------------------------------------------------
+subtest 'Themes ...', {
+}
+
+#-------------------------------------------------------------------------------
+subtest 'Signals ...', {
+  use Gnome::Gtk3::Main;
+  use Gnome::N::GlibToRakuTypes;
+
+  my Gnome::Gtk3::Main $main .= new;
+
+  class SignalHandlers {
+    has Bool $!signal-processed = False;
+
+    method ... (
+      'any-args',
+      Gnome::Gdk3::Atom :$_widget, gulong :$_handler-id
+      # --> ...
+    ) {
+
+      isa-ok $_widget, Gnome::Gdk3::Atom;
+      $!signal-processed = True;
+    }
+
+    method signal-emitter ( Gnome::Gdk3::Atom :$widget --> Str ) {
+
+      while $main.gtk-events-pending() { $main.iteration-do(False); }
+
+      $widget.emit-by-name(
+        'signal',
+      #  'any-args',
+      #  :return-type(int32),
+      #  :parameters([int32,])
+      );
+      is $!signal-processed, True, '\'...\' signal processed';
+
+      while $main.gtk-events-pending() { $main.iteration-do(False); }
+
+      #$!signal-processed = False;
+      #$widget.emit-by-name(
+      #  'signal',
+      #  'any-args',
+      #  :return-type(int32),
+      #  :parameters([int32,])
+      #);
+      #is $!signal-processed, True, '\'...\' signal processed';
+
+      while $main.gtk-events-pending() { $main.iteration-do(False); }
+      sleep(0.4);
+      $main.gtk-main-quit;
+
+      'done'
+    }
+  }
+
+  my Gnome::Gdk3::Atom $a .= new;
+
+  #my Gnome::Gtk3::Window $w .= new;
+  #$w.add($m);
+
+  my SignalHandlers $sh .= new;
+  $a.register-signal( $sh, 'method', 'signal');
+
+  my Promise $p = $a.start-thread(
+    $sh, 'signal-emitter',
+    # :!new-context,
+    # :start-time(now + 1)
+  );
+
+  is $main.gtk-main-level, 0, "loop level 0";
+  $main.gtk-main;
+  #is $main.gtk-main-level, 0, "loop level is 0 again";
+
+  is $p.result, 'done', 'emitter finished';
+}
