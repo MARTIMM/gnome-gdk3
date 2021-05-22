@@ -254,8 +254,8 @@ sub gdk_property_delete (
 =item Bool $pdelete; if TRUE, delete the property after retrieving the data.
 
 Returned List holds
-=item Bool result; TRUE if data was successfully received and stored in data , otherwise FALSE.
-=item N-GObject $actual_property_type;
+=item Bool result; TRUE if data was successfully received and stored in data, otherwise FALSE.
+=item N-GObject $actual_property_type; actual type
 =item Int $actual_format; the actual format of the data; either 8, 16 or 32 bits
 =item Int $actual_length; Data returned in the 32 bit format is stored in a long variable, so the actual number of 32 bit elements should be be calculated via actual_length / sizeof(glong) to ensure portability to 64 bit systems.
 =item Str $data;
@@ -413,7 +413,7 @@ sub _gdk_atom_intern (
   is symbol('gdk_atom_intern')
   { * }
 
-#`{{ cannot be used!
+#`{{ cannot be used! GC
 #-------------------------------------------------------------------------------
 # TM:0:intern-static-string:
 =begin pod
