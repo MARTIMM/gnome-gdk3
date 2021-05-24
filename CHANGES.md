@@ -1,4 +1,7 @@
 ## Release notes
+* 2021-05-24 0.19.0:
+  * Added modules **Gnome::Gdk3::DragContext** and **Gnome::Gdk3::Atom** for drag and drop support.
+
 * 2021-04-25 0.18.1:
   * Changed  **Gnome::Gdk3::Screen** and **Gnome::Gdk3::Visual** for remarks made in release notes of Gtk3.
 

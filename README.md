@@ -49,16 +49,17 @@ Do not install this package on its own. Instead install `Gnome::Gtk3`.
 Name: **Marcel Timmerman**
 Github account name: **MARTIMM**
 
+
 # Issues
 
 There are always some problems! If you find one, please help by filing an issue at [my Gnome::Gtk3 github project][issues].
+
 
 # Attribution
 * The inventors of Raku, formerly known as Perl 6, of course and the writers of the documentation which helped me out every time again and again.
 * The builders of the GTK+ library and the documentation.
 * Other helpful modules for their insight and use.
 * Icons used from www.iconfinder.com, humility icons, Andy Fitzsimon, licensed GPL.
-
 
 [//]: # (---- [refs] ----------------------------------------------------------)
 [changes]: https://github.com/MARTIMM/gnome-gdk/blob/master/CHANGES.md
