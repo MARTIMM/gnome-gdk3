@@ -83,7 +83,7 @@ Finds or creates an atom corresponding to a given string.
 
   multi method new ( Str :$intern! )
 
-=item Str $atom_name; a string.
+=item Str $intern; a string, the name of the atom.
 
 =begin comment
 =item Bool $only_if_exists; if C<True>, GDK is allowed to not create a new atom, but just return C<GDK-NONE> if the requested atom doesn’t already exists. Currently, the flag is ignored, since checking the existance of an atom is as expensive as creating it.

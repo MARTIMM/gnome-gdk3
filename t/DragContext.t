@@ -9,6 +9,11 @@ use Gnome::Gdk3::DragContext;
 
 #-------------------------------------------------------------------------------
 my Gnome::Gdk3::DragContext $d;
+ok 1, 'Gnome::Gdk3::DragContext loads ok';
+done-testing;
+
+=finish
+
 #-------------------------------------------------------------------------------
 subtest 'ISA test', {
   $d .= new;

@@ -6,7 +6,7 @@ use v6;
 
 =head1 Gnome::Gdk3::Drag
 
-Functions for controlling drag and drop handling
+Functions for controlling lower level drag and drop handling
 
 =comment ![](images/X.png)
 
@@ -14,7 +14,8 @@ Functions for controlling drag and drop handling
 
 These functions provide a low level interface for drag and drop. The X backend of GDK supports both the Xdnd and Motif drag and drop protocols transparently, the Win32 backend supports the WM-DROPFILES protocol.
 
-GTK+ provides a higher level abstraction based on top of these functions, and so they are not normally needed in GTK+ applications. See the [Drag and Drop][gtk3-Drag-and-Drop] section of  * the GTK+ documentation for more information.
+GTK+ provides a higher level abstraction based on top of these functions, and so they are not normally needed in GTK+ applications.
+=comment See the [Drag and Drop][gtk3-Drag-and-Drop] section of the GTK+ documentation for more information.
 
 
 =head1 Synopsis
@@ -24,31 +25,17 @@ GTK+ provides a higher level abstraction based on top of these functions, and so
   also is Gnome::GObject::Object;
 
 
-=comment head2 Uml Diagram
+=head1 See Also
+=item Gnome::Gdk3::Atom
+=item Gnome::Gtk3::DragDest
+=item Gnome::Gtk3::DragSource
+=item Gnome::Gtk3::SelectionData
+=item Gnome::Gtk3::TargetEntry
+=item Gnome::Gtk3::TargetList
+=comment item Gnome::Gtk3::Targets
+=comment item Gnome::Gtk3::TargetTable
 
-=comment ![](plantuml/.svg)
 
-
-=begin comment
-=head2 Inheriting this class
-
-Inheriting is done in a special way in that it needs a call from new() to get the native object created by the class you are inheriting from.
-
-  use Gnome::Gdk3::Drag;
-
-  unit class MyGuiClass;
-  also is Gnome::Gdk3::Drag;
-
-  submethod new ( |c ) {
-    # let the Gnome::Gdk3::Drag class process the options
-    self.bless( :GdkDrag, |c);
-  }
-
-  submethod BUILD ( ... ) {
-    ...
-  }
-
-=end comment
 =comment head2 Example
 
 =end pod
@@ -197,35 +184,43 @@ This function is called by the drag source.
 
 =head3 :native-object
 
-Create a Drag object using a native object from elsewhere. In this particular case import a drag context.
+Create a Drag object using a native object from elsewhere. This is the most used way to initialize this object because you will get the context when a signal arrives and calls a handler for it.
 
   multi method new ( N-GObject :$native-object! )
 
 =head4 Example
 
-An example to get a context and create this object;
+An example of a handler to process the C<drag-motion> event.
 
-  my Gnome::Gtk3::Dnd $dnd-drag .= new;
-  my Gnome::Gdk3::DragContext $dnd-ctx .= new(
-    :native-object(
-      $dnd-drag( $widget, $targets, $actions, $button, $event, $x, $y)
-    )
-  );
+  method motion (
+    N-GObject $context, Int $x, Int $y, UInt $time
+    --> Bool
+  ) {
+    …
+    my Gnome::Gdk3::DragContext $drag-context .= new(
+      :native-object($context)
+    );
+    $drag-context.status( GDK_ACTION_COPY, $time);
+    …
+  }
+
 
 =end pod
 
 #TM:1:new():
+#TM:0:new(:window,:targets)
+#TM:0:new(:window,:targets,:device)
+#TM:0:new(:window,:targets,:device,:x,:y)
 #TM:4:new(:native-object):Gnome::N::TopLevelClassSupport
 submethod BUILD ( *%options ) {
   # prevent creating wrong native-objects
-  if self.^name eq 'Gnome::Gdk3::Drag' #`{{ or %options<GdkDrag> }} {
+  if self.^name eq 'Gnome::Gdk3::DragContext' {
 
     # check if native object is set by a parent class
     if self.is-valid { }
 
     # check if common options are handled by some parent
     elsif %options<native-object>:exists { }
-#    elsif %options<build-id>:exists { }
 
     # process all other options
     else {
@@ -242,7 +237,8 @@ submethod BUILD ( *%options ) {
 
           if %options<x>:exists and %options<y>:exists {
             $no =_gdk_drag_begin_from_point(
-              $no1, $no3, $no2, %options<x>, %options<y>);
+              $no1, $no3, $no2, %options<x>.Int, %options<y>.Int
+            );
           }
 
           else {
@@ -255,7 +251,7 @@ submethod BUILD ( *%options ) {
         }
       }
 
-      #`{{ use this when the module is not made inheritable
+      ##`{{ use this when the module is not made inheritable
       # check if there are unknown options
       elsif %options.elems {
         die X::Gnome.new(
@@ -265,14 +261,14 @@ submethod BUILD ( *%options ) {
           )
         );
       }
-      }}
+      #}}
 
-      #`{{ when there are no defaults use this
+      ##`{{ when there are no defaults use this
       # check if there are any options
       elsif %options.elems == 0 {
         die X::Gnome.new(:message('No options specified ' ~ self.^name));
       }
-      }}
+      #}}
 
       #`{{ when there are defaults use this instead
       # create default object
@@ -298,7 +294,8 @@ Aborts a drag without dropping.
 
 This function is called by the drag source.
 
-This function does not need to be called in managed drag and drop operations. See C<manage-dnd()> for more information.
+This function does not need to be called in managed drag and drop operations.
+=comment See C<manage-dnd()> for more information.
 
   method abort ( UInt $time )
 
@@ -350,6 +347,9 @@ sub _gdk_drag_begin (
 =begin pod
 =head2 begin-for-device
 
+Starts a drag and creates a new drag context for it.
+
+This function is called by the drag source.
 
 
   method begin-for-device ( N-GObject $window, N-GObject $device, N-GList $targets --> N-GObject )
@@ -382,7 +382,9 @@ sub _gdk_drag_begin_for_device (
 =begin pod
 =head2 begin-from-point
 
+Starts a drag and creates a new drag context for it.
 
+This function is called by the drag source.
 
   method begin-from-point ( N-GObject $window, N-GObject $device, N-GList $targets, Int() $x_root, Int() $y_root --> N-GObject )
 
@@ -603,7 +605,7 @@ sub gdk_drag_context_get_suggested_action (
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:list-targets:
+#TM:4:list-targets:gnome-gtk3/xt/dnd-source-targets-view.raku
 =begin pod
 =head2 list-targets
 
@@ -705,7 +707,6 @@ Sets the position of the drag window that will be kept under the cursor hotspot.
 =end pod
 
 method set-hotspot ( Int() $hot_x, Int() $hot_y ) {
-
   gdk_drag_context_set_hotspot(
     self.get-native-object-no-reffing, $hot_x, $hot_y
   );
@@ -725,7 +726,8 @@ Drops on the current destination.
 
 This function is called by the drag source.
 
-This function does not need to be called in managed drag and drop operations. See C<manage-dnd()> for more information.
+This function does not need to be called in managed drag and drop operations.
+=comment See C<manage-dnd()> for more information.
 
   method drop ( UInt $time )
 
@@ -747,7 +749,7 @@ sub gdk_drag_drop (
 =begin pod
 =head2 drop-done
 
-Inform GDK if the drop ended successfully. Passing C<False> for I<success> may trigger a drag cancellation animation.
+Inform GDK if the drop ended successfully. Passing C<False> for I<$success> may trigger a drag cancellation animation.
 
 This function is called by the drag source, and should be the last call before dropping the reference to the I<context>.
 
@@ -917,7 +919,8 @@ Updates the drag context when the pointer moves or the set of actions changes.
 
 This function is called by the drag source.
 
-This function does not need to be called in managed drag and drop operations. See C<manage-dnd()> for more information.
+This function does not need to be called in managed drag and drop operations.
+=comment See C<manage-dnd()> for more information.
 
 Returns:
 
