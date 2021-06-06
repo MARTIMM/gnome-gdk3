@@ -108,18 +108,14 @@ submethod BUILD ( *%options ) {
 
     # check if common options are handled by some parent
     elsif %options<native-object>:exists { }
-    #elsif %options<build-id>:exists { }
 
     # process all other options
     else {
       my $no;
       if ? %options<intern> {
-        #$no = %options<intern>;
-        #$no .= get-native-object-no-reffing unless $no ~~ N-GObject;
         $no = _gdk_atom_intern( %options<intern>, False);
       }
 
-      #`{{ use this when the module is not made inheritable
       # check if there are unknown options
       elsif %options.elems {
         die X::Gnome.new(
@@ -129,27 +125,17 @@ submethod BUILD ( *%options ) {
           )
         );
       }
-      }}
 
-      #`{{ when there are no defaults use this
       # check if there are any options
       elsif %options.elems == 0 {
         die X::Gnome.new(:message('No options specified ' ~ self.^name));
       }
-      }}
-
-      #`{{ when there are defaults use this instead
-      # create default object
-      else {
-        $no = _gdk_atom_new();
-      }
-      }}
 
       self.set-native-object($no);
     }
 
     # only after creating the native-object, the gtype is known
-    self.set-class-info('N-GObject');
+    self.set-class-info('GdkAtom');
   }
 }
 
