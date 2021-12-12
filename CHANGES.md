@@ -1,4 +1,7 @@
 ## Release notes
+* 2021-12-12 0.19.1:
+  * Changes for renamed methods in **Gnome::N::TopLevelClassSupport**.
+
 * 2021-05-24 0.19.0:
   * Added modules **Gnome::Gdk3::DragContext** and **Gnome::Gdk3::Atom** for drag and drop support.
 
