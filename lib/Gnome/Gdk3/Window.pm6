@@ -627,7 +627,7 @@ submethod BUILD ( *%options ) {
     }
 
     # only after creating the native-object, the gtype is known
-    self.set-class-info('GdkWindow');
+    self._set-class-info('GdkWindow');
   }
 }
 
@@ -640,7 +640,7 @@ method _fallback ( $native-sub is copy --> Callable ) {
   try { $s = &::("gdk_$native-sub"); } unless ?$s;
   try { $s = &::($native-sub); } if !$s and $native-sub ~~ m/^ 'gdk_' /;
 
-  self.set-class-name-of-sub('GdkWindow');
+  self._set-class-name-of-sub('GdkWindow');
   $s = callsame unless ?$s;
 
   $s;
