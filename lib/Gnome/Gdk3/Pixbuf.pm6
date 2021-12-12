@@ -25,8 +25,8 @@ You can also copy an existing pixbuf with the C<gdk_pixbuf_copy()> function.  Th
 =head2 Implemented Interfaces
 
 Gnome::Gdk3::Pixbuf implements
-=comment ?? item Gnome::Gio::GIcon
-=comment ?? item Gnome::Gio::GLoadableIcon
+=comment ?? item Gnome::Gio::Icon
+=comment ?? item Gnome::Gio::LoadableIcon
 
 
 =comment head2 See Also
@@ -40,8 +40,13 @@ Gnome::Gdk3::Pixbuf implements
   unit class Gnome::Gdk3::Pixbuf;
   also is Gnome::GObject::Object;
 
-=comment  ?? also does Gnome::GIcon;
-=comment  ?? also does Gnome::GLoadableIcon;
+=comment  ?? also does Gnome::Gio::Icon;
+=comment  ?? also does Gnome::Gio::LoadableIcon;
+
+
+=head2 Uml Diagram
+
+![](plantuml/Pixbuf.svg)
 
 
 =comment head2 Example
@@ -60,11 +65,16 @@ use Gnome::Glib::Error;
 
 use Gnome::Cairo::Types;
 
+#use Gnome::Gio::Icon;
+#use Gnome::Gio::LoadableIcon;
+
 #-------------------------------------------------------------------------------
 # /usr/include/gtk-3.0/gtk/INCLUDE
 # https://developer.gnome.org/WWW
-unit class Gnome::Gdk3::Pixbuf:auth<github:MARTIMM>;
+unit class Gnome::Gdk3::Pixbuf:auth<github:MARTIMM>:ver<0.2.0>;
 also is Gnome::GObject::Object;
+#also does Gnome::Gio::Icon;
+#also does Gnome::Gio::LoadableIcon;
 
 #-------------------------------------------------------------------------------
 =begin pod
@@ -360,7 +370,7 @@ submethod BUILD ( *%options is copy ) {
     }
 
     # only after creating the native-object, the gtype is known
-    self.set-class-info('GdkPixbuf');
+    self._set-class-info('GdkPixbuf');
   }
 }
 
@@ -373,7 +383,7 @@ method _fallback ( $native-sub is copy --> Callable ) {
   try { $s = &::("gdk_$native-sub"); } unless ?$s;
   try { $s = &::($native-sub); } if !$s and $native-sub ~~ m/^ 'gdk_' /;
 
-  self.set-class-name-of-sub('GdkPixbuf');
+  self._set-class-name-of-sub('GdkPixbuf');
   $s = callsame unless ?$s;
 
   $s;
