@@ -772,8 +772,8 @@ Describes a key press or key release event.
 =item N-GObject $.window: the window which received the event.
 =item Int $.send_event: C<1> if the event was sent explicitly.
 =item UInt $.time: the time of the event in milliseconds.
-=item UInt $.state: (type C<Gnome::Gdk3::ModifierType>): a bit-mask representing the state of the modifier keys (e.g. Control, Shift and Alt) and the pointer buttons. See C<Gnome::Gdk3::ModifierType>.
-=item UInt $.keyval: the key that was pressed or released. See the `gdk/gdkkeysyms.h` header file for a complete list of GDK key codes.
+=item UInt $.state: (type C<GdkModifierType>): a bit-mask representing the state of the modifier keys (e.g. Control, Shift and Alt) and the pointer buttons. See C<GdkModifierType>.
+=item UInt $.keyval: the key that was pressed or released. See the B<Gnome::Gdk3::Keysyms> class for a complete list of GDK key codes.
 =item Int $.length: the length of I<string>.
 =item Str $.string: a string containing an approximation of the text that would result from this keypress. The only correct way to handle text input of text is using input methods (see C<Gnome::Gtk3::IMContext>), so this field is deprecated and should never be used. (C<gdk_unicode_to_keyval()> provides a non-deprecated way of getting an approximate translation for a key.) The string is encoded in the encoding of the current locale (Note: this for backwards compatibility: strings in GTK+ and GDK are typically in UTF-8.) and NUL-terminated. In some cases, the translation of the key code will be a single NUL byte, in which case looking at I<length> is necessary to distinguish it from the an empty translation.
 =item UInt $.hardware_keycode: the raw code of the key that was pressed or released.
@@ -1438,7 +1438,7 @@ submethod BUILD ( *%options ) {
 
   # process all named arguments
   if ? %options<event-name> {
-    self.set-native-object(gdk_events_new(%options<event-name>));
+    self._set-native-object(gdk_events_new(%options<event-name>));
   }
 
   elsif ? %options<native-object> || ? %options<widget> || %options<build-id> {
