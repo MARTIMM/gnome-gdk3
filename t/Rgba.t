@@ -17,7 +17,7 @@ subtest 'ISA test', {
   isa-ok $r, Gnome::Gdk3::RGBA, '.new(:red,...)';
   ok $r.is-valid, 'r,g,b,a is valid';
 
-  my Gnome::Gdk3::RGBA $c1 .= new(:native-object($r.get-native-object));
+  my Gnome::Gdk3::RGBA $c1 .= new(:native-object($r._get-native-object));
   isa-ok $c1, Gnome::Gdk3::RGBA, '.new(:native-object(N-GdkRGBA))';
   is $c1.to-string, 'rgba(128,128,128,0.5)', 'compare string ok';
   ok $r.is-valid, 'rgba is valid';

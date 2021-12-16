@@ -131,7 +131,7 @@ submethod BUILD ( *%options ) {
         die X::Gnome.new(:message('No options specified ' ~ self.^name));
       }
 
-      self.set-native-object($no);
+      self._set-native-object($no);
     }
 
     # only after creating the native-object, the gtype is known
@@ -177,9 +177,9 @@ method property-change (
   Int() $format where * ~~ any( 8, 16, 32), GdkPropMode $mode,
   Str $data
 ) {
-  $window .= get-native-object-no-reffing unless $window ~~ N-GObject;
-  $property .= get-native-object-no-reffing unless $property ~~ N-GObject;
-  $type .= get-native-object-no-reffing unless $type ~~ N-GObject;
+  $window .= _get-native-object-no-reffing unless $window ~~ N-GObject;
+  $property .= _get-native-object-no-reffing unless $property ~~ N-GObject;
+  $type .= _get-native-object-no-reffing unless $type ~~ N-GObject;
 
   my $str-item = CArray[uint8].new($data.encode);
   $str-item[$data.encode.elems] = 0;
@@ -210,8 +210,8 @@ Deletes a property from a window.
 =end pod
 
 method property-delete ( $window is copy, $property is copy ) {
-  $window .= get-native-object-no-reffing unless $window ~~ N-GObject;
-  $property .= get-native-object-no-reffing unless $property ~~ N-GObject;
+  $window .= _get-native-object-no-reffing unless $window ~~ N-GObject;
+  $property .= _get-native-object-no-reffing unless $property ~~ N-GObject;
 
   gdk_property_delete( $window, $property);
 }
@@ -252,9 +252,9 @@ method property-get (
   UInt $length, Bool $pdelete = False
   --> List
 ) {
-  $window .= get-native-object-no-reffing unless $window ~~ N-GObject;
-  $property .= get-native-object-no-reffing unless $property ~~ N-GObject;
-  $type .= get-native-object-no-reffing unless $type ~~ N-GObject;
+  $window .= _get-native-object-no-reffing unless $window ~~ N-GObject;
+  $property .= _get-native-object-no-reffing unless $property ~~ N-GObject;
+  $type .= _get-native-object-no-reffing unless $type ~~ N-GObject;
 
   my N-GObject $apt;
   my CArray[uint8] $d;
@@ -316,8 +316,8 @@ method gdk-text-property-to-utf8-list-for-display (
 #  Int() $length
   --> List
 ) {
-  $display .= get-native-object-no-reffing unless $display ~~ N-GObject;
-  $encoding .= get-native-object-no-reffing unless $encoding ~~ N-GObject;
+  $display .= _get-native-object-no-reffing unless $display ~~ N-GObject;
+  $encoding .= _get-native-object-no-reffing unless $encoding ~~ N-GObject;
   my $s = CArray[Str].new($text);
 
   gdk_text_property_to_utf8_list_for_display(
@@ -443,7 +443,7 @@ Returns: a newly-allocated string containing the string corresponding to I<atom>
 =end pod
 
 method name ( --> Str ) {
-  gdk_atom_name(self.get-native-object-no-reffing)
+  gdk_atom_name(self._get-native-object-no-reffing)
 }
 
 sub gdk_atom_name (

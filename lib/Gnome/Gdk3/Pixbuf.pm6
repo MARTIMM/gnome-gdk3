@@ -344,14 +344,14 @@ submethod BUILD ( *%options is copy ) {
           '.new(:pixbuf)', '.new(:native-object)', '0.15.5', '0.18.0'
         );
         $no = %options<pixbuf>;
-        $no .= get-native-object-no-reffing
-          if $no.^can('get-native-object-no-reffing');
+        $no .= _get-native-object-no-reffing
+          if $no.^can('_get-native-object-no-reffing');
       }
 
       elsif ? %options<surface> {
         $no = %options<surface>;
-        $no .= get-native-object-no-reffing
-          if $no.^can('get-native-object-no-reffing');
+        $no .= _get-native-object-no-reffing
+          if $no.^can('_get-native-object-no-reffing');
 
         my @clipto = map { ($_//0).Int }, %options<clipto>[^4];
         $no = _gdk_pixbuf_get_from_surface( $no, |@clipto);
@@ -359,14 +359,14 @@ submethod BUILD ( *%options is copy ) {
 
       elsif ? %options<window> {
         $no = %options<window>;
-        $no .= get-native-object-no-reffing
-          if $no.^can('get-native-object-no-reffing');
+        $no .= _get-native-object-no-reffing
+          if $no.^can('_get-native-object-no-reffing');
 
         my @clipto = map { ($_//0).Int }, %options<clipto>[^4];
         $no = _gdk_pixbuf_get_from_window( $no, |@clipto);
       }
 
-      self.set-native-object($no);
+      self._set-native-object($no);
     }
 
     # only after creating the native-object, the gtype is known

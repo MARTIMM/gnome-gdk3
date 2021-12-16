@@ -229,13 +229,13 @@ submethod BUILD ( *%options ) {
       my $no;
       if ? %options<window> and %options<targets>:exists {
         my $no1 = %options<window>;
-        $no1 .= get-native-object-no-reffing unless $no1 ~~ N-GObject;
+        $no1 .= _get-native-object-no-reffing unless $no1 ~~ N-GObject;
         my $no2 = %options<targets>;
-        $no2 .= get-native-object-no-reffing unless $no2 ~~ N-GList;
+        $no2 .= _get-native-object-no-reffing unless $no2 ~~ N-GList;
 
         if ? %options<device> {
           my $no3 = %options<device>;
-          $no3 .= get-native-object-no-reffing unless $no3 ~~ N-GObject;
+          $no3 .= _get-native-object-no-reffing unless $no3 ~~ N-GObject;
 
           if %options<x>:exists and %options<y>:exists {
             $no =_gdk_drag_begin_from_point(
@@ -279,7 +279,7 @@ submethod BUILD ( *%options ) {
       }
       }}
 
-      self.set-native-object($no);
+      self._set-native-object($no);
     }
 
     # only after creating the native-object, the gtype is known
@@ -305,7 +305,7 @@ This function does not need to be called in managed drag and drop operations.
 =end pod
 
 method abort ( UInt $time ) {
-  gdk_drag_abort( self.get-native-object-no-reffing, $time);
+  gdk_drag_abort( self._get-native-object-no-reffing, $time);
 }
 
 sub gdk_drag_abort (
@@ -330,8 +330,8 @@ This function is called by the drag source.
 =end pod
 
 method begin ( $window is copy, $targets is copy --> N-GObject ) {
-  $window .= get-native-object-no-reffing unless $window ~~ N-GObject;
-  $targets .= get-native-object-no-reffing unless $targets ~~ N-GList;
+  $window .= _get-native-object-no-reffing unless $window ~~ N-GObject;
+  $targets .= _get-native-object-no-reffing unless $targets ~~ N-GList;
 
   gdk_drag_begin( $window, $targets)
 }
@@ -362,12 +362,12 @@ This function is called by the drag source.
 =end pod
 
 method begin-for-device ( $window is copy, $device is copy, $targets is copy --> N-GObject ) {
-  $window .= get-native-object-no-reffing unless $window ~~ N-GObject;
-  $device .= get-native-object-no-reffing unless $device ~~ N-GObject;
-  $targets .= get-native-object-no-reffing unless $targets ~~ N-GList;
+  $window .= _get-native-object-no-reffing unless $window ~~ N-GObject;
+  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
+  $targets .= _get-native-object-no-reffing unless $targets ~~ N-GList;
 
   gdk_drag_begin_for_device(
-    self.get-native-object-no-reffing, $window, $device, $targets
+    self._get-native-object-no-reffing, $window, $device, $targets
   )
 }
 }}
@@ -398,12 +398,12 @@ This function is called by the drag source.
 =end pod
 
 method begin-from-point ( $window is copy, $device is copy, $targets is copy, Int() $x_root, Int() $y_root --> N-GObject ) {
-  $window .= get-native-object-no-reffing unless $window ~~ N-GObject;
-  $device .= get-native-object-no-reffing unless $device ~~ N-GObject;
-  $targets .= get-native-object-no-reffing unless $targets ~~ N-GList;
+  $window .= _get-native-object-no-reffing unless $window ~~ N-GObject;
+  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
+  $targets .= _get-native-object-no-reffing unless $targets ~~ N-GList;
 
   gdk_drag_begin_from_point(
-    self.get-native-object-no-reffing, $window, $device, $targets, $x_root, $y_root
+    self._get-native-object-no-reffing, $window, $device, $targets, $x_root, $y_root
   )
 }
 }}
@@ -428,7 +428,7 @@ Returns: the C<GdkDragAction> flags
 =end pod
 
 method get-actions ( --> Int ) {
-  gdk_drag_context_get_actions(self.get-native-object-no-reffing)
+  gdk_drag_context_get_actions(self._get-native-object-no-reffing)
 }
 
 sub gdk_drag_context_get_actions (
@@ -450,7 +450,7 @@ Returns the destination window for the DND operation, a B<Gnome::Gdk3::Window>
 method get-dest-window ( --> N-GObject ) {
   Gnome::Gdk3::Window.new(
     :native-object(
-      gdk_drag_context_get_dest_window(self.get-native-object-no-reffing)
+      gdk_drag_context_get_dest_window(self._get-native-object-no-reffing)
     )
   )
 }
@@ -474,7 +474,7 @@ Returns the B<Gnome::Gdk3::Device> associated to the drag context.
 method get-device ( --> Gnome::Gdk3::Device ) {
   Gnome::Gdk3::Device.new(
     :native-object(
-      gdk_drag_context_get_device(self.get-native-object-no-reffing)
+      gdk_drag_context_get_device(self._get-native-object-no-reffing)
     )
   )
 }
@@ -500,7 +500,7 @@ Returns: the drag window, or C<undefined>
 method get-drag-window ( --> Gnome::Gdk3::Window ) {
   Gnome::Gdk3::Window.new(
     :native-object(
-      gdk_drag_context_get_drag_window(self.get-native-object-no-reffing)
+      gdk_drag_context_get_drag_window(self._get-native-object-no-reffing)
     )
   )
 }
@@ -525,7 +525,7 @@ Returns: the drag protocol
 
 method get-protocol ( --> GdkDragProtocol ) {
   GdkDragProtocol(
-    gdk_drag_context_get_protocol(self.get-native-object-no-reffing)
+    gdk_drag_context_get_protocol(self._get-native-object-no-reffing)
   )
 }
 
@@ -549,7 +549,7 @@ Returns: a C<GdkDragAction> enum value.
 
 method get-selected-action ( --> GdkDragAction ) {
   GdkDragAction(
-    gdk_drag_context_get_selected_action(self.get-native-object-no-reffing)
+    gdk_drag_context_get_selected_action(self._get-native-object-no-reffing)
   )
 }
 
@@ -572,7 +572,7 @@ Returns the B<Gnome::Gdk3::Window> where the DND operation started.
 method get-source-window ( --> Gnome::Gdk3::Window ) {
   Gnome::Gdk3::Window.new(
     :native-object(
-      gdk_drag_context_get_source_window(self.get-native-object-no-reffing)
+      gdk_drag_context_get_source_window(self._get-native-object-no-reffing)
     )
   )
 }
@@ -597,7 +597,7 @@ Returns: a C<GdkDragAction> value
 
 method get-suggested-action ( --> GdkDragAction ) {
   GdkDragAction(
-    gdk_drag_context_get_suggested_action(self.get-native-object-no-reffing)
+    gdk_drag_context_get_suggested_action(self._get-native-object-no-reffing)
   )
 }
 
@@ -622,7 +622,7 @@ Returns: (element-type Gnome::Gdk3::Atom): a B<Gnome::Glib::List> of targets
 method list-targets ( --> Gnome::Glib::List ) {
   Gnome::Glib::List.new(
     :native-object(
-      gdk_drag_context_list_targets(self.get-native-object-no-reffing)
+      gdk_drag_context_list_targets(self._get-native-object-no-reffing)
     )
   )
 }
@@ -657,10 +657,10 @@ Returns: B<TRUE> if the drag and drop operation is managed.
 method manage-dnd (
   $ipc_window is copy, GdkDragAction $actions --> Bool
 ) {
-  $ipc_window .= get-native-object-no-reffing unless $ipc_window ~~ N-GObject;
+  $ipc_window .= _get-native-object-no-reffing unless $ipc_window ~~ N-GObject;
 
   gdk_drag_context_manage_dnd(
-    self.get-native-object-no-reffing, $ipc_window, $actions
+    self._get-native-object-no-reffing, $ipc_window, $actions
   ).Bool
 }
 
@@ -683,10 +683,10 @@ Associates a B<Gnome::Gdk3::Device> to I<context>, so all Drag and Drop events f
 =end pod
 
 method set-device ( $device is copy ) {
-  $device .= get-native-object-no-reffing unless $device ~~ N-GObject;
+  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
 
   gdk_drag_context_set_device(
-    self.get-native-object-no-reffing, $device
+    self._get-native-object-no-reffing, $device
   );
 }
 
@@ -710,7 +710,7 @@ Sets the position of the drag window that will be kept under the cursor hotspot.
 
 method set-hotspot ( Int() $hot_x, Int() $hot_y ) {
   gdk_drag_context_set_hotspot(
-    self.get-native-object-no-reffing, $hot_x, $hot_y
+    self._get-native-object-no-reffing, $hot_x, $hot_y
   );
 }
 
@@ -737,7 +737,7 @@ This function does not need to be called in managed drag and drop operations.
 =end pod
 
 method drop ( UInt $time ) {
-  gdk_drag_drop( self.get-native-object-no-reffing, $time
+  gdk_drag_drop( self._get-native-object-no-reffing, $time
   );
 }
 
@@ -764,7 +764,7 @@ The B<Gnome::Gdk3::DragContext> will only take the first C<drop-done()> call as 
 
 method drop-done ( Bool $success ) {
   gdk_drag_drop_done(
-    self.get-native-object-no-reffing, $success
+    self._get-native-object-no-reffing, $success
   );
 }
 
@@ -787,7 +787,7 @@ Returns: C<True> if the drop was successful.
 =end pod
 
 method drop-succeeded ( --> Bool ) {
-  gdk_drag_drop_succeeded(self.get-native-object-no-reffing).Bool
+  gdk_drag_drop_succeeded(self._get-native-object-no-reffing).Bool
 }
 
 sub gdk_drag_drop_succeeded (
@@ -819,12 +819,12 @@ This function is called by the drag source to obtain the I<dest-window> and I<pr
 =end pod
 
 method find-window-for-screen ( $drag_window is copy, $screen is copy, Int() $x_root, Int() $y_root, $dest_window is copy, GdkDragProtocol $protocol ) {
-  $drag_window .= get-native-object-no-reffing unless $drag_window ~~ N-GObject;
-  $screen .= get-native-object-no-reffing unless $screen ~~ N-GObject;
-  $dest_window .= get-native-object-no-reffing unless $dest_window ~~ N-GObject;
+  $drag_window .= _get-native-object-no-reffing unless $drag_window ~~ N-GObject;
+  $screen .= _get-native-object-no-reffing unless $screen ~~ N-GObject;
+  $dest_window .= _get-native-object-no-reffing unless $dest_window ~~ N-GObject;
 
   gdk_drag_find_window_for_screen(
-    self.get-native-object-no-reffing, $drag_window, $screen, $x_root, $y_root, $dest_window, $protocol
+    self._get-native-object-no-reffing, $drag_window, $screen, $x_root, $y_root, $dest_window, $protocol
   );
 }
 
@@ -851,7 +851,7 @@ This function is called by the drag destination.
 method gdk-drop-finish ( Bool $success, UInt $time ) {
 
   gdk_drop_finish(
-    self.get-native-object-no-reffing, $success, $time
+    self._get-native-object-no-reffing, $success, $time
   );
 }
 
@@ -877,7 +877,7 @@ This function is called by the drag destination in response to a drop initiated 
 
 method gdk-drop-reply ( Bool $accepted, UInt $time ) {
   gdk_drop_reply(
-    self.get-native-object-no-reffing, $accepted, $time
+    self._get-native-object-no-reffing, $accepted, $time
   );
 }
 
@@ -902,7 +902,7 @@ Returns: the selection atom, or C<GDK-NONE>
 method get-selection ( --> Gnome::Gdk3::Atom ) {
   Gnome::Gdk3::Atom.new(
     :native-object(
-      gdk_drag_get_selection(self.get-native-object-no-reffing)
+      gdk_drag_get_selection(self._get-native-object-no-reffing)
     )
   )
 }
@@ -947,10 +947,10 @@ method motion (
   Int() $y_root, GFlag $suggested_action, GdkDragAction $possible_actions,
   UInt $time
   --> Bool ) {
-  $dest_window .= get-native-object-no-reffing unless $dest_window ~~ N-GObject;
+  $dest_window .= _get-native-object-no-reffing unless $dest_window ~~ N-GObject;
 
   gdk_drag_motion(
-    self.get-native-object-no-reffing, $dest_window, $protocol,
+    self._get-native-object-no-reffing, $dest_window, $protocol,
     $x_root, $y_root, $suggested_action, $possible_actions, $time
   ).Bool
 }
@@ -976,7 +976,7 @@ This function is called by the drag destination in response to C<motion()> calle
 =end pod
 
 method status ( GdkDragAction $action, UInt $time ) {
-  gdk_drag_status( self.get-native-object-no-reffing, $action, $time);
+  gdk_drag_status( self._get-native-object-no-reffing, $action, $time);
 }
 
 sub gdk_drag_status (

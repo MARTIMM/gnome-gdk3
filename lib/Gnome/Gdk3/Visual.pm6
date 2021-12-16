@@ -137,7 +137,7 @@ submethod BUILD ( *%options ) {
       my $no;
       if ? %options<___x___> {
         #$no = %options<___x___>;
-        #$no .= get-native-object-no-reffing unless $no ~~ N-GObject;
+        #$no .= _get-native-object-no-reffing unless $no ~~ N-GObject;
         #$no = _gdk_visual_new___x___($no);
       }
 
@@ -167,7 +167,7 @@ submethod BUILD ( *%options ) {
       }
       }}
 
-      self.set-native-object($no);
+      self._set-native-object($no);
     }
 
     # only after creating the native-object, the gtype is known
@@ -192,7 +192,7 @@ List returns the following;
 
 method get-blue-pixel-details ( --> List ) {
   gdk_visual_get_blue_pixel_details(
-    self.get-native-object-no-reffing,
+    self._get-native-object-no-reffing,
     my guint32 $mask, my gint $shift, my gint $precision
   );
 
@@ -217,7 +217,7 @@ Returns the bit depth of this visual.
 =end pod
 
 method get-depth ( --> Int ) {
-  gdk_visual_get_depth(self.get-native-object-no-reffing)
+  gdk_visual_get_depth(self._get-native-object-no-reffing)
 }
 
 sub gdk_visual_get_depth (
@@ -242,7 +242,7 @@ List returns the following;
 
 method get-green-pixel-details ( --> List  ) {
   gdk_visual_get_green_pixel_details(
-    self.get-native-object-no-reffing,
+    self._get-native-object-no-reffing,
     my guint32 $mask, my gint $shift, my gint $precision
   );
 
@@ -271,7 +271,7 @@ List returns the following;
 
 method get-red-pixel-details ( --> List ) {
   gdk_visual_get_red_pixel_details(
-    self.get-native-object-no-reffing,
+    self._get-native-object-no-reffing,
     my guint $mask, my gint $shift, my gint $precision
   );
 
@@ -301,7 +301,7 @@ Gets the screen to which this visual belongs
 method get-screen-rk ( --> Any ) {
   self._wrap-native-type(
     'Gnome::Gdk3::Screen',
-    gdk_visual_get_screen(self.get-native-object-no-reffing)
+    gdk_visual_get_screen(self._get-native-object-no-reffing)
   )
 }
 
@@ -309,18 +309,18 @@ method get-screen-rk ( --> Any ) {
 #`{{
 method get-screen ( --> Any ) {
   note self._get_no_type_info(
-    gdk_visual_get_screen(self.get-native-object-no-reffing),
+    gdk_visual_get_screen(self._get-native-object-no-reffing),
     :check('GdkScreen')
   );
 
   self._wrap-native-type-from-no(
-    gdk_visual_get_screen(self.get-native-object-no-reffing)
+    gdk_visual_get_screen(self._get-native-object-no-reffing)
   )
 }
 }}
 
 method get-screen ( --> N-GObject ) {
-  gdk_visual_get_screen(self.get-native-object-no-reffing)
+  gdk_visual_get_screen(self._get-native-object-no-reffing)
 }
 
 sub gdk_visual_get_screen (
@@ -342,7 +342,7 @@ Returns: A B<Gnome::Gdk3::VisualType> stating the type of I<visual>.
 =end pod
 
 method get-visual-type ( --> GdkVisualType ) {
-  GdkVisualType(gdk_visual_get_visual_type(self.get-native-object-no-reffing))
+  GdkVisualType(gdk_visual_get_visual_type(self._get-native-object-no-reffing))
 }
 
 sub gdk_visual_get_visual_type (

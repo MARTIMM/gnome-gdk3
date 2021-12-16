@@ -93,11 +93,11 @@ submethod BUILD ( *%options ) {
 
   if ? %options<default> {
     Gnome::N::deprecate( '.new(:default)', '.new()', '0.15.1', '0.18.0');
-    self.set-native-object(gdk_display_get_default()).defined;
+    self._set-native-object(gdk_display_get_default()).defined;
   }
 
   elsif ? %options<open> {
-    self.set-native-object(gdk_display_open(%options<display-name>));
+    self._set-native-object(gdk_display_open(%options<display-name>));
   }
 
   elsif ? %options<native-object> || ? %options<widget> {
@@ -114,7 +114,7 @@ submethod BUILD ( *%options ) {
 
   # replacement for :default option
   else {
-    self.set-native-object(gdk_display_get_default()).defined;
+    self._set-native-object(gdk_display_get_default()).defined;
   }
 
   # only after creating the native-object, the gtype is known

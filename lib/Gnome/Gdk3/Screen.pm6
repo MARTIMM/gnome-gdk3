@@ -112,7 +112,7 @@ submethod BUILD ( *%options ) {
         $no = _gdk_screen_get_default();
       }
 
-      self.set-native-object($no);
+      self._set-native-object($no);
     }
 
     # only after creating the native-object, the gtype is known
@@ -152,12 +152,12 @@ Returns: the display to which I<screen> belongs
 method get-display-rk ( --> Any ) {
   self._wrap-native-type(
     'Gnome::Gdk3::Display',
-    gdk_screen_get_display(self.get-native-object-no-reffing)
+    gdk_screen_get_display(self._get-native-object-no-reffing)
   )
 }
 
 method get-display ( --> N-GObject ) {
-  gdk_screen_get_display(self.get-native-object-no-reffing)
+  gdk_screen_get_display(self._get-native-object-no-reffing)
 }
 
 sub gdk_screen_get_display (
@@ -179,7 +179,7 @@ Returns: the current font options, or C<undefined> if no default font options ha
 =end pod
 
 method get-font-options ( --> cairo_font_options_t ) {
-  gdk_screen_get_font_options(self.get-native-object-no-reffing)
+  gdk_screen_get_font_options(self._get-native-object-no-reffing)
 }
 
 sub gdk_screen_get_font_options (
@@ -201,7 +201,7 @@ Returns: the current resolution, or -1 if no resolution has been set.
 =end pod
 
 method get-resolution ( --> Num ) {
-  gdk_screen_get_resolution(self.get-native-object-no-reffing)
+  gdk_screen_get_resolution(self._get-native-object-no-reffing)
 }
 
 sub gdk_screen_get_resolution (
@@ -230,12 +230,12 @@ Returns: a visual to use for windows with an alpha channel or C<undefined> if th
 method get-rgba-visual-rk ( --> Any ) {
   self._wrap-native-type(
     'Gnome::Gdk3::Visual',
-    gdk_screen_get_rgba_visual(self.get-native-object-no-reffing)
+    gdk_screen_get_rgba_visual(self._get-native-object-no-reffing)
   )
 }
 
 method get-rgba-visual ( --> N-GObject ) {
-  gdk_screen_get_rgba_visual(self.get-native-object-no-reffing)
+  gdk_screen_get_rgba_visual(self._get-native-object-no-reffing)
 }
 
 sub gdk_screen_get_rgba_visual (
@@ -260,12 +260,12 @@ Returns: the root window
 method get-root-window-rk ( --> Any ) {
   self._wrap-native-type(
     'Gnome::Gdk3::Window',
-    gdk_screen_get_root_window(self.get-native-object-no-reffing)
+    gdk_screen_get_root_window(self._get-native-object-no-reffing)
   )
 }
 
 method get-root-window ( --> N-GObject ) {
-  gdk_screen_get_root_window(self.get-native-object-no-reffing)
+  gdk_screen_get_root_window(self._get-native-object-no-reffing)
 }
 
 sub gdk_screen_get_root_window (
@@ -292,10 +292,10 @@ Returns: C<True> if the setting existed and a value was stored in I<value>, C<Fa
 =end pod
 
 method get-setting ( Str $name, $value is copy --> Bool ) {
-  $value .= get-native-object-no-reffing unless $value ~~ N-GObject;
+  $value .= _get-native-object-no-reffing unless $value ~~ N-GObject;
 
   gdk_screen_get_setting(
-    self.get-native-object-no-reffing, $name, $value
+    self._get-native-object-no-reffing, $name, $value
   ).Bool
 }
 
@@ -322,12 +322,12 @@ Returns: the system visual
 method get-system-visual-rk ( --> Any ) {
   self._wrap-native-type(
     'Gnome::Gdk3::Visual',
-    gdk_screen_get_system_visual(self.get-native-object-no-reffing)
+    gdk_screen_get_system_visual(self._get-native-object-no-reffing)
   )
 }
 
 method get-system-visual ( --> N-GObject ) {
-  gdk_screen_get_system_visual(self.get-native-object-no-reffing)
+  gdk_screen_get_system_visual(self._get-native-object-no-reffing)
 }
 
 sub gdk_screen_get_system_visual (
@@ -348,13 +348,13 @@ sub gdk_screen_get_system_visual (
 method get-toplevel-windows-rk ( --> Gnome::Glib::List ) {
   Gnome::Glib::List.new(
     :native-object(
-      gdk_screen_get_toplevel_windows(self.get-native-object-no-reffing)
+      gdk_screen_get_toplevel_windows(self._get-native-object-no-reffing)
     )
   )
 }
 
 method get-toplevel-windows ( --> N-GList ) {
-  gdk_screen_get_toplevel_windows(self.get-native-object-no-reffing)
+  gdk_screen_get_toplevel_windows(self._get-native-object-no-reffing)
 }
 
 sub gdk_screen_get_toplevel_windows (
@@ -385,13 +385,13 @@ Returns:   (element-type GdkWindow): a list of B<Gnome::Gdk3::Windows> for the c
 method get-window-stack-rk ( --> Gnome::Glib::List ) {
   Gnome::Glib::List.new(
     :native-object(
-      gdk_screen_get_window_stack(self.get-native-object-no-reffing)
+      gdk_screen_get_window_stack(self._get-native-object-no-reffing)
     )
   )
 }
 
 method get-window-stack ( --> N-GList ) {
-  gdk_screen_get_window_stack(self.get-native-object-no-reffing)
+  gdk_screen_get_window_stack(self._get-native-object-no-reffing)
 }
 
 sub gdk_screen_get_window_stack (
@@ -415,7 +415,7 @@ Returns: Whether windows with RGBA visuals can reasonably be expected to have th
 =end pod
 
 method is-composited ( --> Bool ) {
-  gdk_screen_is_composited(self.get-native-object-no-reffing).Bool
+  gdk_screen_is_composited(self._get-native-object-no-reffing).Bool
 }
 
 sub gdk_screen_is_composited (
@@ -442,13 +442,13 @@ Returns: (transfer container) (element-type GdkVisual): a list of visuals; the l
 method list-visuals-rk ( --> Gnome::Glib::List ) {
   Gnome::Glib::List.new(
     :native-object(
-      gdk_screen_list_visuals(self.get-native-object-no-reffing)
+      gdk_screen_list_visuals(self._get-native-object-no-reffing)
     )
   )
 }
 
 method list-visuals ( --> N-GList ) {
-  gdk_screen_list_visuals(self.get-native-object-no-reffing)
+  gdk_screen_list_visuals(self._get-native-object-no-reffing)
 }
 
 sub gdk_screen_list_visuals (
@@ -472,7 +472,7 @@ Sets the default font options for the screen. These options will be set on any B
 method set-font-options ( cairo_font_options_t $options ) {
 
   gdk_screen_set_font_options(
-    self.get-native-object-no-reffing, $options
+    self._get-native-object-no-reffing, $options
   );
 }
 
@@ -495,7 +495,7 @@ Sets the resolution for font handling on the screen. This is a scale factor betw
 =end pod
 
 method set-resolution ( Num() $dpi ) {
-  gdk_screen_set_resolution(self.get-native-object-no-reffing, $dpi.Num);
+  gdk_screen_set_resolution(self._get-native-object-no-reffing, $dpi.Num);
 }
 
 sub gdk_screen_set_resolution (
