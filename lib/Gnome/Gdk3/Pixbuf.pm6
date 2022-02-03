@@ -882,7 +882,7 @@ sub __gdk_pixbuf_new_from_file (
 
 Creates a new pixbuf by loading an image from a file. The file format is detected automatically. If NULL is returned, then error will be set. Possible errors are in the GDK_PIXBUF_ERROR and G_FILE_ERROR domains.
 
-The image will be scaled to fit in the requested size, preserving the image's aspect ratio. Note that the returned pixbuf may be smaller than width x height , if the aspect ratio requires it. To load and image at the requested size, regardless of aspect ratio, use gdk_pixbuf_new_from_file_at_scale().
+The image will be scaled to fit in the requested size, preserving the image's aspect ratio. Note that the returned pixbuf may be smaller than width x height, if the aspect ratio requires it. To load and image at the requested size, regardless of aspect ratio, use gdk_pixbuf_new_from_file_at_scale().
 
   method gdk_pixbuf_new_from_file_at_size ( Str $filename, Int $width, Int $height, N-GError $error --> N-GObject  )
 
