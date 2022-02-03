@@ -1,6 +1,6 @@
 ## Release notes
 * 2022-02-02 0.19.2:
-  * Doc changes for **Gnome::Gdk3::Events**.
+  * Doc changes for **Gnome::Gdk3::Events**. Quite a few methods were defined uncorrectly and therefore unusable.
 
 * 2021-12-12 0.19.1:
   * Changes for renamed methods in **Gnome::N::TopLevelClassSupport**.
