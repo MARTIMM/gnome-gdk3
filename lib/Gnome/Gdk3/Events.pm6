@@ -19,6 +19,7 @@ In GTK+ applications the events are handled automatically in C<gtk_main_do_event
 =head2 Declaration
 
   unit class Gnome::Gdk3::Events;
+  also is Gnome::N::TopLevelClassSupport;
 
 =head2 Example
 
@@ -55,6 +56,7 @@ use NativeCall;
 use Gnome::N::X;
 use Gnome::N::NativeLib;
 use Gnome::N::N-GObject;
+use Gnome::N::TopLevelClassSupport;
 use Gnome::N::GlibToRakuTypes;
 
 use Gnome::Gdk3::Types;
@@ -65,6 +67,7 @@ use Gnome::Cairo::Types;
 # https://developer.gnome.org/gdk3/stable/gdk3-Event-Structures.html
 # https://developer.gnome.org/gdk3/stable/gdk3-Events.html
 unit class Gnome::Gdk3::Events:auth<github:MARTIMM>;
+also is Gnome::N::TopLevelClassSupport;
 
 #-------------------------------------------------------------------------------
 =begin pod
@@ -2763,66 +2766,80 @@ my constant GdkEvent is export = N-GdkEvent;
 Fields C<$.event-any>, C<$.event-motion>, C<$.event-button>, C<$.event-scroll>, C<$.event-key>, C<$.event-crossing>, C<$.event-focus> and C<$.event-configure> are deprecated (version 0.19.2) and replaced by C<$.any>, C<m$.motion>, C<$.button>, C<$.scroll>, C<$.key>, C<$.crossing>, C<$.focus> and C<$.configure> resp. (Fields are removed in version 0.22.0 and higher)
 =end pod
 
-
-#-------------------------------------------------------------------------------
-#my Bool $signals-added = False;
-#`{{
 #-------------------------------------------------------------------------------
 =begin pod
 =head1 Methods
 =head2 new
 
-  multi method new ( GdkEventType :$event-name! )
+=head3 :type
 
-Create a new event object. When successful, the object must be freed explicitly when done using C<gdk_event_free()>.
+Creates a new event of the given type. All fields are set to 0.
+
+Returns: a newly-allocated B<Gnome::Gdk3::Event>. This object should be freed C<clear-object()>.
+
+  method new ( GdkEventType :$type! )
+
+=item $type; a B<Gnome::Gdk3::EventType>
+
+
+=head3 :native-object
 
   multi method new ( Gnome::GObject::Object :$native-object! )
 
 Create an object using a native object from elsewhere. See also C<Gnome::GObject::Object>.
 
-  multi method new ( Str :$build-id! )
-
-Create an object using a native object from a builder. See also C<Gnome::GObject::Object>.
-
 =end pod
 
 submethod BUILD ( *%options ) {
+  # prevent creating wrong native-objects
+  if self.^name eq 'Gnome::Gdk3::Events' {
 
-  # add signal info in the form of group<signal-name>.
-  # groups are e.g. signal, event, nativeobject etc
-  #$signals-added = self.add-signal-types( $?CLASS.^name,
-  #  # ... :type<signame>
-  #) unless $signals-added;
+    # check if native object is set by a parent class
+    if self.is-valid { }
 
-  # prevent creating wrong widgets
-  return unless self.^name eq 'Gnome::Gdk3::Events';
+    # check if common options are handled by some parent
+    elsif %options<native-object>:exists { }
 
-  # process all named arguments
-  if ? %options<event-name> {
-    self._set-native-object(gdk_events_new(%options<event-name>));
-  }
+    # process all other options
+    else {
+      my $no;
+      if ? %options<type> {
+        $no = _gdk_event_new(%options<type>);
+      }
 
-  elsif ? %options<native-object> || ? %options<widget> || %options<build-id> {
-    # provided in Gnome::GObject::Object
-  }
+      ##`{{ use this when the module is not made inheritable
+      # check if there are unknown options
+      elsif %options.elems {
+        die X::Gnome.new(
+          :message(
+            'Unsupported, undefined, incomplete or wrongly typed options for ' ~
+            self.^name ~ ': ' ~ %options.keys.join(', ')
+          )
+        );
+      }
+      #}}
 
-  elsif %options.keys.elems {
-    die X::Gnome.new(
-      :message('Unsupported options for ' ~ self.^name ~
-               ': ' ~ %options.keys.join(', ')
-              )
-    );
+      ##`{{ when there are no defaults use this
+      # check if there are any options
+      elsif %options.elems == 0 {
+        die X::Gnome.new(:message('No options specified ' ~ self.^name));
+      }
+      #}}
+
+      #`{{ when there are defaults use this instead
+      # create default object
+      else {
+        $no = _gdk_events_new();
+      }
+      }}
+
+      self.set-native-object($no);
+    }
+
+    # only after creating the native-object, the gtype is known
+    self._set-class-info('GdkEvents');
   }
 }
-}}
-
-#`{{
-submethod BUILD ( *%options ) {
-
-  # prevent creating wrong widgets
-  #return unless self.^name eq 'Gnome::Gdk3::Events';
-}
-}}
 
 #-------------------------------------------------------------------------------
 # no pod. user does not have to know about it.
@@ -2838,6 +2855,19 @@ method _fallback ( $native-sub is copy --> Callable ) {
   $s;
 }
 
+#-------------------------------------------------------------------------------
+# ? no ref/unref for a variant type
+method native-object-ref ( $n-native-object --> Any ) {
+  $n-native-object
+}
+
+#-------------------------------------------------------------------------------
+method native-object-unref ( $n-native-object ) {
+#  _g_object_free($n-native-object)
+  _gdk_event_free($n-native-object)
+}
+
+#`{{
 #-------------------------------------------------------------------------------
 #TM:0:copy:
 =begin pod
@@ -2863,9 +2893,11 @@ sub gdk_event_copy (
   N-GdkEvent $event --> N-GdkEvent
 ) is native(&gdk-lib)
   { * }
+}}
 
+#`{{
 #-------------------------------------------------------------------------------
-#TM:0:free:
+#TM:0:_gdk_event_free:
 =begin pod
 =head2 free
 
@@ -2877,23 +2909,25 @@ Frees a B<Gnome::Gdk3::Event>, freeing or decrementing any resources associated 
 =end pod
 
 method free ( N-GdkEvent $event ) {
-
   gdk_event_free(
     self._get-native-object-no-reffing, $event
   );
 }
+}}
 
-sub gdk_event_free (
+sub _gdk_event_free (
   N-GdkEvent $event
 ) is native(&gdk-lib)
+  is symbol('gdk_event_free')
   { * }
 
 #-------------------------------------------------------------------------------
+#TODO -> new
 #TM:0:get:
 =begin pod
 =head2 get
 
-Checks all open displays for a B<Gnome::Gdk3::Event> to process,to be processed on, fetching events from the windowing system if necessary. See C<gdk_display_get_event()>.
+Checks all open displays for a B<Gnome::Gdk3::Event> to process,to be processed on, fetching events from the windowing system if necessary. See C<Gnome::Gdk3::Display.get-event()>.
 
 Returns: the next B<Gnome::Gdk3::Event> to be processed, or C<undefined> if no events are pending. The returned B<Gnome::Gdk3::Event> should be freed with C<gdk_event_free()>.
 
@@ -2902,10 +2936,7 @@ Returns: the next B<Gnome::Gdk3::Event> to be processed, or C<undefined> if no e
 =end pod
 
 method get ( --> N-GdkEvent ) {
-
-  gdk_event_get(
-    self._get-native-object-no-reffing,
-  )
+  gdk_event_get()
 }
 
 sub gdk_event_get (
@@ -3641,9 +3672,10 @@ method gdk-event-new ( GdkEventType $type --> N-GdkEvent ) {
   )
 }
 }}
-sub gdk_event_new (
+sub _gdk_event_new (
   GEnum $type --> N-GdkEvent
 ) is native(&gdk-lib)
+  is symbol('gdk_event_new')
   { * }
 
 #-------------------------------------------------------------------------------
@@ -3726,7 +3758,7 @@ sub gdk_event_request_motions (
 =begin pod
 =head2 set-device
 
-Sets the device for I<event> to I<device>. The event must have been allocated by GTK+, for instance, by C<gdk_event_copy()>.
+Sets the device for I<event> to I<device>. The event must have been allocated by GTK+, for instance, by C<copy()>.
 
   method set-device ( N-GdkEvent $event, N-GObject $device )
 
@@ -3736,10 +3768,7 @@ Sets the device for I<event> to I<device>. The event must have been allocated by
 
 method set-device ( N-GdkEvent $event, $device is copy ) {
   $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
-
-  gdk_event_set_device(
-    self._get-native-object-no-reffing, $event, $device
-  );
+  gdk_event_set_device( self._get-native-object-no-reffing, $event, $device);
 }
 
 sub gdk_event_set_device (
@@ -3747,6 +3776,12 @@ sub gdk_event_set_device (
 ) is native(&gdk-lib)
   { * }
 
+#===================
+#===================
+#===================
+#===================
+#===================
+#===================
 #-------------------------------------------------------------------------------
 #TM:0:set-device-tool:
 =begin pod
