@@ -2775,11 +2775,20 @@ Fields C<$.event-any>, C<$.event-motion>, C<$.event-button>, C<$.event-scroll>, 
 
 Creates a new event of the given type. All fields are set to 0.
 
-Returns: a newly-allocated B<Gnome::Gdk3::Event>. This object should be freed C<clear-object()>.
+Returns: a newly-allocated B<Gnome::Gdk3::Event>. This object should be freed with C<clear-object()>.
 
-  method new ( GdkEventType :$type! )
+  multi method new ( GdkEventType :$type! )
 
 =item $type; a B<Gnome::Gdk3::EventType>
+
+
+=head3 :get
+
+When C<:get> is given (no value needed) it checks all open displays for a an event to process, to be processed on, fetching events from the windowing system if necessary. See C<Gnome::Gdk3::Display.get-event()>.
+
+Gets the next B<Gnome::Gdk3::Event> to be processed, or, if no events are pending, the object becomes invalid. As always, this object should be freed with C<clear-object()>.
+
+  multi method get ( :get! )
 
 
 =head3 :native-object
@@ -2805,6 +2814,10 @@ submethod BUILD ( *%options ) {
       my $no;
       if ? %options<type> {
         $no = _gdk_event_new(%options<type>);
+      }
+
+      elsif %options<get>:exists {
+        $no = _gdk_event_get;
       }
 
       ##`{{ use this when the module is not made inheritable
@@ -2869,7 +2882,7 @@ method native-object-unref ( $n-native-object ) {
 
 #`{{
 #-------------------------------------------------------------------------------
-#TM:0:copy:
+# TM:0:copy:
 =begin pod
 =head2 copy
 
@@ -2922,8 +2935,8 @@ sub _gdk_event_free (
   { * }
 
 #-------------------------------------------------------------------------------
-#TODO -> new
-#TM:0:get:
+#TM:0:_gdk_event_get:
+#`{{
 =begin pod
 =head2 get
 
@@ -2938,10 +2951,12 @@ Returns: the next B<Gnome::Gdk3::Event> to be processed, or C<undefined> if no e
 method get ( --> N-GdkEvent ) {
   gdk_event_get()
 }
+}}
 
-sub gdk_event_get (
+sub _gdk_event_get (
    --> N-GdkEvent
 ) is native(&gdk-lib)
+  is symbol('gdk_event_get')
   { * }
 
 #-------------------------------------------------------------------------------
@@ -2951,24 +2966,24 @@ sub gdk_event_get (
 
 Extract the axis value for a particular axis use from an event structure.
 
-Returns: C<True> if the specified axis was found, otherwise C<False>
+Returns: the axis value if the specified axis was found, otherwise an undefined C<Num>.
 
-  method get-axis ( N-GdkEvent $event, GdkAxisUse $axis_use, Num() $value --> Bool )
+  method get-axis ( GdkAxisUse $axis_use --> Num )
 
-=item $event; a B<Gnome::Gdk3::Event>
 =item $axis_use; the axis use to look for
-=item $value; location to store the value found
 =end pod
 
-method get-axis ( N-GdkEvent $event, GdkAxisUse $axis_use, Num() $value --> Bool ) {
+method get-axis ( GdkAxisUse $axis_use --> Num ) {
+  my gdouble $value;
+  my Bool() $r = gdk_event_get_axis(
+    self._get-native-object-no-reffing, $axis_use.value, $value
+  );
 
-  gdk_event_get_axis(
-    self._get-native-object-no-reffing, $event, $axis_use, $value
-  ).Bool
+  $r ?? $value.Num !! Num
 }
 
 sub gdk_event_get_axis (
-  N-GdkEvent $event, GEnum $axis_use, gdouble $value --> gboolean
+  N-GdkEvent $event, GEnum $axis_use, gdouble $value is rw --> gboolean
 ) is native(&gdk-lib)
   { * }
 
@@ -2981,17 +2996,15 @@ Extract the button number from an event.
 
 Returns: a defined C<Int> if the event delivered a button number.
 
-  method get-button ( N-GdkEvent $event --> Int )
-
-=item $event; a B<Gnome::Gdk3::Event>
+  method get-button ( --> Int )
 
 =end pod
 
-method get-button ( N-GdkEvent $event --> Int ) {
+method get-button ( --> Int ) {
   my guint $button;
-  my Bool $r = gdk_event_get_button(
-    self._get-native-object-no-reffing, $event, $button
-  ).Bool;
+  my Bool() $r = gdk_event_get_button(
+    self._get-native-object-no-reffing, $button
+  );
 
   $r ?? $button !! Int
 }
@@ -3010,16 +3023,15 @@ Extracts the click count from an event.
 
 Returns: a defined C<Int> if the event delivered a click count
 
-  method get-click-count ( N-GdkEvent $event --> Int )
+  method get-click-count ( --> Int )
 
-=item $event; a B<Gnome::Gdk3::Event>
 =end pod
 
-method get-click-count ( N-GdkEvent $event --> Int ) {
+method get-click-count ( --> Int ) {
   my guint $click_count;
-  my Bool $r = gdk_event_get_click_count(
-    self._get-native-object-no-reffing, $event, $click_count
-  ).Bool;
+  my Bool() $r = gdk_event_get_click_count(
+    self._get-native-object-no-reffing, $click_count
+  );
 
   $r ?? $click_count !! Int
 }
@@ -3038,21 +3050,19 @@ Extract the event window relative x/y coordinates from an event.
 
 Returns: C<True> if the event delivered event window coordinates
 
-  method get-coords ( N-GdkEvent $event --> List )
-
-=item $event; a B<Gnome::Gdk3::Event>
+  method get-coords ( --> List )
 
 List returns;
 =item Num; event window x coordinate
 =item Num; event window y coordinate
 =end pod
 
-method get-coords ( N-GdkEvent $event --> List ) {
+method get-coords ( --> List ) {
   my gdouble $x_win;
   my gdouble $y_win;
 
   my Bool $r = gdk_event_get_coords(
-    self._get-native-object-no-reffing, $event, $x_win, $y_win
+    self._get-native-object-no-reffing, $x_win, $y_win
   ).Bool;
 
   ( $x_win, $y_win)
@@ -3073,20 +3083,19 @@ If the event contains a “device” field, this function will return it, else i
 
 Returns: a B<Gnome::Gdk3::Device>, or C<undefined>.
 
-  method get-device ( N-GdkEvent $event --> N-GObject )
-  method get-device-rk ( N-GdkEvent $event --> Gnome::Gdk3::Device )
+  method get-device ( --> N-GObject )
+  method get-device-rk ( --> Gnome::Gdk3::Device )
 
-=item $event; a B<Gnome::Gdk3::Event>.
 =end pod
 
-method get-device ( N-GdkEvent $event --> N-GObject ) {
-  gdk_event_get_device( self._get-native-object-no-reffing, $event)
+method get-device ( --> N-GObject ) {
+  gdk_event_get_device(self._get-native-object-no-reffing)
 }
 
 method get-device-rk ( N-GdkEvent $event --> Any ) {
   self._wrap-native-type(
     'Gnome::Gdk3::Device',
-    gdk_event_get_device( self._get-native-object-no-reffing, $event)
+    gdk_event_get_device(self._get-native-object-no-reffing)
   )
 }
 
@@ -3107,16 +3116,12 @@ Note: the B<Gnome::Gdk3::DeviceTool><!-- -->s will be constant during the applic
 
 Returns: The current device tool, or C<undefined>
 
-  method get-device-tool ( N-GdkEvent $event --> N-GObject )
+  method get-device-tool ( --> N-GObject )
 
-=item $event; a B<Gnome::Gdk3::Event>
 =end pod
 
-method get-device-tool ( N-GdkEvent $event --> N-GObject ) {
-
-  gdk_event_get_device_tool(
-    self._get-native-object-no-reffing, $event
-  )
+method get-device-tool ( --> N-GObject ) {
+  gdk_event_get_device_tool(self._get-native-object-no-reffing)
 }
 
 sub gdk_event_get_device_tool (
@@ -3135,16 +3140,12 @@ If I<event> is of type C<GDK_TOUCH_BEGIN>, C<GDK_TOUCH_UPDATE>, C<GDK_TOUCH_END>
 
 Returns: the event sequence that the event belongs to
 
-  method get-event-sequence ( N-GdkEvent $event --> GdkEventSequence )
+  method get-event-sequence ( --> GdkEventSequence )
 
-=item $event; a B<Gnome::Gdk3::Event>
 =end pod
 
-method get-event-sequence ( N-GdkEvent $event --> GdkEventSequence ) {
-
-  gdk_event_get_event_sequence(
-    self._get-native-object-no-reffing, $event
-  )
+method get-event-sequence ( --> GdkEventSequence ) {
+  gdk_event_get_event_sequence(self._get-native-object-no-reffing)
 }
 
 sub gdk_event_get_event_sequence (
@@ -3162,14 +3163,13 @@ Retrieves the type of the event.
 
 Returns: a B<Gnome::Gdk3::EventType>
 
-  method get-event-type ( N-GdkEvent $event --> GdkEventType )
+  method get-event-type ( --> GdkEventType )
 
-=item $event; a B<Gnome::Gdk3::Event>
 =end pod
 
-method get-event-type ( N-GdkEvent $event --> GdkEventType ) {
+method get-event-type ( --> GdkEventType ) {
   GdkEventType(
-    gdk_event_get_event_type( self._get-native-object-no-reffing, $event)
+    gdk_event_get_event_type(self._get-native-object-no-reffing)
   )
 }
 
@@ -3185,20 +3185,19 @@ sub gdk_event_get_event_type (
 
 Extracts the hardware keycode from an event.
 
-Also see C<gdk_event_get_scancode()>.
+Also see C<get-scancode()>.
 
 Returns: a defined keycode if the event delivered a hardware keycode, undefined otherwise.
 
-  method get-keycode ( N-GdkEvent $event --> UInt )
+  method get-keycode ( --> UInt )
 
-=item $event; a B<Gnome::Gdk3::Event>
 =end pod
 
-method get-keycode ( N-GdkEvent $event --> UInt ) {
+method get-keycode ( --> UInt ) {
   my guint16 $keycode;
-  my Bool $r = gdk_event_get_keycode(
-    self._get-native-object-no-reffing, $event, $keycode
-  ).Bool;
+  my Bool() $r = gdk_event_get_keycode(
+    self._get-native-object-no-reffing, $keycode
+  );
 
   $r ?? $keycode !! UInt
 }
@@ -3217,17 +3216,15 @@ Extracts the keyval from an event.
 
 Returns: a defined key symbol if the event delivered a key symbol, undefined otherwise.
 
-  method get-keyval ( N-GdkEvent $event --> UInt )
+  method get-keyval ( --> UInt )
 
-=item $event; a B<Gnome::Gdk3::Event>
-=item $keyval; location to store the keyval
 =end pod
 
-method get-keyval ( N-GdkEvent $event --> UInt ) {
+method get-keyval ( --> UInt ) {
   my guint $keyval;
-  my Bool $r = gdk_event_get_keyval(
-    self._get-native-object-no-reffing, $event, $keyval
-  ).Bool;
+  my Bool() $r = gdk_event_get_keyval(
+    self._get-native-object-no-reffing, $keyval
+  );
 
   $r ?? $keyval !! UInt
 }
@@ -3246,15 +3243,12 @@ Returns whether this event is an 'emulated' pointer event (typically from a touc
 
 Returns: C<True> if this event is emulated
 
-  method get-pointer-emulated ( N-GdkEvent $event --> Bool )
+  method get-pointer-emulated ( --> Bool )
 
-=item $event;  B<event>: a B<Gnome::Gdk3::Event>
 =end pod
 
-method get-pointer-emulated ( N-GdkEvent $event --> Bool ) {
-  gdk_event_get_pointer_emulated(
-    self._get-native-object-no-reffing, $event
-  ).Bool
+method get-pointer-emulated ( --> Bool ) {
+  gdk_event_get_pointer_emulated(self._get-native-object-no-reffing).Bool
 }
 
 sub gdk_event_get_pointer_emulated (
@@ -3271,23 +3265,21 @@ Extract the root window relative x/y coordinates from an event.
 
 Returns: a list if the event delivered root window coordinates. The list is empty if not.
 
-  method get-root-coords ( N-GdkEvent $event --> List )
-
-=item $event; a B<Gnome::Gdk3::Event>
+  method get-root-coords ( --> List )
 
 The List returns
 =item Num; root window x coordinate
 =item Num; root window y coordinate
 =end pod
 
-method get-root-coords ( N-GdkEvent $event --> List ) {
+method get-root-coords (--> List ) {
 
   my gdouble $x_root;
   my gdouble $y_root;
 
-  my Bool $r = gdk_event_get_root_coords(
-    self._get-native-object-no-reffing, $event, $x_root, $y_root
-  ).Bool;
+  my Bool() $r = gdk_event_get_root_coords(
+    self._get-native-object-no-reffing, $x_root, $y_root
+  );
 
   $r ?? ( $x_root, $y_root) !! ()
 }
@@ -3308,13 +3300,12 @@ This is usually hardware_keycode. On Windows this is the high word of WM_KEY{DOW
 
 Returns: The associated keyboard scancode or 0
 
-  method get-scancode ( N-GdkEvent $event --> Int )
+  method get-scancode ( --> Int )
 
-=item $event; a B<Gnome::Gdk3::Event>
 =end pod
 
-method get-scancode ( N-GdkEvent $event --> Int ) {
-  gdk_event_get_scancode( self._get-native-object-no-reffing, $event)
+method get-scancode ( --> Int ) {
+  gdk_event_get_scancode(self._get-native-object-no-reffing)
 }
 
 sub gdk_event_get_scancode (
@@ -3332,20 +3323,20 @@ Returns the screen for the event. The screen is typically the screen in any C<$e
 
 Returns: the screen for the event
 
-  method get-screen ( N-GdkEvent $event --> N-GObject )
-  method get-screen-rk ( N-GdkEvent $event --> Gnome::Gdk3::Screen )
+  method get-screen ( --> N-GObject )
+  method get-screen-rk ( --> Gnome::Gdk3::Screen )
 
 =item $event; a B<Gnome::Gdk3::Event>
 =end pod
 
-method get-screen ( N-GdkEvent $event --> N-GObject ) {
-  gdk_event_get_screen( self._get-native-object-no-reffing, $event)
+method get-screen ( --> N-GObject ) {
+  gdk_event_get_screen(self._get-native-object-no-reffing)
 }
 
-method get-screen-rk ( N-GdkEvent $event --> Any ) {
+method get-screen-rk ( --> Any ) {
   self._wrap-native-type(
     'Gnome::Gdk3::Screen',
-    gdk_event_get_screen( self._get-native-object-no-reffing, $event)
+    gdk_event_get_screen(self._get-native-object-no-reffing)
   )
 }
 
@@ -3359,26 +3350,24 @@ sub gdk_event_get_screen (
 =begin pod
 =head2 get-scroll-deltas
 
-Retrieves the scroll deltas from a B<Gnome::Gdk3::Event>
+Retrieves the scroll deltas from this event
 
 See also: C<gdk_event_get_scroll_direction()>
 
 Returns: A List holding the values if the event contains smooth scroll information and an empty List otherwise.
 
-  method get-scroll-deltas ( N-GdkEvent $event --> List )
-
-=item $event; a B<Gnome::Gdk3::Event>
+  method get-scroll-deltas ( --> List )
 
 The List returns;
 =item Num; X delta
 =item Num; Y delta
 =end pod
 
-method get-scroll-deltas ( N-GdkEvent $event --> List ) {
+method get-scroll-deltas ( --> List ) {
   my gdouble $delta_x;
   my gdouble $delta_y;
   my Bool() $r = gdk_event_get_scroll_deltas(
-    self._get-native-object-no-reffing, $event, $delta_x, $delta_y
+    self._get-native-object-no-reffing, $delta_x, $delta_y
   );
 
   $r ?? ( $delta_x, $delta_y) !! ()
@@ -3431,15 +3420,14 @@ If you wish to handle both discrete and smooth scrolling, you should check the r
 
 Returns: a defined GdkScrollDirection value if the event delivered a scroll direction and undefined otherwise
 
-  method get-scroll-direction ( N-GdkEvent $event -> GdkScrollDirection )
+  method get-scroll-direction ( --> GdkScrollDirection )
 
-=item $event; a B<Gnome::Gdk3::Event>
 =end pod
 
-method get-scroll-direction ( N-GdkEvent $event --> GdkScrollDirection ) {
+method get-scroll-direction ( --> GdkScrollDirection ) {
   my GEnum $direction;
   my Bool() $r = gdk_event_get_scroll_direction(
-    self._get-native-object-no-reffing, $event, $direction
+    self._get-native-object-no-reffing, $direction
   );
 
   %$r ?? GdkScrollDirection($direction) !! GdkScrollDirection
@@ -3458,16 +3446,12 @@ sub gdk_event_get_scroll_direction (
 
 Returns the B<Gnome::Gdk3::Seat> this event was generated for.
 
-  method get-seat ( N-GdkEvent $event --> N-GObject )
+  method get-seat ( --> N-GObject )
 
-=item $event; a B<Gnome::Gdk3::Event>
 =end pod
 
-method get-seat ( N-GdkEvent $event --> N-GObject ) {
-
-  gdk_event_get_seat(
-    self._get-native-object-no-reffing, $event
-  )
+method get-seat ( --> N-GObject ) {
+  gdk_event_get_seat(self._get-native-object-no-reffing)
 }
 
 sub gdk_event_get_seat (
@@ -3490,20 +3474,20 @@ If the event does not contain a device field, this function will return C<undefi
 
 Returns: a B<Gnome::Gdk3::Device>, or C<undefined>.
 
-  method get-source-device ( N-GdkEvent $event --> N-GObject )
-  method get-source-device-rk ( N-GdkEvent $event --> Gnome::Gdk3::Device )
+  method get-source-device ( --> N-GObject )
+  method get-source-device-rk ( --> Gnome::Gdk3::Device )
 
 =item $event; a B<Gnome::Gdk3::Event>
 =end pod
 
-method get-source-device ( N-GdkEvent $event --> N-GObject ) {
-  gdk_event_get_source_device( self._get-native-object-no-reffing, $event)
+method get-source-device ( --> N-GObject ) {
+  gdk_event_get_source_device(self._get-native-object-no-reffing)
 }
 
-method get-source-device-rk ( N-GdkEvent $event --> Any ) {
+method get-source-device-rk ( --> Any ) {
   self._wrap-native-type(
     'Gnome::Gdk3::Device',
-    gdk_event_get_source_device( self._get-native-object-no-reffing, $event)
+    gdk_event_get_source_device(self._get-native-object-no-reffing)
   )
 }
 
