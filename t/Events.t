@@ -12,8 +12,8 @@ ok 1, 'load module ok';
 my Gnome::Gdk3::Events $e;
 #-------------------------------------------------------------------------------
 subtest 'ISA test', {
-  $e .= new;
-  isa-ok $e, Gnome::Gdk3::Events, '.new';
+  $e .= new(:type(GDK_KEY_PRESS));
+  isa-ok $e, Gnome::Gdk3::Events, '.new(:type)';
 }
 
 
