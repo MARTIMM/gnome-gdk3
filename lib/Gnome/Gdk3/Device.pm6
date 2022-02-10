@@ -173,7 +173,7 @@ submethod BUILD ( *%options ) {
   # prevent creating wrong widgets
   return unless self.^name eq 'Gnome::Gdk3::Device';
 
-  if ? %options<native-object> || ? %options<widget> {
+  if %options<native-object>:exists {
     # provided in GObject
   }
 
