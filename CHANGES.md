@@ -1,4 +1,15 @@
 ## Release notes
+* 2022-02-02 0.19.3:
+  * Deprecate all `-rk()` routines. It is possible to coerce from the native object to the Raku object like so;
+  ```
+  my Gnome::Gdk3::Event $event = …;
+  my Gnome::Gdk3::Device() $device = $event.get-device;
+  ```
+  instead of doing this
+  ```
+  my Gnome::Gdk3::Device $device = $event.get-device-rk;
+  ```
+
 * 2022-02-02 0.19.2:
   * Doc changes for **Gnome::Gdk3::Events**. Quite a few methods were defined uncorrectly and therefore unusable.
 
