@@ -2,18 +2,26 @@ use v6;
 use NativeCall;
 use Test;
 
+use Gnome::Gdk3::Device;
+
 use Gnome::Gdk3::Events;
 ok 1, 'load module ok';
 
-#use Gnome::N::X;
-#Gnome::N::debug(:on);
+use Gnome::N::X;
+Gnome::N::debug(:on);
 
 #-------------------------------------------------------------------------------
 my Gnome::Gdk3::Events $e;
 #-------------------------------------------------------------------------------
 subtest 'ISA test', {
-  $e .= new(:type(GDK_KEY_PRESS));
+  $e .= new(:type(GDK_BUTTON_PRESS));
   isa-ok $e, Gnome::Gdk3::Events, '.new(:type)';
+
+#  diag $e.get-native-object // '- 1';
+#  diag $e.N-GObject // '- 2';
+
+  note $e.get-device-rk.^name();
+  note $e.get-screen-rk.^name();
 }
 
 
