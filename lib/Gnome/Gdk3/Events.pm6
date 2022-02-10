@@ -2040,7 +2040,7 @@ class N-GdkEventButton is export is repr('CStruct') {
   has N-GObject $.device;
   has gdouble $.x_root;
   has gdouble $.y_root;
-
+#`{{ TODO
   submethod BUILD (
     :$type, :$time, :$x, :$y, :$axes, :$state, :$button, :$x_root, :$y_root
   ) {
@@ -2070,7 +2070,7 @@ note 'fv2: ', $device;
       $!device = $device;
     }
   }
-
+}}
 #`{{
   method set( $field, $value is copy ) {
 note 'fv1: ', $field, ', ', $value.gist;
@@ -2925,7 +2925,10 @@ submethod BUILD ( *%options ) {
     # process all other options
     else {
       my $no;
-      if ? %options<type> {
+      if %options<type>:exists {
+        $no = _gdk_event_new(%options<type>);
+
+#`{{
         my $type = %options<type>;
 
         given $type {
@@ -2941,6 +2944,7 @@ note "event: $no.gist()";
             die X::Gnome.new(:message("Type $type not supported"));
           }
         }
+}}
       }
 
       elsif %options<get>:exists {
@@ -3260,17 +3264,15 @@ sub gdk_event_get_coords (
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:get-device:
-#TM:0:get-device-rk:
+#TM:1:get-device:
 =begin pod
-=head2 get-device, get-device-rk
+=head2 get-device
 
 If the event contains a “device” field, this function will return it, else it will return C<undefined> or an invalid object in the case of C<get-device-rk()>.
 
 Returns: a B<Gnome::Gdk3::Device>, or C<undefined>.
 
   method get-device ( --> N-GObject )
-  method get-device-rk ( --> Gnome::Gdk3::Device )
 
 =end pod
 
@@ -3278,7 +3280,12 @@ method get-device ( --> N-GObject ) {
   gdk_event_get_device(self._get-native-object-no-reffing)
 }
 
-method get-device-rk ( N-GdkEvent $event --> Any ) {
+method get-device-rk ( --> Any ) {
+  Gnome::N::deprecate(
+    'get-device-rk', 'coercing from get-device',
+    '0.19.2', '0.21.0'
+  );
+
   self._wrap-native-type(
     'Gnome::Gdk3::Device',
     gdk_event_get_device(self._get-native-object-no-reffing)
@@ -3527,16 +3534,14 @@ sub gdk_event_get_scancode (
 
 #-------------------------------------------------------------------------------
 #TM:0:get-screen:
-#TM:0:get-screen-rk:
 =begin pod
-=head2 get-screen, get-screen-rk
+=head2 get-screen
 
 Returns the screen for the event. The screen is typically the screen in any C<$event.any.window>`, but for events such as mouse events, it is the screen where the pointer was when the event occurs - that is, the screen which has the root window to which C<$event.motion.x_root> and C<$event.motion.y_root> are relative.
 
 Returns: the screen for the event
 
   method get-screen ( --> N-GObject )
-  method get-screen-rk ( --> Gnome::Gdk3::Screen )
 
 =item $event; a B<Gnome::Gdk3::Event>
 =end pod
@@ -3546,6 +3551,11 @@ method get-screen ( --> N-GObject ) {
 }
 
 method get-screen-rk ( --> Any ) {
+  Gnome::N::deprecate(
+    'get-screen-rk', 'coercing from get-screen',
+    '0.19.2', '0.21.0'
+  );
+
   self._wrap-native-type(
     'Gnome::Gdk3::Screen',
     gdk_event_get_screen(self._get-native-object-no-reffing)
@@ -3696,9 +3706,8 @@ sub gdk_get_show_events (
 
 #-------------------------------------------------------------------------------
 #TM:0:get-source-device:
-#TM:0:get-source-device-rk:
 =begin pod
-=head2 get-source-device, get-source-device-rk
+=head2 get-source-device
 
 This function returns the hardware secondary B<Gnome::Gdk3::Device> that has triggered the event, falling back to the virtual primary device (as in C<get-device()>) if the event wasn’t caused by interaction with a hardware device.
 
@@ -3709,7 +3718,6 @@ If the event does not contain a device field, this function will return C<undefi
 Returns: a B<Gnome::Gdk3::Device>, or C<undefined>.
 
   method get-source-device ( --> N-GObject )
-  method get-source-device-rk ( --> Gnome::Gdk3::Device )
 
 =item $event; a B<Gnome::Gdk3::Event>
 =end pod
@@ -3719,6 +3727,11 @@ method get-source-device ( --> N-GObject ) {
 }
 
 method get-source-device-rk ( --> Any ) {
+  Gnome::N::deprecate(
+    'get-source-device-rk', 'coercing from get-source-device',
+    '0.19.2', '0.21.0'
+  );
+
   self._wrap-native-type(
     'Gnome::Gdk3::Device',
     gdk_event_get_source_device(self._get-native-object-no-reffing)
@@ -3783,14 +3796,12 @@ sub gdk_event_get_time (
 
 #-------------------------------------------------------------------------------
 #TM:0:get-window:
-#TM:0:get-window-rk:
 =begin pod
-=head2 get-window, get-window-rk
+=head2 get-window
 
 Extracts the B<Gnome::Gdk3::Window> associated with an event.
 
   method get-window ( --> N-GObject )
-  method get-window-rk ( --> Gnome::Gdk3::Window )
 
 =end pod
 
@@ -3799,6 +3810,11 @@ method get-window ( --> N-GObject ) {
 }
 
 method get-window-rk ( --> Any ) {
+  Gnome::N::deprecate(
+    'get-window-rk', 'coercing from get-window',
+    '0.19.2', '0.21.0'
+  );
+
   self._wrap-native-type(
     'Gnome::Gdk3::Window',
     gdk_event_get_window( self._get-native-object-no-reffing)
