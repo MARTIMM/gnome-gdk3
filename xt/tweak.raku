@@ -6,18 +6,18 @@ use Gnome::N::N-GObject;
 
 use Gnome::Gtk3::Window;
 use Gnome::Gtk3::Button;
-use Gnome::Gtk3::Main;
 
 use Gnome::Gdk3::Display;
 use Gnome::Gdk3::Window;
-
 use Gnome::Gdk3::Events;
+
+use Gnome::Glib::MainLoop;
 
 #class N-GObject is repr('CPointer') is export { }
 
 class N-EvBttn is export is repr('CStruct') {
   has GEnum $.type;
-  has Pointer $.window;
+  has N-GObject $.window;
   has gdouble $.x;
   has gdouble $.y;
 
@@ -33,12 +33,28 @@ note 'self: ', self, ', ', self.^name;
       $window .= get-native-object-no-reffing unless $window ~~ N-GObject;
 note 'fv1: ', $window.gist, ', ', $window.defined;
 #      $!window := $window;
-      $!window = nativecast( Pointer, $window);
+      $!window = $window;
     }
   }
 }
 
-my Gnome::Gtk3::Main $main .= new;
+class X {
+  method set-event ( Gnome::Gtk3::Window :$gtk-window ) {
+
+#    my Gnome::Gdk3::Display $display = $gtk-window.get-display-rk;
+    my N-GObject $gdk-window-no = $gtk-window.get-window;
+
+    my $no = N-EvBttn.new(
+      :type(GDK_BUTTON_PRESS), :x(20e0), :y(20e0), :time(time),
+      :window($gdk-window-no)
+    );
+
+note "event: $no.gist()";
+    G_SOURCE_CONTINUE
+  }
+}
+
+
 my Gnome::Gtk3::Button $b .= new(:label<Start>);
 with my Gnome::Gtk3::Window $gtk-window .= new {
   .set-title('test events');
@@ -46,12 +62,9 @@ with my Gnome::Gtk3::Window $gtk-window .= new {
   .show-all;
 }
 
-my Gnome::Gdk3::Display $display = $gtk-window.get-display-rk;
-my N-GObject $gdk-window-no = $gtk-window.get-window;
+my Gnome::Glib::MainLoop $loop .= new;
 
-my $no = N-EvBttn.new(
-  :type(GDK_BUTTON_PRESS), :x(20e0), :y(20e0), :time(time),
-  :window($gdk-window-no)
+my Int $esid = $loop.timeout-add(
+  1000, X.new, 'set-event', :$gtk-window
 );
-
-note "event: $no.gist()";
+$loop.run;
