@@ -39,14 +39,15 @@ subtest 'Manipulations', {
     ).get-name;
   }, '.get-display()';
 
-  lives-ok { diag 'display name: ' ~ $s.get-display-rk.get-name;},
+  lives-ok { diag 'display name: ' ~ (my Gnome::Gdk3::Display() $d = $s.get-display).get-name;},
     '.get-display()';
 
   lives-ok { diag 'resolution: ' ~ $s.get-resolution; }, '.get-resolution()';
-  lives-ok { diag 'rgb: ' ~ $s.get-rgba-visual-rk.get-depth; },
+  lives-ok { diag 'rgb: ' ~ $s.get-rgba-visual.().get-depth; },
     '.get-rgba-visual()';
-  lives-ok { $s.get-root-window-rk.beep; }, '.get-root-window()';
-  lives-ok { diag 'sys: ' ~ $s.get-system-visual-rk.get-depth; },
+
+  lives-ok { $s.get-root-window.().beep; }, '.get-root-window()';
+  lives-ok { diag 'sys: ' ~ $s.get-system-visual.().get-depth; },
     '.get-system-visual()';
   lives-ok { diag 'toplevels: ' ~ $s.get-toplevel-windows-rk.length; },
     '.get-toplevel-windows()';
@@ -63,6 +64,19 @@ subtest 'Manipulations', {
 done-testing;
 
 =finish
+
+# nice to remember
+
+with $s.get-rgba-visual {
+  note .defined;
+  note .^name;
+  note .gist;
+  note .().get-depth;
+  note .('Gnome::Gdk3::Visual').get-depth;
+}
+
+
+
 
 # Some props are tests but still not on travis tests because devices may return
 # different values and therefore fail.

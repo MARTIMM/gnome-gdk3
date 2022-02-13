@@ -88,19 +88,7 @@ submethod BUILD ( *%options ) {
     else {
       my $no;
 
-      if ? %options<default> {
-        Gnome::N::deprecate( '.new(:default)', '.new()', '0.15.3', '0.18.0');
-        $no = _gdk_screen_get_default();
-      }
-
-      elsif ? %options<screen> {
-        Gnome::N::deprecate(
-          '.new(:screen)', '.new(:native-object)', '0.15.3', '0.18.0'
-        );
-        $no = %options<screen>;
-      }
-
-      elsif %options.keys.elems {
+      if %options.keys.elems {
         die X::Gnome.new(
           :message('Unsupported options for ' ~ self.^name ~
                    ': ' ~ %options.keys.join(', ')
@@ -137,19 +125,23 @@ method _fallback ( $native-sub is copy --> Callable ) {
 #-------------------------------------------------------------------------------
 #TM:1:get-display:
 =begin pod
-=head2 get-display, get-display-rk
+=head2 get-display
 
 Gets the display to which the I<screen> belongs.
 
 Returns: the display to which I<screen> belongs
 
-  method get-display-rk ( --> Gnome::Gdk3::Display )
   method get-display ( --> N-GObject )
 
 =end pod
 
 # Used Any to prevent loading and circular dependencies
 method get-display-rk ( --> Any ) {
+  Gnome::N::deprecate(
+    'get-display-rk', 'coercing from get-display',
+    '0.19.2', '0.21.0'
+  );
+
   self._wrap-native-type(
     'Gnome::Gdk3::Display',
     gdk_screen_get_display(self._get-native-object-no-reffing)
@@ -212,7 +204,7 @@ sub gdk_screen_get_resolution (
 #-------------------------------------------------------------------------------
 #TM:1:get-rgba-visual:
 =begin pod
-=head2 get-rgba-visual, get-rgba-visual-rk
+=head2 get-rgba-visual
 
 Gets a visual to use for creating windows with an alpha channel. The windowing system on which GTK+ is running may not support this capability, in which case C<undefined> will be returned. Even if a non-C<undefined> value is returned, its possible that the window’s alpha channel won’t be honored when displaying the window on the screen: in particular, for X an appropriate windowing manager and compositing manager must be running to provide appropriate display.
 
@@ -222,12 +214,16 @@ For setting an overall opacity for a top-level window, see C<gdk-window-set-opac
 
 Returns: a visual to use for windows with an alpha channel or C<undefined> if the capability is not available.
 
-  method get-rgba-visual-rk ( --> Gnome::Gdk3::Visual )
   method get-rgba-visual ( --> N-GObject )
 
 =end pod
 
 method get-rgba-visual-rk ( --> Any ) {
+  Gnome::N::deprecate(
+    'get-rgba-visual-rk', 'coercing from get-rgba-visual',
+    '0.19.2', '0.21.0'
+  );
+
   self._wrap-native-type(
     'Gnome::Gdk3::Visual',
     gdk_screen_get_rgba_visual(self._get-native-object-no-reffing)
@@ -246,18 +242,22 @@ sub gdk_screen_get_rgba_visual (
 #-------------------------------------------------------------------------------
 #TM:1:get-root-window:
 =begin pod
-=head2 get-root-window, get-root-window-rk
+=head2 get-root-window
 
 Gets the root window of I<screen>.
 
 Returns: the root window
 
-  method get-root-window-rk ( --> Gnome::Gdk3::Window )
   method get-root-window ( --> N-GObject )
 
 =end pod
 
 method get-root-window-rk ( --> Any ) {
+  Gnome::N::deprecate(
+    'get-root-window-rk', 'coercing from get-root-window',
+    '0.19.2', '0.21.0'
+  );
+
   self._wrap-native-type(
     'Gnome::Gdk3::Window',
     gdk_screen_get_root_window(self._get-native-object-no-reffing)
@@ -308,18 +308,22 @@ sub gdk_screen_get_setting (
 #-------------------------------------------------------------------------------
 #TM:1:get-system-visual:
 =begin pod
-=head2 get-system-visual, get-system-visual-rk
+=head2 get-system-visual
 
 Get the system’s default visual for I<screen>. This is the visual for the root window of the display. The return value should not be freed.
 
 Returns: the system visual
 
-  method get-system-visual-rk ( --> Gnome::Gdk3::Visual )
   method get-system-visual ( --> N-GObject )
 
 =end pod
 
 method get-system-visual-rk ( --> Any ) {
+  Gnome::N::deprecate(
+    'get-system-visual-rk', 'coercing from get-system-visual',
+    '0.19.2', '0.21.0'
+  );
+
   self._wrap-native-type(
     'Gnome::Gdk3::Visual',
     gdk_screen_get_system_visual(self._get-native-object-no-reffing)
