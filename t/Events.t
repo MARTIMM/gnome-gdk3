@@ -17,11 +17,13 @@ subtest 'ISA test', {
   $e .= new(:type(GDK_BUTTON_PRESS));
   isa-ok $e, Gnome::Gdk3::Events, '.new(:type)';
 
-#  diag $e.get-native-object // '- 1';
-#  diag $e.N-GObject // '- 2';
+#`{{
+  diag $e.get-native-object // '- 1';
+  diag $e.N-GObject // '- 2';
 
   note $e.get-device-rk.^name();
   note $e.get-screen-rk.^name();
+}}
 }
 
 
