@@ -15,10 +15,11 @@ The B<Gnome::Gdk3::Device> object represents a single input device, such as a ke
 See the B<Gnome::Gdk3::DeviceManager> documentation for more information about the various kinds of master and slave devices, and their relationships.
 
 =begin comment
-=head2 See Also
-
-B<Gnome::Gdk3::DeviceManager>
+A screen device can be retrieved from a widget via the following steps
+=item Call C<.get-window()> from B<Gnome::Gtk3::Widget>. This returns a native B<Gnome::Gdk3::Window>.
+=item Then call C<.get_screen()> from B<Gnome::Gdk3::Window> to get a B<Gnome::Gdk3::Screen>.
 =end comment
+
 
 =head1 Synopsis
 =head2 Declaration
@@ -36,8 +37,12 @@ use NativeCall;
 use Gnome::N::X;
 use Gnome::N::NativeLib;
 use Gnome::N::N-GObject;
+use Gnome::N::GlibToRakuTypes;
+
 use Gnome::Glib::List;
+
 use Gnome::GObject::Object;
+
 #use Gnome::Gdk3::Types;
 
 #-------------------------------------------------------------------------------
@@ -50,23 +55,61 @@ also is Gnome::GObject::Object;
 =begin pod
 =head1 Types
 =end pod
+
+#-------------------------------------------------------------------------------
+=begin pod
+=head2 enum GdkDeviceType
+
+Indicates the device type. See [above][GdkDeviceManager.description]
+for more information about the meaning of these device types.
+
+=item GDK_DEVICE_TYPE_MASTER: Device is a master (or virtual) device. There will be an associated focus indicator on the screen.
+=item GDK_DEVICE_TYPE_SLAVE: Device is a slave (or physical) device.
+=item GDK_DEVICE_TYPE_FLOATING: Device is a physical device, currently not attached to any virtual device.
+
+=end pod
+
+#TE:0:GdkDeviceType:
+enum GdkDeviceType is export (
+  'GDK_DEVICE_TYPE_MASTER',
+  'GDK_DEVICE_TYPE_SLAVE',
+  'GDK_DEVICE_TYPE_FLOATING'
+);
+
+#-------------------------------------------------------------------------------
+=begin pod
+=head2 enum GdkInputMode
+
+An enumeration that describes the mode of an input device.
+
+=item GDK_MODE_DISABLED: the device is disabled and will not report any events.
+=item GDK_MODE_SCREEN: the device is enabled. The device’s coordinate space maps to the entire screen.
+=item GDK_MODE_WINDOW: the device is enabled. The device’s coordinate space is mapped to a single window. The manner in which this window is chosen is undefined, but it will typically be the same way in which the focus window for key events is determined.
+
+=end pod
+
+#TE:0:GdkInputMode:
+enum GdkInputMode is export (
+  'GDK_MODE_DISABLED',
+  'GDK_MODE_SCREEN',
+  'GDK_MODE_WINDOW'
+);
+
 #-------------------------------------------------------------------------------
 =begin pod
 =head2 enum GdkInputSource
 
 An enumeration describing the type of an input device in general terms.
 
-
 =item GDK_SOURCE_MOUSE: the device is a mouse. (This will be reported for the core pointer, even if it is something else, such as a trackball.)
 =item GDK_SOURCE_PEN: the device is a stylus of a graphics tablet or similar device.
 =item GDK_SOURCE_ERASER: the device is an eraser. Typically, this would be the other end of a stylus on a graphics tablet.
 =item GDK_SOURCE_CURSOR: the device is a graphics tablet “puck” or similar device.
 =item GDK_SOURCE_KEYBOARD: the device is a keyboard.
-=item GDK_SOURCE_TOUCHSCREEN: the device is a direct-input touch device, such as a touchscreen or tablet. This device type has been added in 3.4.
-=item GDK_SOURCE_TOUCHPAD: the device is an indirect touch device, such as a touchpad. This device type has been added in 3.4.
-=item GDK_SOURCE_TRACKPOINT: the device is a trackpoint. This device type has been added in 3.22
-=item GDK_SOURCE_TABLET_PAD: the device is a "pad", a collection of buttons, rings and strips found in drawing tablets. This device type has been added in 3.22.
-
+=item GDK_SOURCE_TOUCHSCREEN: the device is a direct-input touch device, such as a touchscreen or tablet.
+=item GDK_SOURCE_TOUCHPAD: the device is an indirect touch device, such as a touchpad.
+=item GDK_SOURCE_TRACKPOINT: the device is a trackpoint.
+=item GDK_SOURCE_TABLET_PAD: the device is a "pad", a collection of buttons, rings and strips found in drawing tablets.
 
 =end pod
 
@@ -83,69 +126,22 @@ enum GdkInputSource is export (
   'GDK_SOURCE_TABLET_PAD'
 );
 
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 enum GdkInputMode
-
-An enumeration that describes the mode of an input device.
-
-
-=item GDK_MODE_DISABLED: the device is disabled and will not report any events.
-=item GDK_MODE_SCREEN: the device is enabled. The device’s coordinate space maps to the entire screen.
-=item GDK_MODE_WINDOW: the device is enabled. The device’s coordinate space is mapped to a single window. The manner in which this window is chosen is undefined, but it will typically be the same way in which the focus window for key events is determined.
-
-
-=end pod
-
-#TE:0:GdkInputMode:
-enum GdkInputMode is export (
-  'GDK_MODE_DISABLED',
-  'GDK_MODE_SCREEN',
-  'GDK_MODE_WINDOW'
-);
-
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 enum GdkDeviceType
-
-Indicates the device type. See [above][B<Gnome::Gdk3::DeviceManager>.description]
-for more information about the meaning of these device types.
-
-
-=item GDK_DEVICE_TYPE_MASTER: Device is a master (or virtual) device. There will be an associated focus indicator on the screen.
-=item GDK_DEVICE_TYPE_SLAVE: Device is a slave (or physical) device.
-=item GDK_DEVICE_TYPE_FLOATING: Device is a physical device, currently not attached to any virtual device.
-
-
-=end pod
-
-#TE:0:GdkDeviceType:
-enum GdkDeviceType is export (
-  'GDK_DEVICE_TYPE_MASTER',
-  'GDK_DEVICE_TYPE_SLAVE',
-  'GDK_DEVICE_TYPE_FLOATING'
-);
-
 #`{{
-#-------------------------------------------------------------------------------
-constant GDK_MAX_TIMECOORD_AXES = 128;
 #-------------------------------------------------------------------------------
 =begin pod
 =head2 class N-GdkTimeCoord
 
 A B<Gnome::Gdk3::TimeCoord> stores a single event in a motion history.
 
-
 =item UInt $.time: The timestamp for this event.
-=item num64 $.axes: the values of the device’s axes.
-
+=item Num $.axes: the values of the device’s axes.
 
 =end pod
 
 #TT:0:N-GdkTimeCoord:
 class N-GdkTimeCoord is export is repr('CStruct') {
-  has uint32 $.time;
-  has CArray[num64] $.axes;
+  has guint32 $.time;
+  has gdouble $.axes[GDK_MAX_TIMECOORD_AXES];
 }
 }}
 
@@ -156,16 +152,80 @@ my Bool $signals-added = False;
 =head1 Methods
 =head2 new
 
-Create an object using a native object from elsewhere. See also B<Gnome::GObject::Object>.
+=head3 :native-object
+
+Create a Device object using a native object from elsewhere. See also B<Gnome::N::TopLevelClassSupport>.
 
   multi method new ( N-GObject :$native-object! )
 
 =end pod
 
-#TM:0:new(:native-object):
-
+#TM:4:new(:native-object):
 submethod BUILD ( *%options ) {
 
+  # add signal info in the form of w*<signal-name>.
+  unless $signals-added {
+    $signals-added = self.add-signal-types( $?CLASS.^name,
+      :w1<tool-changed>, :w0<changed>,
+    );
+
+    # signals from interfaces
+    #_add_..._signal_types($?CLASS.^name);
+  }
+
+
+  # prevent creating wrong native-objects
+  if self.^name eq 'Gnome::Gdk3::Device' #`{{ or %options<GdkDevice> }} {
+
+    # check if native object is set by a parent class
+    if self.is-valid { }
+
+    # check if common options are handled by some parent
+    elsif %options<native-object>:exists { }
+
+    # process all other options
+    else {
+      my $no;
+      if ? %options<___x___> {
+        #$no = %options<___x___>;
+        #$no .= _get-native-object-no-reffing unless $no ~~ N-GObject;
+        #$no = _gdk_device_new___x___($no);
+      }
+
+      ##`{{ use this when the module is not made inheritable
+      # check if there are unknown options
+      elsif %options.elems {
+        die X::Gnome.new(
+          :message(
+            'Unsupported, undefined, incomplete or wrongly typed options for ' ~
+            self.^name ~ ': ' ~ %options.keys.join(', ')
+          )
+        );
+      }
+      #}}
+
+      ##`{{ when there are no defaults use this
+      # check if there are any options
+      elsif %options.elems == 0 {
+        die X::Gnome.new(:message('No options specified ' ~ self.^name));
+      }
+      #}}
+
+      #`{{ when there are defaults use this instead
+      # create default object
+      else {
+        $no = _gdk_device_new();
+      }
+      }}
+
+      self.set-native-object($no);
+    }
+
+    # only after creating the native-object, the gtype is known
+    self._set-class-info('GdkDevice');
+  }
+
+#`{{
   $signals-added = self.add-signal-types( $?CLASS.^name,
     :w0<changed>, :w1<tool-changed>,
   ) unless $signals-added;
@@ -187,6 +247,7 @@ submethod BUILD ( *%options ) {
 
   # only after creating the native-object, the gtype is known
   self._set-class-info('GdkDevice');
+}}
 }
 
 #-------------------------------------------------------------------------------
