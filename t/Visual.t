@@ -3,10 +3,13 @@ use v6;
 #use NativeCall;
 use Test;
 
-
 use Gnome::Gdk3::Visual;
 use Gnome::Gdk3::Screen;
 ok 1, 'nome::Gdk3::Visual loads ok';
+
+# this line removes an error: No such symbol 'Gnome::Gdk3::Screen'
+#use Gnome::N::N-GObject;
+#Gnome::Gdk3::Screen.new(:native-object(N-GObject));
 
 
 #use Gnome::N::X;
@@ -24,7 +27,7 @@ my Gnome::Gdk3::Screen $s;
 #-------------------------------------------------------------------------------
 subtest 'Manipulations', {
   $s .= new;
-  $v = $s.get-rgba-visual-rk;
+  $v = $s.get-rgba-visual.();
   lives-ok { diag 'rgb: ' ~ $v.get-depth; }, '.get-rgba-visual()';
   lives-ok { diag 'blue pix: ' ~ $v.get-blue-pixel-details; },
     '.get-blue-pixel-details()';
@@ -34,13 +37,15 @@ subtest 'Manipulations', {
     '.get-red-pixel-details()';
 
   my Gnome::Gdk3::Screen $s2 .= new(:native-object($v.get-screen));
-  lives-ok { diag 'display name: ' ~ $s2.get-display-rk.get-name;},
+  lives-ok { diag 'display name: ' ~ $s2.get-display.().get-name;},
     '.get-screen()';
 
-# TODO Error in Visual; No such symbol 'Gnome::Gdk3::Screen' error
-#  $s2 = $v.get-screen;
-#  lives-ok { diag 'display name: ' ~ $s2.get-display.get-name;},
-#    '.get-screen()';
+# TODO Error in Visual?; No such symbol 'Gnome::Gdk3::Screen' error
+#note $?LINE, ', ', $v.get-screen.().gist;
+#  $s2 = $v.get-screen.(Gnome::Gdk3::Screen);
+#note $?LINE;
+  lives-ok { diag 'display name: ' ~ $s2.get-display.().get-name;},
+    '.get-screen()';
   lives-ok { diag 'visual type: ' ~ $v.get-visual-type;}, '.get-visual-type()';
 }
 
