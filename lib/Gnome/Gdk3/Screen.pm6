@@ -78,7 +78,6 @@ submethod BUILD ( *%options ) {
 
   # prevent creating wrong widgets
   if self.^name eq 'Gnome::Gdk3::Screen' #`{{or %options<GdkScreen>}} {
-
     if self.is-valid { }
 
     # check if common options are handled by some parent
