@@ -302,6 +302,7 @@ method get-screen-rk ( --> Any ) {
     'get-screen-rk', 'coercing from get-screen',
     '0.19.2', '0.21.0'
   );
+
   self._wrap-native-type(
     'Gnome::Gdk3::Screen',
     gdk_visual_get_screen(self._get-native-object-no-reffing)
