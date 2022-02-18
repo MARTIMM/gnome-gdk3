@@ -754,7 +754,7 @@ class N-GdkEventScroll is export is repr('CStruct') {
 
   submethod BUILD (
     Int:D :$type, Int() :$time, Num() :$x, Num() :$y,
-    UInt() :$state, Int() $direction, Num() :$x_root, Num() :$y_root
+    UInt() :$state, Int() :$direction, Num() :$x_root, Num() :$y_root
   ) {
     $!type = $type.value;
     $!send_event = 1;
@@ -763,7 +763,7 @@ class N-GdkEventScroll is export is repr('CStruct') {
     $!x = $x // 0e0;
     $!y = $y // 0e0;
     $!state = $state // 0;
-    $!is_hint = $is_hint ?? 1 !! 0;
+    $!direction = $direction // 0;
     $!x_root = $x_root // 0e0;
     $!y_root = $y_root  // 0e0;
   }
