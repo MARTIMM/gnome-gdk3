@@ -19,13 +19,13 @@ my Gnome::Gdk3::Window $w .= new;
 subtest 'ISA test', {
   my Gnome::Gdk3::Window $w .= new;
   isa-ok $w, Gnome::Gdk3::Window;
-
-  my Int $wtype = $w.get-window-type;
-  is GdkWindowType($wtype), GDK_WINDOW_TOPLEVEL, '.get-window-type()';
 }
 
 #-------------------------------------------------------------------------------
 subtest 'Manipulations', {
+
+  my GdkWindowType $wtype = $w.get-window-type;
+  is $wtype, GDK_WINDOW_TOPLEVEL, '.get-window-type()';
 
 #results are different between X11 and Wayland so tests are skipped
 #  $w.gdk-window-move( 500, 600);
@@ -51,8 +51,12 @@ subtest 'Manipulations', {
   ok $surface.is-valid, '.create-similar-image-surface()';
 }
 
+#-------------------------------------------------------------------------------
+done-testing;
 
-#`{{
+=finish
+
+
 #-------------------------------------------------------------------------------
 subtest 'Inherit ...', {
 }
@@ -72,7 +76,3 @@ subtest 'Themes ...', {
 #-------------------------------------------------------------------------------
 subtest 'Signals ...', {
 }
-}}
-
-#-------------------------------------------------------------------------------
-done-testing;
