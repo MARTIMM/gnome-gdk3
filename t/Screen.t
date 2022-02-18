@@ -9,6 +9,7 @@ use Gnome::N::N-GObject;
 use Gnome::GObject::Object;
 use Gnome::GObject::Type;
 
+use Gnome::Gdk3::Visual;
 use Gnome::Gdk3::Display;
 use Gnome::Gdk3::Screen;
 
@@ -47,8 +48,12 @@ subtest 'Manipulations', {
     '.get-rgba-visual()';
 
   lives-ok { $s.get-root-window.().beep; }, '.get-root-window()';
-  lives-ok { diag 'sys: ' ~ $s.get-system-visual.().get-depth; },
-    '.get-system-visual()';
+
+  # TODO somehow '$s.get-system-visual.().get-depth' does not work
+  # Fails with error 'No such symbol 'Gnome::Gdk3::Visual'
+
+  my Gnome::Gdk3::Visual $v .= new(:native-object($s.get-system-visual));
+  lives-ok { diag 'sys: ' ~ $v.get-depth; }, '.get-system-visual()';
   lives-ok { diag 'toplevels: ' ~ $s.get-toplevel-windows-rk.length; },
     '.get-toplevel-windows()';
   lives-ok { diag 'win stack: ' ~ $s.get-window-stack-rk.length; },
