@@ -27,7 +27,17 @@ subtest 'Manipulations', {
   my GdkWindowType $wtype = $w.get-window-type;
   is $wtype, GDK_WINDOW_TOPLEVEL, '.get-window-type()';
 
-  lives-ok { $w.beep; }, '.beep';
+  lives-ok { $w.beep; }, '.beep()';
+  lives-ok { $w.deiconify; }, '.deiconify()';
+  lives-ok { $w.focus(time + 2) }, '.focus()';
+  lives-ok {
+    $w.fullscreen;
+    $w.unfullscreen;
+  }, '.fullscreen() / .unfullscreen()';
+  lives-ok {
+    $w.fullscreen-on-monitor(0);
+    $w.unfullscreen;
+  }, '.fullscreen-on-monitor()';
 
 #results are different between X11 and Wayland so tests are skipped
 #  $w.gdk-window-move( 500, 600);
@@ -51,6 +61,11 @@ subtest 'Manipulations', {
     )
   );
   ok $surface.is-valid, '.create-similar-image-surface()';
+
+  ok $w.ensure-native, '.ensure-native()';
+
+  $w.destroy;
+  nok $w.is-valid, '.destroy()';
 }
 
 #-------------------------------------------------------------------------------

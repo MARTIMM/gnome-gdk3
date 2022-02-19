@@ -1194,8 +1194,9 @@ This function assumes that the drag is controlled by the client pointer device, 
 =item $timestamp; timestamp of mouse click that began the drag
 =end pod
 
-method begin-move-drag ( Int() $button, Int() $root_x, Int() $root_y, UInt $timestamp ) {
-
+method begin-move-drag (
+  Int() $button, Int() $root_x, Int() $root_y, UInt $timestamp
+) {
   gdk_window_begin_move_drag(
     self._get-native-object-no-reffing, $button, $root_x, $root_y, $timestamp
   );
@@ -1365,8 +1366,9 @@ See also: C<coords_to_parent()>
 =item $y; return location for Y coordinate in child’s coordinate system
 =end pod
 
-method coords-from-parent ( Num() $parent_x, Num() $parent_y, Num() $x, Num() $y ) {
-
+method coords-from-parent (
+  Num() $parent_x, Num() $parent_y, Num() $x, Num() $y
+) {
   gdk_window_coords_from_parent(
     self._get-native-object-no-reffing, $parent_x, $parent_y, $x, $y
   );
@@ -1390,7 +1392,9 @@ You should always use this function when writing generic code that walks up a wi
 
 See also: C<coords_from_parent()>
 
-  method coords-to-parent ( Num() $x, Num() $y, Num() $parent_x, Num() $parent_y )
+  method coords-to-parent (
+    Num() $x, Num() $y, Num() $parent_x, Num() $parent_y
+  )
 
 =item $x; X coordinate in child’s coordinate system
 =item $y; Y coordinate in child’s coordinate system
@@ -1398,8 +1402,9 @@ See also: C<coords_from_parent()>
 =item $parent_y; return location for Y coordinate in parent’s coordinate system, or C<undefined>
 =end pod
 
-method coords-to-parent ( Num() $x, Num() $y, Num() $parent_x, Num() $parent_y ) {
-
+method coords-to-parent (
+  Num() $x, Num() $y, Num() $parent_x, Num() $parent_y
+) {
   gdk_window_coords_to_parent(
     self._get-native-object-no-reffing, $x, $y, $parent_x, $parent_y
   );
@@ -1410,6 +1415,7 @@ sub gdk_window_coords_to_parent (
 ) is native(&gdk-lib)
   { * }
 
+#`{{
 #-------------------------------------------------------------------------------
 #TM:0:create-gl-context:
 =begin pod
@@ -1421,18 +1427,22 @@ If the creation of the B<Gnome::Gdk3::GLContext> failed, I<error> will be set.
 
 Before using the returned B<Gnome::Gdk3::GLContext>, you will need to call C<gdk_gl_context_make_current()> or C<gdk_gl_context_realize()>.
 
-Returns: the newly created B<Gnome::Gdk3::GLContext>, or C<undefined> on error
+  method create-gl-context ( --> List )
 
-  method create-gl-context ( N-GError $error --> N-GObject )
+The returned list holds
+=item an error object. This object is valid when there is an error.
+=item a native B<Gnome::Gdk3::GLContext>. The object is invalid on error.
 
-=item $error; return location for an error
 =end pod
 
 method create-gl-context ( $error is copy --> N-GObject ) {
-  $error .= _get-native-object-no-reffing unless $error ~~ N-GError;
-
-  gdk_window_create_gl_context(
+  my CArray[N-GError] $error .= new;
+  my $no = gdk_window_create_gl_context(
     self._get-native-object-no-reffing, $error
+  );
+
+  ( N-GError.new($no.defined ?? $error[0] !! N-GError),
+    self._wrap-native-type( 'Gnome::Gdk3::GLContext', $no)
   )
 }
 
@@ -1440,6 +1450,7 @@ sub gdk_window_create_gl_context (
   N-GObject $window, N-GError $error --> N-GObject
 ) is native(&gdk-lib)
   { * }
+}}
 
 #-------------------------------------------------------------------------------
 #TM:1:create-similar-image-surface:
@@ -1452,9 +1463,11 @@ Initially the surface contents are all 0 (transparent if contents have transpare
 
 The I<width> and I<height> of the new surface are not affected by the scaling factor of the I<window>, or by the I<scale> argument; they are the size of the surface in device pixels. If you wish to create an image surface capable of holding the contents of I<window> you can use:
 
+=begin comment
 |[<!-- language="C" --> int scale = get_scale_factor (window); int width = get_width (window) * scale; int height = get_height (window) * scale;
 
 // format is set elsewhere cairo_surface_t *surface = create_similar_image_surface (window, format, width, height, scale); ]|
+=end comment
 
 Note that unlike C<cairo_surface_create_similar_image()>, the new surface's device scale is set to I<scale>, or to the scale factor of I<window> if I<scale> is 0.
 
@@ -1462,7 +1475,10 @@ Returns: a pointer to the newly allocated surface. The caller owns the surface a
 
 This function always returns a valid pointer, but it will return a pointer to a “nil” surface if I<other> is already in an error state or any other error occurs.
 
-  method create-similar-image-surface ( cairo_format_t $format, Int() $width, Int() $height, Int() $scale --> cairo_surface_t )
+  method create-similar-image-surface (
+    cairo_format_t $format, Int() $width, Int() $height, Int() $scale
+    --> cairo_surface_t
+  )
 
 =item $format; (type int): the format for the new surface
 =item $width; width of the new surface
@@ -1470,8 +1486,10 @@ This function always returns a valid pointer, but it will return a pointer to a 
 =item $scale; the scale of the new surface, or 0 to use same as I<window>
 =end pod
 
-method create-similar-image-surface ( cairo_format_t $format, Int() $width, Int() $height, Int() $scale --> cairo_surface_t ) {
-
+method create-similar-image-surface (
+  cairo_format_t $format, Int() $width, Int() $height, Int() $scale
+  --> cairo_surface_t
+) {
   gdk_window_create_similar_image_surface(
     self._get-native-object-no-reffing, $format, $width, $height, $scale
   )
@@ -1495,7 +1513,10 @@ Returns: a pointer to the newly allocated surface. The caller owns the surface a
 
 This function always returns a valid pointer, but it will return a pointer to a “nil” surface if I<other> is already in an error state or any other error occurs.
 
-  method create-similar-surface ( cairo_content_t $content, Int() $width, Int() $height --> cairo_surface_t )
+  method create-similar-surface (
+    cairo_content_t $content, Int() $width, Int() $height
+    --> cairo_surface_t
+  )
 
 =item $content; the content for the new surface
 =item $width; width of the new surface
@@ -1515,7 +1536,7 @@ sub gdk_window_create_similar_surface (
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:deiconify:
+#TM:1:deiconify:
 =begin pod
 =head2 deiconify
 
@@ -1526,10 +1547,7 @@ Attempt to deiconify (unminimize) I<window>. On X11 the window manager may choos
 =end pod
 
 method deiconify ( ) {
-
-  gdk_window_deiconify(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_deiconify(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_deiconify (
@@ -1538,7 +1556,7 @@ sub gdk_window_deiconify (
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:destroy:
+#TM:1:destroy:
 =begin pod
 =head2 destroy
 
@@ -1546,15 +1564,15 @@ Destroys the window system resources associated with I<window> and decrements I<
 
 Note that a window will not be destroyed automatically when its reference count reaches zero. You must call this function yourself before that happens.
 
+After this call the object becomes invalid and its native object lost.
+
   method destroy ( )
 
 =end pod
 
 method destroy ( ) {
-
-  gdk_window_destroy(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_destroy(self._get-native-object-no-reffing);
+  self._set-native-object(N-GObject);
 }
 
 sub gdk_window_destroy (
@@ -1562,16 +1580,17 @@ sub gdk_window_destroy (
 ) is native(&gdk-lib)
   { * }
 
+#`{{
 #-------------------------------------------------------------------------------
 #TM:0:end-draw-frame:
 =begin pod
 =head2 end-draw-frame
 
-Indicates that the drawing of the contents of I<window> started with C<begin_frame()> has been completed.
+Indicates that the drawing of the contents of I<window> started with C<begin-draw-frame()> has been completed.
 
 This function will take care of destroying the B<Gnome::Gdk3::DrawingContext>.
 
-It is an error to call this function without a matching C<begin_frame()> first.
+It is an error to call this function without a matching C<begin-draw-frame()> first.
 
   method end-draw-frame ( N-GObject() $context )
 
@@ -1586,9 +1605,10 @@ sub gdk_window_end_draw_frame (
   N-GObject $window, N-GObject $context
 ) is native(&gdk-lib)
   { * }
+}}
 
 #-------------------------------------------------------------------------------
-#TM:0:ensure-native:
+#TM:1:ensure-native:
 =begin pod
 =head2 ensure-native
 
@@ -1605,10 +1625,7 @@ Returns: C<True> if the window has a native window, C<False> otherwise
 =end pod
 
 method ensure-native ( --> Bool ) {
-
-  gdk_window_ensure_native(
-    self._get-native-object-no-reffing,
-  ).Bool
+  gdk_window_ensure_native(self._get-native-object-no-reffing).Bool
 }
 
 sub gdk_window_ensure_native (
@@ -1617,11 +1634,11 @@ sub gdk_window_ensure_native (
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:focus:
+#TM:1:focus:
 =begin pod
 =head2 focus
 
-Sets keyboard focus to I<window>. In most cases, C<gtk_window_present_with_time()> should be used on a B<Gnome::Gdk3::Window>, rather than calling this function.
+Sets keyboard focus to I<window>. In most cases, C<Gnome::Gtk3::Window.present-with-time()> should be used on a B<Gnome::Gtk3::Window>, rather than calling this function.
 
   method focus ( UInt $timestamp )
 
@@ -1629,10 +1646,7 @@ Sets keyboard focus to I<window>. In most cases, C<gtk_window_present_with_time(
 =end pod
 
 method focus ( UInt $timestamp ) {
-
-  gdk_window_focus(
-    self._get-native-object-no-reffing, $timestamp
-  );
+  gdk_window_focus( self._get-native-object-no-reffing, $timestamp);
 }
 
 sub gdk_window_focus (
@@ -1652,10 +1666,7 @@ Temporarily freezes a window such that it won’t receive expose events. The win
 =end pod
 
 method freeze-updates ( ) {
-
-  gdk_window_freeze_updates(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_freeze_updates(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_freeze_updates (
@@ -1664,7 +1675,7 @@ sub gdk_window_freeze_updates (
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:fullscreen:
+#TM:1:fullscreen:
 =begin pod
 =head2 fullscreen
 
@@ -1679,10 +1690,7 @@ On X11, asks the window manager to put I<window> in a fullscreen state, if the w
 =end pod
 
 method fullscreen ( ) {
-
-  gdk_window_fullscreen(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_fullscreen(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_fullscreen (
@@ -1691,13 +1699,13 @@ sub gdk_window_fullscreen (
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:fullscreen-on-monitor:
+#TM:1:fullscreen-on-monitor:
 =begin pod
 =head2 fullscreen-on-monitor
 
 Moves the window into fullscreen mode on the given monitor. This means the window covers the entire screen and is above any panels or task bars.
 
-If the window was already fullscreen, then this function does nothing. Since: UNRELEASED
+If the window was already fullscreen, then this function does nothing.
 
   method fullscreen-on-monitor ( Int() $monitor )
 
@@ -1705,7 +1713,6 @@ If the window was already fullscreen, then this function does nothing. Since: UN
 =end pod
 
 method fullscreen-on-monitor ( Int() $monitor ) {
-
   gdk_window_fullscreen_on_monitor(
     self._get-native-object-no-reffing, $monitor
   );
@@ -1713,31 +1720,6 @@ method fullscreen-on-monitor ( Int() $monitor ) {
 
 sub gdk_window_fullscreen_on_monitor (
   N-GObject $window, gint $monitor
-) is native(&gdk-lib)
-  { * }
-
-#-------------------------------------------------------------------------------
-#TM:0:gdk-get-default-root-window:
-=begin pod
-=head2 gdk-get-default-root-window
-
-Obtains the root window (parent all other windows are inside) for the default display and screen.
-
-Returns: the default root window
-
-  method gdk-get-default-root-window ( --> N-GObject )
-
-=end pod
-
-method gdk-get-default-root-window ( --> N-GObject ) {
-
-  gdk_get_default_root_window(
-    self._get-native-object-no-reffing,
-  )
-}
-
-sub gdk_get_default_root_window (
-   --> N-GObject
 ) is native(&gdk-lib)
   { * }
 
@@ -1918,6 +1900,28 @@ method get-decorations ( GdkWMDecoration $decorations --> Bool ) {
 
 sub gdk_window_get_decorations (
   N-GObject $window, GEnum $decorations --> gboolean
+) is native(&gdk-lib)
+  { * }
+
+#-------------------------------------------------------------------------------
+#TM:0:get-default-root-window:
+=begin pod
+=head2 get-default-root-window
+
+Obtains the root window (parent all other windows are inside) for the default display and screen.
+
+Returns: the default root window
+
+  method get-default-root-window ( --> N-GObject )
+
+=end pod
+
+method get-default-root-window ( --> N-GObject ) {
+  gdk_get_default_root_window(self._get-native-object-no-reffing)
+}
+
+sub gdk_get_default_root_window (
+   --> N-GObject
 ) is native(&gdk-lib)
   { * }
 
@@ -4951,7 +4955,7 @@ sub gdk_window_thaw_updates (
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:unfullscreen:
+#TM:1:unfullscreen:
 =begin pod
 =head2 unfullscreen
 
@@ -4964,10 +4968,7 @@ On X11, asks the window manager to move I<window> out of the fullscreen state, i
 =end pod
 
 method unfullscreen ( ) {
-
-  gdk_window_unfullscreen(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_unfullscreen(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_unfullscreen (
