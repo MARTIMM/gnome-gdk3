@@ -51,6 +51,8 @@ subtest 'Manipulations', {
 
   # TODO somehow '$s.get-system-visual.().get-depth' does not work
   # Fails with error 'No such symbol 'Gnome::Gdk3::Visual'
+#note $s.get-system-visual.('Gnome::Gdk3::Visual').get-depth;
+#my Gnome::Gdk3::Visual() $v0 = $s.get-system-visual;
 
   my Gnome::Gdk3::Visual $v .= new(:native-object($s.get-system-visual));
   lives-ok { diag 'sys: ' ~ $v.get-depth; }, '.get-system-visual()';
