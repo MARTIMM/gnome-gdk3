@@ -1123,21 +1123,18 @@ sub gdk_window_add_filter (
 }}
 
 #-------------------------------------------------------------------------------
-#TM:0:beep:
+#TM:1:beep:
 =begin pod
 =head2 beep
 
-Emits a short beep associated to I<window> in the appropriate display, if supported. Otherwise, emits a short beep on the display just as C<gdk_display_beep()>.
+Emits a short beep associated to I<window> in the appropriate display, if supported. Otherwise, emits a short beep on the display just as C<Gnome::Gdk3::Display.beep()>.
 
   method beep ( )
 
 =end pod
 
 method beep ( ) {
-
-  gdk_window_beep(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_beep(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_beep (
@@ -1187,7 +1184,9 @@ Begins a window move operation (for a toplevel window).
 
 This function assumes that the drag is controlled by the client pointer device, use C<begin_move_drag_for_device()> to begin a drag with a different device.
 
-  method begin-move-drag ( Int() $button, Int() $root_x, Int() $root_y, UInt $timestamp )
+  method begin-move-drag (
+    Int() $button, Int() $root_x, Int() $root_y, UInt $timestamp
+  )
 
 =item $button; the button being used to drag, or 0 for a keyboard-initiated drag
 =item $root_x; root window X coordinate of mouse click that began the drag
@@ -1214,7 +1213,10 @@ sub gdk_window_begin_move_drag (
 
 Begins a window move operation (for a toplevel window). You might use this function to implement a “window move grip,” for example. The function works best with window managers that support the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) but has a fallback implementation for other window managers.
 
-  method begin-move-drag-for-device ( N-GObject $device, Int() $button, Int() $root_x, Int() $root_y, UInt $timestamp )
+  method begin-move-drag-for-device (
+    N-GObject() $device, Int() $button,
+    Int() $root_x, Int() $root_y, UInt $timestamp
+  )
 
 =item $device; the device used for the operation
 =item $button; the button being used to drag, or 0 for a keyboard-initiated drag
@@ -1223,11 +1225,13 @@ Begins a window move operation (for a toplevel window). You might use this funct
 =item $timestamp; timestamp of mouse click that began the drag
 =end pod
 
-method begin-move-drag-for-device ( $device is copy, Int() $button, Int() $root_x, Int() $root_y, UInt $timestamp ) {
-  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
-
+method begin-move-drag-for-device (
+  N-GObject() $device, Int() $button,
+  Int() $root_x, Int() $root_y, UInt $timestamp
+) {
   gdk_window_begin_move_drag_for_device(
-    self._get-native-object-no-reffing, $device, $button, $root_x, $root_y, $timestamp
+    self._get-native-object-no-reffing, $device, $button,
+    $root_x, $root_y, $timestamp
   );
 }
 
@@ -1245,7 +1249,10 @@ Begins a window resize operation (for a toplevel window).
 
 This function assumes that the drag is controlled by the client pointer device, use C<begin_resize_drag_for_device()> to begin a drag with a different device.
 
-  method begin-resize-drag ( GdkWindowEdge $edge, Int() $button, Int() $root_x, Int() $root_y, UInt $timestamp )
+  method begin-resize-drag (
+    GdkWindowEdge $edge, Int() $button,
+    Int() $root_x, Int() $root_y, UInt $timestamp
+  )
 
 =item $edge; the edge or corner from which the drag is started
 =item $button; the button being used to drag, or 0 for a keyboard-initiated drag
@@ -1254,8 +1261,10 @@ This function assumes that the drag is controlled by the client pointer device, 
 =item $timestamp; timestamp of mouse click that began the drag (use C<gdk_event_get_time()>)
 =end pod
 
-method begin-resize-drag ( GdkWindowEdge $edge, Int() $button, Int() $root_x, Int() $root_y, UInt $timestamp ) {
-
+method begin-resize-drag (
+  GdkWindowEdge $edge, Int() $button,
+  Int() $root_x, Int() $root_y, UInt $timestamp
+) {
   gdk_window_begin_resize_drag(
     self._get-native-object-no-reffing, $edge, $button, $root_x, $root_y, $timestamp
   );
@@ -1273,7 +1282,10 @@ sub gdk_window_begin_resize_drag (
 
 Begins a window resize operation (for a toplevel window). You might use this function to implement a “window resize grip,” for example; in fact B<Gnome::Gdk3::Statusbar> uses it. The function works best with window managers that support the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) but has a fallback implementation for other window managers.
 
-  method begin-resize-drag-for-device ( GdkWindowEdge $edge, N-GObject $device, Int() $button, Int() $root_x, Int() $root_y, UInt $timestamp )
+  method begin-resize-drag-for-device (
+    GdkWindowEdge $edge, N-GObject() $device, Int() $button,
+    Int() $root_x, Int() $root_y, UInt $timestamp
+  )
 
 =item $edge; the edge or corner from which the drag is started
 =item $device; the device used for the operation
@@ -1283,9 +1295,10 @@ Begins a window resize operation (for a toplevel window). You might use this fun
 =item $timestamp; timestamp of mouse click that began the drag (use C<gdk_event_get_time()>)
 =end pod
 
-method begin-resize-drag-for-device ( GdkWindowEdge $edge, $device is copy, Int() $button, Int() $root_x, Int() $root_y, UInt $timestamp ) {
-  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
-
+method begin-resize-drag-for-device (
+  GdkWindowEdge $edge, N-GObject() $device, Int() $button,
+  Int() $root_x, Int() $root_y, UInt $timestamp
+) {
   gdk_window_begin_resize_drag_for_device(
     self._get-native-object-no-reffing, $edge, $device, $button, $root_x, $root_y, $timestamp
   );
@@ -1303,7 +1316,10 @@ sub gdk_window_begin_resize_drag_for_device (
 
 Constrains a desired width and height according to a set of geometry hints (such as minimum and maximum size).
 
-  method constrain-size ( GdkGeometry $geometry, GdkWindowHints $flags, Int() $width, Int() $height )
+  method constrain-size (
+    GdkGeometry $geometry, GdkWindowHints $flags,
+    Int() $width, Int() $height
+  )
 
 =item $geometry; a B<Gnome::Gdk3::Geometry> structure
 =item $flags; a mask indicating what portions of I<geometry> are set
@@ -1313,8 +1329,9 @@ Constrains a desired width and height according to a set of geometry hints (such
 =item $new_height; location to store resulting height
 =end pod
 
-method constrain-size ( GdkGeometry $geometry, GdkWindowHints $flags, Int() $width, Int() $height ) {
-
+method constrain-size (
+  GdkGeometry $geometry, GdkWindowHints $flags, Int() $width, Int() $height
+) {
   gdk_window_constrain_size(
     self._get-native-object-no-reffing, $geometry, $flags, $width, $height, my gint $new_width, my gint $new_height
   );
@@ -1338,7 +1355,9 @@ You should always use this function when writing generic code that walks down a 
 
 See also: C<coords_to_parent()>
 
-  method coords-from-parent ( Num() $parent_x, Num() $parent_y, Num() $x, Num() $y )
+  method coords-from-parent (
+    Num() $parent_x, Num() $parent_y, Num() $x, Num() $y
+  )
 
 =item $parent_x; X coordinate in parent’s coordinate system
 =item $parent_y; Y coordinate in parent’s coordinate system
@@ -1554,17 +1573,13 @@ This function will take care of destroying the B<Gnome::Gdk3::DrawingContext>.
 
 It is an error to call this function without a matching C<begin_frame()> first.
 
-  method end-draw-frame ( N-GObject $context )
+  method end-draw-frame ( N-GObject() $context )
 
 =item $context; the B<Gnome::Gdk3::DrawingContext> created by C<begin_draw_frame()>
 =end pod
 
-method end-draw-frame ( $context is copy ) {
-  $context .= _get-native-object-no-reffing unless $context ~~ N-GObject;
-
-  gdk_window_end_draw_frame(
-    self._get-native-object-no-reffing, $context
-  );
+method end-draw-frame ( N-GObject() $context ) {
+  gdk_window_end_draw_frame( self._get-native-object-no-reffing, $context);
 }
 
 sub gdk_window_end_draw_frame (
@@ -1727,79 +1742,6 @@ sub gdk_get_default_root_window (
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:gdk-offscreen-window-get-embedder:
-=begin pod
-=head2 gdk-offscreen-window-get-embedder
-
-
-
-  method gdk-offscreen-window-get-embedder ( --> N-GObject )
-
-=end pod
-
-method gdk-offscreen-window-get-embedder ( --> N-GObject ) {
-
-  gdk_offscreen_window_get_embedder(
-    self._get-native-object-no-reffing,
-  )
-}
-
-sub gdk_offscreen_window_get_embedder (
-  N-GObject $window --> N-GObject
-) is native(&gdk-lib)
-  { * }
-
-#`{{
-#-------------------------------------------------------------------------------
-#TM:0:gdk-offscreen-window-get-surface:
-=begin pod
-=head2 gdk-offscreen-window-get-surface
-
-
-
-  method gdk-offscreen-window-get-surface ( --> cairo_surface_t )
-
-=end pod
-
-method gdk-offscreen-window-get-surface ( --> cairo_surface_t ) {
-
-  gdk_offscreen_window_get_surface(
-    self._get-native-object-no-reffing,
-  )
-}
-
-sub gdk_offscreen_window_get_surface (
-  N-GObject $window --> cairo_surface_t
-) is native(&gdk-lib)
-  { * }
-}}
-
-#-------------------------------------------------------------------------------
-#TM:0:gdk-offscreen-window-set-embedder:
-=begin pod
-=head2 gdk-offscreen-window-set-embedder
-
-
-
-  method gdk-offscreen-window-set-embedder ( N-GObject $embedder )
-
-=item $embedder;
-=end pod
-
-method gdk-offscreen-window-set-embedder ( $embedder is copy ) {
-  $embedder .= _get-native-object-no-reffing unless $embedder ~~ N-GObject;
-
-  gdk_offscreen_window_set_embedder(
-    self._get-native-object-no-reffing, $embedder
-  );
-}
-
-sub gdk_offscreen_window_set_embedder (
-  N-GObject $window, N-GObject $embedder
-) is native(&gdk-lib)
-  { * }
-
-#-------------------------------------------------------------------------------
 #TM:0:geometry-changed:
 =begin pod
 =head2 geometry-changed
@@ -1811,10 +1753,7 @@ This function informs GDK that the geometry of an embedded offscreen window has 
 =end pod
 
 method geometry-changed ( ) {
-
-  gdk_window_geometry_changed(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_geometry_changed(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_geometry_changed (
@@ -1991,17 +1930,13 @@ Retrieves a B<Gnome::Gdk3::Cursor> pointer for the I<device> currently set on th
 
 Returns: a B<Gnome::Gdk3::Cursor>, or C<undefined>. The returned object is owned by the B<Gnome::Gdk3::Window> and should not be unreferenced directly. Use C<set_cursor()> to unset the cursor of the window
 
-  method get-device-cursor ( N-GObject $device --> N-GObject )
+  method get-device-cursor ( N-GObject() $device --> N-GObject )
 
 =item $device; a master, pointer B<Gnome::Gdk3::Device>.
 =end pod
 
-method get-device-cursor ( $device is copy --> N-GObject ) {
-  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
-
-  gdk_window_get_device_cursor(
-    self._get-native-object-no-reffing, $device
-  )
+method get-device-cursor ( N-GObject() $device --> N-GObject ) {
+  gdk_window_get_device_cursor( self._get-native-object-no-reffing, $device)
 }
 
 sub gdk_window_get_device_cursor (
@@ -2018,14 +1953,12 @@ Returns the event mask for I<window> corresponding to an specific device.
 
 Returns: device event mask for I<window>
 
-  method get-device-events ( N-GObject $device --> GdkEventMask )
+  method get-device-events ( N-GObject() $device --> GdkEventMask )
 
 =item $device; a B<Gnome::Gdk3::Device>.
 =end pod
 
-method get-device-events ( $device is copy --> GdkEventMask ) {
-  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
-
+method get-device-events ( N-GObject() $device --> GdkEventMask ) {
   GdkEventMask(
     gdk_window_get_device_events( self._get-native-object-no-reffing, $device)
   )
@@ -2047,7 +1980,9 @@ Use C<get_device_position_double()> if you need subpixel precision.
 
 Returns: The window underneath I<device> (as with C<gdk_device_get_window_at_position()>), or C<undefined> if the window is not known to GDK.
 
-  method get-device-position ( N-GObject $device, GdkModifierType $mask --> N-GObject )
+  method get-device-position (
+    N-GObject() $device, GdkModifierType $mask --> N-GObject
+  )
 
 =item $device; pointer B<Gnome::Gdk3::Device> to query to.
 =item $x; return location for the X coordinate of I<device>, or C<undefined>.
@@ -2055,9 +1990,9 @@ Returns: The window underneath I<device> (as with C<gdk_device_get_window_at_pos
 =item $mask; return location for the modifier mask, or C<undefined>.
 =end pod
 
-method get-device-position ( $device is copy, GdkModifierType $mask --> N-GObject ) {
-  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
-
+method get-device-position (
+  N-GObject() $device, GdkModifierType $mask --> N-GObject
+) {
   gdk_window_get_device_position(
     self._get-native-object-no-reffing, $device, my gint $x, my gint $y, $mask
   )
@@ -2077,7 +2012,10 @@ Obtains the current device position in doubles and modifier state. The position 
 
 Returns: The window underneath I<device> (as with C<gdk_device_get_window_at_position()>), or C<undefined> if the window is not known to GDK.
 
-  method get-device-position-double ( N-GObject $device, Num() $x, Num() $y, GdkModifierType $mask --> N-GObject )
+  method get-device-position-double (
+    N-GObject() $device, Num() $x, Num() $y, GdkModifierType $mask
+    --> N-GObject
+  )
 
 =item $device; pointer B<Gnome::Gdk3::Device> to query to.
 =item $x; return location for the X coordinate of I<device>, or C<undefined>.
@@ -2085,9 +2023,10 @@ Returns: The window underneath I<device> (as with C<gdk_device_get_window_at_pos
 =item $mask; return location for the modifier mask, or C<undefined>.
 =end pod
 
-method get-device-position-double ( $device is copy, Num() $x, Num() $y, GdkModifierType $mask --> N-GObject ) {
-  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
-
+method get-device-position-double (
+  N-GObject() $device, Num() $x, Num() $y,
+  GdkModifierType $mask --> N-GObject
+) {
   gdk_window_get_device_position_double(
     self._get-native-object-no-reffing, $device, $x, $y, $mask
   )
@@ -2133,14 +2072,12 @@ Finds out the DND protocol supported by a window.
 
 Returns: the supported DND protocol.
 
-  method get-drag-protocol ( N-GObject $target --> GdkDragProtocol )
+  method get-drag-protocol ( N-GObject() $target --> GdkDragProtocol )
 
 =item $target; location of the window where the drop should happen. This may be I<window> or a proxy window, or C<undefined> if I<window> does not support Drag and Drop.
 =end pod
 
-method get-drag-protocol ( $target is copy --> GdkDragProtocol ) {
-  $target .= _get-native-object-no-reffing unless $target ~~ N-GObject;
-
+method get-drag-protocol ( N-GObject() $target --> GdkDragProtocol ) {
   GdkDragProtocol(
     gdk_window_get_drag_protocol( self._get-native-object-no-reffing, $target)
   )
@@ -2314,17 +2251,13 @@ sub gdk_window_get_frame_clock (
 
 Obtains the bounding box of the window, including window manager titlebar/borders if any. The frame position is given in root window coordinates. To get the position of the window itself (rather than the frame) in root window coordinates, use C<get_origin()>.
 
-  method get-frame-extents ( N-GObject $rect )
+  method get-frame-extents ( N-GObject() $rect )
 
 =item $rect; rectangle to fill with bounding box of the window frame
 =end pod
 
-method get-frame-extents ( $rect is copy ) {
-  $rect .= _get-native-object-no-reffing unless $rect ~~ N-GObject;
-
-  gdk_window_get_frame_extents(
-    self._get-native-object-no-reffing, $rect
-  );
+method get-frame-extents ( N-GObject() $rect ) {
+  gdk_window_get_frame_extents( self._get-native-object-no-reffing, $rect);
 }
 
 sub gdk_window_get_frame_extents (
@@ -3104,15 +3037,13 @@ sub gdk_window_invalidate_maybe_recurse (
 
 A convenience wrapper around C<invalidate_region()> which invalidates a rectangular region. See C<invalidate_region()> for details.
 
-  method invalidate-rect ( N-GObject $rect, Bool $invalidate_children )
+  method invalidate-rect ( N-GObject() $rect, Bool $invalidate_children )
 
 =item $rect; rectangle to invalidate or C<undefined> to invalidate the whole window
 =item $invalidate_children; whether to also invalidate child windows
 =end pod
 
-method invalidate-rect ( $rect is copy, Bool $invalidate_children ) {
-  $rect .= _get-native-object-no-reffing unless $rect ~~ N-GObject;
-
+method invalidate-rect ( N-GObject() $rect, Bool $invalidate_children ) {
   gdk_window_invalidate_rect(
     self._get-native-object-no-reffing, $rect, $invalidate_children
   );
@@ -3506,7 +3437,11 @@ I<anchor_hints> determines how I<window> will be moved if the anchor points caus
 
 Connect to the  I<moved-to-rect> signal to find out how it was actually positioned.
 
-  method move-to-rect ( N-GObject $rect, GdkGravity $rect_anchor, GdkGravity $window_anchor, GdkAnchorHints $anchor_hints, Int() $rect_anchor_dx, Int() $rect_anchor_dy )
+  method move-to-rect (
+    N-GObject() $rect, GdkGravity $rect_anchor,
+    GdkGravity $window_anchor, GdkAnchorHints $anchor_hints,
+    Int() $rect_anchor_dx, Int() $rect_anchor_dy
+  )
 
 =item $rect; the destination B<Gnome::Gdk3::Rectangle> to align I<window> with
 =item $rect_anchor; the point on I<rect> to align with I<window>'s anchor point
@@ -3516,16 +3451,84 @@ Connect to the  I<moved-to-rect> signal to find out how it was actually position
 =item $rect_anchor_dy; vertical offset to shift I<window>, i.e. I<rect>'s anchor point
 =end pod
 
-method move-to-rect ( $rect is copy, GdkGravity $rect_anchor, GdkGravity $window_anchor, GdkAnchorHints $anchor_hints, Int() $rect_anchor_dx, Int() $rect_anchor_dy ) {
-  $rect .= _get-native-object-no-reffing unless $rect ~~ N-GObject;
-
+method move-to-rect (
+  N-GObject() $rect, GdkGravity $rect_anchor, GdkGravity $window_anchor,
+  GdkAnchorHints $anchor_hints, Int() $rect_anchor_dx, Int() $rect_anchor_dy
+) {
   gdk_window_move_to_rect(
-    self._get-native-object-no-reffing, $rect, $rect_anchor, $window_anchor, $anchor_hints, $rect_anchor_dx, $rect_anchor_dy
+    self._get-native-object-no-reffing, $rect, $rect_anchor, $window_anchor,
+    $anchor_hints, $rect_anchor_dx, $rect_anchor_dy
   );
 }
 
 sub gdk_window_move_to_rect (
-  N-GObject $window, N-GObject $rect, GEnum $rect_anchor, GEnum $window_anchor, GEnum $anchor_hints, gint $rect_anchor_dx, gint $rect_anchor_dy
+  N-GObject $window, N-GObject $rect, GEnum $rect_anchor, GEnum $window_anchor,
+  GEnum $anchor_hints, gint $rect_anchor_dx, gint $rect_anchor_dy
+) is native(&gdk-lib)
+  { * }
+
+#-------------------------------------------------------------------------------
+#TM:0:offscreen-window-get-embedder:
+=begin pod
+=head2 offscreen-window-get-embedder
+
+Gets the window that window is embedded in.
+
+  method gdk-offscreen-window-get-embedder ( --> N-GObject )
+
+=end pod
+
+method offscreen-window-get-embedder ( --> N-GObject ) {
+  gdk_offscreen_window_get_embedder(self._get-native-object-no-reffing)
+}
+
+sub gdk_offscreen_window_get_embedder (
+  N-GObject $window --> N-GObject
+) is native(&gdk-lib)
+  { * }
+
+#-------------------------------------------------------------------------------
+#TM:0:offscreen-window-get-surface:
+=begin pod
+=head2 offscreen-window-get-surface
+
+Gets the offscreen surface that an offscreen window renders into. If you need to keep this around over window resizes, you need to add a reference to it.
+
+  method offscreen-window-get-surface ( --> cairo_surface_t )
+
+=end pod
+
+method offscreen-window-get-surface ( --> cairo_surface_t ) {
+  gdk_offscreen_window_get_surface(self._get-native-object-no-reffing)
+}
+
+sub gdk_offscreen_window_get_surface (
+  N-GObject $window --> cairo_surface_t
+) is native(&gdk-lib)
+  { * }
+
+#-------------------------------------------------------------------------------
+#TM:0:offscreen-window-set-embedder:
+=begin pod
+=head2 offscreen-window-set-embedder
+
+Sets window to be embedded in embedder.
+
+To fully embed an offscreen window, in addition to calling this function, it is also necessary to handle the “pick-embedded-child” signal on the embedder and the “to-embedder” and “from-embedder” signals on window .
+
+  method offscreen-window-set-embedder ( N-GObject() $embedder )
+
+=item $embedder;
+=end pod
+
+method offscreen-window-set-embedder ( N-GObject() $embedder ) {
+  gdk_offscreen_window_set_embedder(
+    self._get-native-object-no-reffing, $embedder
+  );
+}
+
+sub gdk_offscreen_window_set_embedder (
+  N-GObject $window, N-GObject $embedder
 ) is native(&gdk-lib)
   { * }
 
@@ -3636,19 +3639,15 @@ sub gdk_window_remove_filter (
 
 Reparents I<window> into the given I<new_parent>. The window being reparented will be unmapped as a side effect.
 
-  method reparent ( N-GObject $new_parent, Int() $x, Int() $y )
+  method reparent ( N-GObject() $new_parent, Int() $x, Int() $y )
 
 =item $new_parent; new parent to move I<window> into
 =item $x; X location inside the new parent
 =item $y; Y location inside the new parent
 =end pod
 
-method reparent ( $new_parent is copy, Int() $x, Int() $y ) {
-  $new_parent .= _get-native-object-no-reffing unless $new_parent ~~ N-GObject;
-
-  gdk_window_reparent(
-    self._get-native-object-no-reffing, $new_parent, $x, $y
-  );
+method reparent ( N-GObject() $new_parent, Int() $x, Int() $y ) {
+  gdk_window_reparent( self._get-native-object-no-reffing, $new_parent, $x, $y);
 }
 
 sub gdk_window_reparent (
@@ -3696,18 +3695,14 @@ If I<sibling> is C<undefined>, then this either raises (if I<above> is C<True>) 
 
 If I<window> is a toplevel, the window manager may choose to deny the request to move the window in the Z-order, C<restack()> only requests the restack, does not guarantee it.
 
-  method restack ( N-GObject $sibling, Bool $above )
+  method restack ( N-GObject() $sibling, Bool $above )
 
 =item $sibling; a B<Gnome::Gdk3::Window> that is a sibling of I<window>, or C<undefined>
 =item $above; a boolean
 =end pod
 
-method restack ( $sibling is copy, Bool $above ) {
-  $sibling .= _get-native-object-no-reffing unless $sibling ~~ N-GObject;
-
-  gdk_window_restack(
-    self._get-native-object-no-reffing, $sibling, $above
-  );
+method restack ( N-GObject() $sibling, Bool $above ) {
+  gdk_window_restack( self._get-native-object-no-reffing, $sibling, $above);
 }
 
 sub gdk_window_restack (
@@ -3814,6 +3809,7 @@ sub gdk_window_set_child_shapes (
 ) is native(&gdk-lib)
   { * }
 
+#`{{
 #-------------------------------------------------------------------------------
 #TM:0:set-cursor:
 =begin pod
@@ -3825,14 +3821,12 @@ Note that I<cursor> must be for the same display as I<window>.
 
 Use C<gdk_cursor_new_for_display()> or C<gdk_cursor_new_from_pixbuf()> to create the cursor. To make the cursor invisible, use C<GDK_BLANK_CURSOR>. Passing C<undefined> for the I<cursor> argument to C<set_cursor()> means that I<window> will use the cursor of its parent window. Most windows should use this default.
 
-  method set-cursor ( N-GObject $cursor )
+  method set-cursor ( N-GObject() $cursor )
 
-=item $cursor; a cursor
+=item $cursor; a B<Gnome;:Gdk3::Cursor>
 =end pod
 
-method set-cursor ( $cursor is copy ) {
-  $cursor .= _get-native-object-no-reffing unless $cursor ~~ N-GObject;
-
+method set-cursor ( N-GObject() $cursor ) {
   gdk_window_set_cursor(
     self._get-native-object-no-reffing, $cursor
   );
@@ -3842,6 +3836,7 @@ sub gdk_window_set_cursor (
   N-GObject $window, N-GObject $cursor
 ) is native(&gdk-lib)
   { * }
+}}
 
 #-------------------------------------------------------------------------------
 #TM:0:set-decorations:
@@ -3850,7 +3845,7 @@ sub gdk_window_set_cursor (
 
 “Decorations” are the features the window manager adds to a toplevel B<Gnome::Gdk3::Window>. This function sets the traditional Motif window manager hints that tell the window manager which decorations you would like your window to have. Usually you should use C<gtk_window_set_decorated()> on a B<Gnome::Gdk3::Window> instead of using the GDK function directly.
 
-The I<decorations> argument is the logical OR of the fields in the B<Gnome::Gdk3::WMDecoration> enumeration. If B<Gnome::Gdk3::DK_DECOR_ALL> is included in the mask, the other bits indicate which decorations should be turned off. If B<Gnome::Gdk3::DK_DECOR_ALL> is not included, then the other bits indicate which decorations should be turned on.
+The I<decorations> argument is the logical OR of the fields in the B<GdkWMDecoration> enumeration. If B<GDK_DECOR_ALL> is included in the mask, the other bits indicate which decorations should be turned off. If B<GDK_DECOR_ALL> is not included, then the other bits indicate which decorations should be turned on.
 
 Most window managers honor a decorations hint of 0 to disable all decorations, but very few honor all possible combinations of bits.
 
@@ -3860,10 +3855,7 @@ Most window managers honor a decorations hint of 0 to disable all decorations, b
 =end pod
 
 method set-decorations ( GdkWMDecoration $decorations ) {
-
-  gdk_window_set_decorations(
-    self._get-native-object-no-reffing, $decorations
-  );
+  gdk_window_set_decorations( self._get-native-object-no-reffing, $decorations);
 }
 
 sub gdk_window_set_decorations (
@@ -3871,6 +3863,7 @@ sub gdk_window_set_decorations (
 ) is native(&gdk-lib)
   { * }
 
+#`{{
 #-------------------------------------------------------------------------------
 #TM:0:set-device-cursor:
 =begin pod
@@ -3878,16 +3871,13 @@ sub gdk_window_set_decorations (
 
 Sets a specific B<Gnome::Gdk3::Cursor> for a given device when it gets inside I<window>. Use C<gdk_cursor_new_for_display()> or C<gdk_cursor_new_from_pixbuf()> to create the cursor. To make the cursor invisible, use C<GDK_BLANK_CURSOR>. Passing C<undefined> for the I<cursor> argument to C<set_cursor()> means that I<window> will use the cursor of its parent window. Most windows should use this default.
 
-  method set-device-cursor ( N-GObject $device, N-GObject $cursor )
+  method set-device-cursor ( N-GObject() $device, N-GObject() $cursor )
 
 =item $device; a master, pointer B<Gnome::Gdk3::Device>
 =item $cursor; a B<Gnome::Gdk3::Cursor>
 =end pod
 
-method set-device-cursor ( $device is copy, $cursor is copy ) {
-  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
-  $cursor .= _get-native-object-no-reffing unless $cursor ~~ N-GObject;
-
+method set-device-cursor ( N-GObject() $device, N-GObject() $cursor ) {
   gdk_window_set_device_cursor(
     self._get-native-object-no-reffing, $device, $cursor
   );
@@ -3897,6 +3887,7 @@ sub gdk_window_set_device_cursor (
   N-GObject $window, N-GObject $device, N-GObject $cursor
 ) is native(&gdk-lib)
   { * }
+}}
 
 #-------------------------------------------------------------------------------
 #TM:0:set-device-events:
@@ -3907,15 +3898,13 @@ Sets the event mask for a given device (Normally a floating device, not attached
 
 See the [input handling overview][event-masks] for details.
 
-  method set-device-events ( N-GObject $device, GdkEventMask $event_mask )
+  method set-device-events ( N-GObject() $device, GdkEventMask $event_mask )
 
 =item $device; B<Gnome::Gdk3::Device> to enable events for.
 =item $event_mask; event mask for I<window>
 =end pod
 
-method set-device-events ( $device is copy, GdkEventMask $event_mask ) {
-  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
-
+method set-device-events ( N-GObject() $device, GdkEventMask $event_mask ) {
   gdk_window_set_device_events(
     self._get-native-object-no-reffing, $device, $event_mask
   );
@@ -4106,17 +4095,13 @@ Sets the group leader window for I<window>. By default, GDK sets the group leade
 
 The group leader window allows the window manager to distinguish all windows that belong to a single application. It may for example allow users to minimize/unminimize all windows belonging to an application at once. You should only set a non-default group window if your application pretends to be multiple applications.
 
-  method set-group ( N-GObject $leader )
+  method set-group ( N-GObject() $leader )
 
 =item $leader; group leader window, or C<undefined> to restore the default group leader window
 =end pod
 
-method set-group ( $leader is copy ) {
-  $leader .= _get-native-object-no-reffing unless $leader ~~ N-GObject;
-
-  gdk_window_set_group(
-    self._get-native-object-no-reffing, $leader
-  );
+method set-group ( N-GObject() $leader ) {
+  gdk_window_set_group( self._get-native-object-no-reffing, $leader);
 }
 
 sub gdk_window_set_group (
@@ -4616,17 +4601,13 @@ Indicates to the window manager that I<window> is a transient dialog associated 
 
 See C<gtk_window_set_transient_for()> if you’re using B<Gnome::Gdk3::Window> or B<Gnome::Gdk3::Dialog>.
 
-  method set-transient-for ( N-GObject $parent )
+  method set-transient-for ( N-GObject() $parent )
 
 =item $parent; another toplevel B<Gnome::Gdk3::Window>
 =end pod
 
-method set-transient-for ( $parent is copy ) {
-  $parent .= _get-native-object-no-reffing unless $parent ~~ N-GObject;
-
-  gdk_window_set_transient_for(
-    self._get-native-object-no-reffing, $parent
-  );
+method set-transient-for ( N-GObject() $parent ) {
+  gdk_window_set_transient_for( self._get-native-object-no-reffing, $parent);
 }
 
 sub gdk_window_set_transient_for (

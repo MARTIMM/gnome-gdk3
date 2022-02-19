@@ -27,6 +27,8 @@ subtest 'Manipulations', {
   my GdkWindowType $wtype = $w.get-window-type;
   is $wtype, GDK_WINDOW_TOPLEVEL, '.get-window-type()';
 
+  lives-ok { $w.beep; }, '.beep';
+
 #results are different between X11 and Wayland so tests are skipped
 #  $w.gdk-window-move( 500, 600);
 #  my Int ( $x, $y) = $w.get-position;
