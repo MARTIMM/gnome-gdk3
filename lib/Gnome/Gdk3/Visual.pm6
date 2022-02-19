@@ -67,7 +67,7 @@ use Gnome::N::GlibToRakuTypes;
 #use Gnome::Gdk3::Screen;
 
 #-------------------------------------------------------------------------------
-unit class Gnome::Gdk3::Visual:auth<github:MARTIMM>:ver<0.1.0>;
+unit class Gnome::Gdk3::Visual:auth<github:MARTIMM>;
 also is Gnome::GObject::Object;
 
 #-------------------------------------------------------------------------------

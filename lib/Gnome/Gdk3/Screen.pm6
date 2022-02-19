@@ -41,7 +41,7 @@ use Gnome::Cairo::Types;
 #-------------------------------------------------------------------------------
 # See /usr/include/gtk-3.0/gdk/gdkscreen.h
 # https://developer.gnome.org/gdk3/stable/GdkScreen.html
-unit class Gnome::Gdk3::Screen:auth<github:MARTIMM>:ver<0.2.0>;
+unit class Gnome::Gdk3::Screen:auth<github:MARTIMM>;
 also is Gnome::GObject::Object;
 
 #-------------------------------------------------------------------------------

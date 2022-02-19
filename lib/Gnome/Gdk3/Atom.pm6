@@ -43,7 +43,7 @@ use Gnome::N::GlibToRakuTypes;
 use Gnome::N::TopLevelClassSupport;
 
 #-------------------------------------------------------------------------------
-unit class Gnome::Gdk3::Atom:auth<github:MARTIMM>:ver<0.1.0>;
+unit class Gnome::Gdk3::Atom:auth<github:MARTIMM>;
 also is Gnome::N::TopLevelClassSupport;
 
 #-------------------------------------------------------------------------------

@@ -71,7 +71,7 @@ use Gnome::Cairo::Types;
 #-------------------------------------------------------------------------------
 # /usr/include/gtk-3.0/gtk/INCLUDE
 # https://developer.gnome.org/WWW
-unit class Gnome::Gdk3::Pixbuf:auth<github:MARTIMM>:ver<0.2.0>;
+unit class Gnome::Gdk3::Pixbuf:auth<github:MARTIMM>;
 also is Gnome::GObject::Object;
 #also does Gnome::Gio::Icon;
 #also does Gnome::Gio::LoadableIcon;

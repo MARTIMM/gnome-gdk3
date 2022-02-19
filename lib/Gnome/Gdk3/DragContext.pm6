@@ -56,7 +56,7 @@ use Gnome::Gdk3::Window;
 use Gnome::Gdk3::Device;
 
 #-------------------------------------------------------------------------------
-unit class Gnome::Gdk3::DragContext:auth<github:MARTIMM>:ver<0.1.0>;
+unit class Gnome::Gdk3::DragContext:auth<github:MARTIMM>;
 also is Gnome::GObject::Object;
 
 #-------------------------------------------------------------------------------
