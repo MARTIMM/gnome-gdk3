@@ -64,6 +64,13 @@ subtest 'Manipulations', {
 
   ok $w.ensure-native, '.ensure-native()';
 
+  my N-GdkGeometry $g .= new(
+    :10min_width, :10min_height, :100max_width, :100max_height
+  );
+  is $g.min_height, 10, 'N-GdkGeometry';
+  $w.set-geometry-hints( $g, GDK_HINT_POS);
+  ok 1, '.set-geometry-hints() / .get-geometry(): ' ~ $w.get-geometry.gist;
+
   $w.destroy;
   nok $w.is-valid, '.destroy()';
 }

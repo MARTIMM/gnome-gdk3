@@ -337,7 +337,7 @@ C<gtk_window_parse_geometry()> automatically sets these flags.
 
 =end pod
 
-#TE:0:GdkWindowHints:
+#TE:1:GdkWindowHints:
 enum GdkWindowHints is export (
   'GDK_HINT_POS'	       => 1 +< 0,
   'GDK_HINT_MIN_SIZE'    => 1 +< 1,
@@ -434,8 +434,9 @@ the “character grid” will be allowed.
 Here’s an example of how the terminal example would be implemented, assuming
 a terminal area widget called “terminal” and a toplevel window “toplevel”:
 
+=begin comment
 |[<!-- language="C" -->
-GdkGeometry hints;
+N-GdkGeometry hints;
 
 hints.base_width = terminal->char_width;
 hints.base_height = terminal->char_height;
@@ -451,6 +452,7 @@ GDK_HINT_RESIZE_INC |
 GDK_HINT_MIN_SIZE |
 GDK_HINT_BASE_SIZE);
 ]|
+=end comment
 
 The other useful fields are the I<min_aspect> and I<max_aspect> fields; these
 contain a width/height ratio as a floating point number. If a geometry widget
@@ -475,8 +477,8 @@ aspect ratio.
 
 =end pod
 
-#TT:0:N-GdkGeometry:
-class GdkGeometry is export is repr('CStruct') {
+#TT:1:N-GdkGeometry:
+class N-GdkGeometry is export is repr('CStruct') {
   has gint $.min_width;
   has gint $.min_height;
   has gint $.max_width;
@@ -516,7 +518,7 @@ Attributes to use for a newly-created window.
 =end pod
 
 #TT:0:N-GdkWindowAttr:
-class GdkWindowAttr is export is repr('CStruct') {
+class N-GdkWindowAttr is export is repr('CStruct') {
   has gchar-ptr $.title;
   has gint $.event_mask;
   has gint $.x;
@@ -533,478 +535,6 @@ class GdkWindowAttr is export is repr('CStruct') {
   has GEnum $.type_hint;
 }
 
-#`{{
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 enum GdkWindowWindowClass
-
-I<GDK_INPUT_OUTPUT> windows are the standard kind of window you might expect.
-Such windows receive events and are also displayed on screen.
-I<GDK_INPUT_ONLY> windows are invisible; they are usually placed above other
-windows in order to trap or filter the events. You can’t draw on
-I<GDK_INPUT_ONLY> windows.
-
-
-=item GDK_INPUT_OUTPUT: window for graphics and events
-=item GDK_INPUT_ONLY: window for events only
-
-
-=end pod
-
-#TE:0:GdkWindowWindowClass:
-enum GdkWindowWindowClass is export (
-  'GDK_INPUT_OUTPUT', 'GDK_INPUT_ONLY'
-);
-
-
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 enum GdkWindowType
-
-Describes the kind of window.
-
-
-=item GDK_WINDOW_ROOT: root window; this window has no parent, covers the entire screen, and is created by the window system
-=item GDK_WINDOW_TOPLEVEL: toplevel window (used to implement C<Gnome::Gtk3::Window>)
-=item GDK_WINDOW_CHILD: child window (used to implement e.g. C<Gnome::Gtk3::Entry>)
-=item GDK_WINDOW_TEMP: override redirect temporary window (used to implement C<Gnome::Gtk3::Menu>)
-=item GDK_WINDOW_FOREIGN: foreign window (see C<gdk_window_foreign_new()>)
-=item GDK_WINDOW_OFFSCREEN: offscreen window (see [Offscreen Windows][OFFSCREEN-WINDOWS]). Since 2.18
-=item GDK_WINDOW_SUBSURFACE: subsurface-based window; This window is visually tied to a toplevel, and is moved/stacked with it. Currently this window type is only implemented in Wayland. Since 3.14
-
-
-=end pod
-
-#TE:1:GdkWindowType:
-enum GdkWindowType is export (
-  'GDK_WINDOW_ROOT',
-  'GDK_WINDOW_TOPLEVEL',
-  'GDK_WINDOW_CHILD',
-  'GDK_WINDOW_TEMP',
-  'GDK_WINDOW_FOREIGN',
-  'GDK_WINDOW_OFFSCREEN',
-  'GDK_WINDOW_SUBSURFACE'
-);
-
-
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 enum GdkWindowAttributesType
-
-Used to indicate which fields in the C<Gnome::Gdk3::WindowAttr> struct should be honored. For example, if you filled in the “cursor” and “x” fields of C<Gnome::Gdk3::WindowAttr>, pass “I<GDK_WA_X> \| I<GDK_WA_CURSOR>” to C<gdk_window_new()>. Fields in C<Gnome::Gdk3::WindowAttr> not covered by a bit in this enum are required; for example, the I<width>/I<height>, I<wclass>, and I<window_type> fields are required, they have no corresponding flag in C<Gnome::Gdk3::WindowAttributesType>.
-
-
-=item GDK_WA_TITLE: Honor the title field
-=item GDK_WA_X: Honor the X coordinate field
-=item GDK_WA_Y: Honor the Y coordinate field
-=item GDK_WA_CURSOR: Honor the cursor field
-=item GDK_WA_VISUAL: Honor the visual field
-=item GDK_WA_WMCLASS: Honor the wmclass_class and wmclass_name fields
-=item GDK_WA_NOREDIR: Honor the override_redirect field
-=item GDK_WA_TYPE_HINT: Honor the type_hint field
-
-
-=end pod
-
-#TE:0:GdkWindowAttributesType:
-enum GdkWindowAttributesType is export (
-  'GDK_WA_TITLE'	   => 1 +< 1,
-  'GDK_WA_X'	   => 1 +< 2,
-  'GDK_WA_Y'	   => 1 +< 3,
-  'GDK_WA_CURSOR'	   => 1 +< 4,
-  'GDK_WA_VISUAL'	   => 1 +< 5,
-  'GDK_WA_WMCLASS'   => 1 +< 6,
-  'GDK_WA_NOREDIR'   => 1 +< 7,
-  'GDK_WA_TYPE_HINT' => 1 +< 8
-);
-
-
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 enum GdkWindowHints
-
-Used to indicate which fields of a C<Gnome::Gdk3::Geometry> struct should be paid
-attention to. Also, the presence/absence of I<GDK_HINT_POS>,
-I<GDK_HINT_USER_POS>, and I<GDK_HINT_USER_SIZE> is significant, though they don't
-directly refer to C<Gnome::Gdk3::Geometry> fields. I<GDK_HINT_USER_POS> will be set
-automatically by C<Gnome::Gtk3::Window> if you call C<gtk_window_move()>.
-I<GDK_HINT_USER_POS> and I<GDK_HINT_USER_SIZE> should be set if the user
-specified a size/position using a --geometry command-line argument;
-C<gtk_window_parse_geometry()> automatically sets these flags.
-
-
-=item GDK_HINT_POS: indicates that the program has positioned the window
-=item GDK_HINT_MIN_SIZE: min size fields are set
-=item GDK_HINT_MAX_SIZE: max size fields are set
-=item GDK_HINT_BASE_SIZE: base size fields are set
-=item GDK_HINT_ASPECT: aspect ratio fields are set
-=item GDK_HINT_RESIZE_INC: resize increment fields are set
-=item GDK_HINT_WIN_GRAVITY: window gravity field is set
-=item GDK_HINT_USER_POS: indicates that the window’s position was explicitly set by the user
-=item GDK_HINT_USER_SIZE: indicates that the window’s size was explicitly set by the user
-
-
-=end pod
-
-#TE:0:GdkWindowHints:
-enum GdkWindowHints is export (
-  'GDK_HINT_POS'	       => 1 +< 0,
-  'GDK_HINT_MIN_SIZE'    => 1 +< 1,
-  'GDK_HINT_MAX_SIZE'    => 1 +< 2,
-  'GDK_HINT_BASE_SIZE'   => 1 +< 3,
-  'GDK_HINT_ASPECT'      => 1 +< 4,
-  'GDK_HINT_RESIZE_INC'  => 1 +< 5,
-  'GDK_HINT_WIN_GRAVITY' => 1 +< 6,
-  'GDK_HINT_USER_POS'    => 1 +< 7,
-  'GDK_HINT_USER_SIZE'   => 1 +< 8
-);
-
-
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 enum GdkWMDecoration
-
-These are hints originally defined by the Motif toolkit.
-The window manager can use them when determining how to decorate
-the window. The hint must be set before mapping the window.
-
-
-=item GDK_DECOR_ALL: all decorations should be applied.
-=item GDK_DECOR_BORDER: a frame should be drawn around the window.
-=item GDK_DECOR_RESIZEH: the frame should have resize handles.
-=item GDK_DECOR_TITLE: a titlebar should be placed above the window.
-=item GDK_DECOR_MENU: a button for opening a menu should be included.
-=item GDK_DECOR_MINIMIZE: a minimize button should be included.
-=item GDK_DECOR_MAXIMIZE: a maximize button should be included.
-
-
-=end pod
-
-#TE:0:GdkWMDecoration:
-enum GdkWMDecoration is export (
-  'GDK_DECOR_ALL'		=> 1 +< 0,
-  'GDK_DECOR_BORDER'	=> 1 +< 1,
-  'GDK_DECOR_RESIZEH'	=> 1 +< 2,
-  'GDK_DECOR_TITLE'	=> 1 +< 3,
-  'GDK_DECOR_MENU'	=> 1 +< 4,
-  'GDK_DECOR_MINIMIZE'	=> 1 +< 5,
-  'GDK_DECOR_MAXIMIZE'	=> 1 +< 6
-);
-
-
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 enum GdkWMFunction
-
-These are hints originally defined by the Motif toolkit. The window manager
-can use them when determining the functions to offer for the window. The
-hint must be set before mapping the window.
-
-
-=item GDK_FUNC_ALL: all functions should be offered.
-=item GDK_FUNC_RESIZE: the window should be resizable.
-=item GDK_FUNC_MOVE: the window should be movable.
-=item GDK_FUNC_MINIMIZE: the window should be minimizable.
-=item GDK_FUNC_MAXIMIZE: the window should be maximizable.
-=item GDK_FUNC_CLOSE: the window should be closable.
-
-
-=end pod
-
-#TE:0:GdkWMFunction:
-enum GdkWMFunction is export (
-  'GDK_FUNC_ALL'		=> 1 +< 0,
-  'GDK_FUNC_RESIZE'	=> 1 +< 1,
-  'GDK_FUNC_MOVE'		=> 1 +< 2,
-  'GDK_FUNC_MINIMIZE'	=> 1 +< 3,
-  'GDK_FUNC_MAXIMIZE'	=> 1 +< 4,
-  'GDK_FUNC_CLOSE'	=> 1 +< 5
-);
-
-
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 enum GdkGravity
-
-Defines the reference point of a window and the meaning of coordinates
-passed to C<gtk_window_move()>. See C<gtk_window_move()> and the "implementation
-notes" section of the
-[Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
-specification for more details.
-
-
-=item GDK_GRAVITY_NORTH_WEST: the reference point is at the top left corner.
-=item GDK_GRAVITY_NORTH: the reference point is in the middle of the top edge.
-=item GDK_GRAVITY_NORTH_EAST: the reference point is at the top right corner.
-=item GDK_GRAVITY_WEST: the reference point is at the middle of the left edge.
-=item GDK_GRAVITY_CENTER: the reference point is at the center of the window.
-=item GDK_GRAVITY_EAST: the reference point is at the middle of the right edge.
-=item GDK_GRAVITY_SOUTH_WEST: the reference point is at the lower left corner.
-=item GDK_GRAVITY_SOUTH: the reference point is at the middle of the lower edge.
-=item GDK_GRAVITY_SOUTH_EAST: the reference point is at the lower right corner.
-=item GDK_GRAVITY_STATIC: the reference point is at the top left corner of the window itself, ignoring window manager decorations.
-
-
-=end pod
-
-#TE:0:GdkGravity:
-enum GdkGravity is export (
-  'GDK_GRAVITY_NORTH_WEST' => 1,
-  'GDK_GRAVITY_NORTH',
-  'GDK_GRAVITY_NORTH_EAST',
-  'GDK_GRAVITY_WEST',
-  'GDK_GRAVITY_CENTER',
-  'GDK_GRAVITY_EAST',
-  'GDK_GRAVITY_SOUTH_WEST',
-  'GDK_GRAVITY_SOUTH',
-  'GDK_GRAVITY_SOUTH_EAST',
-  'GDK_GRAVITY_STATIC'
-);
-
-
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 enum GdkAnchorHints
-
-Positioning hints for aligning a window relative to a rectangle.
-
-These hints determine how the window should be positioned in the case that
-the window would fall off-screen if placed in its ideal position.
-
-For example, C<GDK_ANCHOR_FLIP_X> will replace C<GDK_GRAVITY_NORTH_WEST> with
-C<GDK_GRAVITY_NORTH_EAST> and vice versa if the window extends beyond the left
-or right edges of the monitor.
-
-If C<GDK_ANCHOR_SLIDE_X> is set, the window can be shifted horizontally to fit
-on-screen. If C<GDK_ANCHOR_RESIZE_X> is set, the window can be shrunken
-horizontally to fit.
-
-In general, when multiple flags are set, flipping should take precedence over
-sliding, which should take precedence over resizing.
-
-Stability: Unstable
-
-
-=item GDK_ANCHOR_FLIP_X: allow flipping anchors horizontally
-=item GDK_ANCHOR_FLIP_Y: allow flipping anchors vertically
-=item GDK_ANCHOR_SLIDE_X: allow sliding window horizontally
-=item GDK_ANCHOR_SLIDE_Y: allow sliding window vertically
-=item GDK_ANCHOR_RESIZE_X: allow resizing window horizontally
-=item GDK_ANCHOR_RESIZE_Y: allow resizing window vertically
-=item GDK_ANCHOR_FLIP: allow flipping anchors on both axes
-=item GDK_ANCHOR_SLIDE: allow sliding window on both axes
-=item GDK_ANCHOR_RESIZE: allow resizing window on both axes
-
-
-=end pod
-
-#TE:0:GdkAnchorHints:
-enum GdkAnchorHints is export (
-  'GDK_ANCHOR_FLIP_X'   => 1 +< 0,
-  'GDK_ANCHOR_FLIP_Y'   => 1 +< 1,
-  'GDK_ANCHOR_SLIDE_X'  => 1 +< 2,
-  'GDK_ANCHOR_SLIDE_Y'  => 1 +< 3,
-  'GDK_ANCHOR_RESIZE_X' => 1 +< 4,
-  'GDK_ANCHOR_RESIZE_Y' => 1 +< 5,
-
-#  'GDK_ANCHOR_FLIP'     => GDK_ANCHOR_FLIP_X +| GDK_ANCHOR_FLIP_Y,
-#  'GDK_ANCHOR_SLIDE'    => GDK_ANCHOR_SLIDE_X +| GDK_ANCHOR_SLIDE_Y,
-#  'GDK_ANCHOR_RESIZE'   => GDK_ANCHOR_RESIZE_X +| GDK_ANCHOR_RESIZE_Y
-  'GDK_ANCHOR_FLIP'     => 1 +< 0 +| 1 +< 1,
-  'GDK_ANCHOR_SLIDE'    => 1 +< 2 +| 1 +< 3,
-  'GDK_ANCHOR_RESIZE'   => 1 +< 4 +| 1 +< 5
-);
-
-
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 enum GdkWindowEdge
-
-Determines a window edge or corner.
-
-
-=item GDK_WINDOW_EDGE_NORTH_WEST: the top left corner.
-=item GDK_WINDOW_EDGE_NORTH: the top edge.
-=item GDK_WINDOW_EDGE_NORTH_EAST: the top right corner.
-=item GDK_WINDOW_EDGE_WEST: the left edge.
-=item GDK_WINDOW_EDGE_EAST: the right edge.
-=item GDK_WINDOW_EDGE_SOUTH_WEST: the lower left corner.
-=item GDK_WINDOW_EDGE_SOUTH: the lower edge.
-=item GDK_WINDOW_EDGE_SOUTH_EAST: the lower right corner.
-
-
-=end pod
-
-#TE:0:GdkWindowEdge:
-enum GdkWindowEdge is export (
-  'GDK_WINDOW_EDGE_NORTH_WEST',
-  'GDK_WINDOW_EDGE_NORTH',
-  'GDK_WINDOW_EDGE_NORTH_EAST',
-  'GDK_WINDOW_EDGE_WEST',
-  'GDK_WINDOW_EDGE_EAST',
-  'GDK_WINDOW_EDGE_SOUTH_WEST',
-  'GDK_WINDOW_EDGE_SOUTH',
-  'GDK_WINDOW_EDGE_SOUTH_EAST'
-);
-
-
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 enum GdkFullscreenMode
-
-Indicates which monitor (in a multi-head setup) a window should span over
-when in fullscreen mode.
-
-
-
-=item GDK_FULLSCREEN_ON_CURRENT_MONITOR: Fullscreen on current monitor only.
-=item GDK_FULLSCREEN_ON_ALL_MONITORS: Span across all monitors when fullscreen.
-
-
-=end pod
-
-#TE:0:GdkFullscreenMode:
-enum GdkFullscreenMode is export (
-  'GDK_FULLSCREEN_ON_CURRENT_MONITOR',
-  'GDK_FULLSCREEN_ON_ALL_MONITORS'
-);
-
-
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 class GdkWindowAttr
-
-Attributes to use for a newly-created window.
-
-=item Str $.title: title of the window (for toplevel windows)
-=item Int $.event_mask: event mask (see C<gdk_window_set_events()>)
-=item Int $.x: X coordinate relative to parent window (see C<gdk_window_move()>)
-=item Int $.y: Y coordinate relative to parent window (see C<gdk_window_move()>)
-=item Int $.width: width of window
-=item Int $.height: height of window
-=item enum C<WindowWindowClass> $.wclass: C<GDK_INPUT_OUTPUT> (normal window) or C<GDK_INPUT_ONLY> (invisible window that receives events)
-=item N-GObject $.visual: C<Gnome::Gdk3::Visual> for window
-=item enum C<GdkWindowType> $.window_type: type of window
-=item N-GObject $.cursor: cursor for the window (see C<gdk_window_set_cursor()>)
-=item Str $.wmclass_name: don’t use (see C<gtk_window_set_wmclass()>)
-=item Str $.wmclass_class: don’t use (see C<gtk_window_set_wmclass()>)
-=item Int $.override_redirect: C<1> to bypass the window manager
-=item C<Gnome::Gdk3::WindowTypeHint> $.type_hint: a hint of the function of the window
-=end pod
-
-
-
-#TT:0:N-GdkWindowAttr:
-class GdkWindowAttr is export is repr('CStruct') {
-  has str $.title;
-  has int32 $.event_mask;         # required
-  has int32 $.x;
-  has int32 $.y;
-  has int32 $.width;              # required
-  has int32 $.height;             # required
-  has int32 $.wclass;             # required enum GdkWindowWindowClass
-  has Pointer $.visual;           #          Gnome::Gdk3::Visual
-  has int32 $.window_type;        # required enum GdkWindowType
-  has Pointer $.cursor;           #          Gnome::Gdk3::Cursor
-  has str $.wmclass_name;
-  has str $.wmclass_class;
-  has int32 $.override_redirect;  # required
-  has int32 $.type_hint;
-}
-
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 class GdkGeometry
-
-The C<Gnome::Gdk3::Geometry> struct gives the window manager information about
-a window’s geometry constraints. Normally you would set these on
-the GTK+ level using C<gtk_window_set_geometry_hints()>. C<Gnome::Gtk3::Window>
-then sets the hints on the C<Gnome::Gdk3::Window> it creates.
-
-C<gdk_window_set_geometry_hints()> expects the hints to be fully valid already
-and simply passes them to the window manager; in contrast,
-C<gtk_window_set_geometry_hints()> performs some interpretation. For example,
-C<Gnome::Gtk3::Window> will apply the hints to the geometry widget instead of the
-toplevel window, if you set a geometry widget. Also, the
-I<min_width>/I<min_height>/I<max_width>/I<max_height> fields may be set to -1, and
-C<Gnome::Gtk3::Window> will substitute the size request of the window or geometry widget.
-If the minimum size hint is not provided, C<Gnome::Gtk3::Window> will use its requisition
-as the minimum size. If the minimum size is provided and a geometry widget is
-set, C<Gnome::Gtk3::Window> will take the minimum size as the minimum size of the
-geometry widget rather than the entire window. The base size is treated
-similarly.
-
-The canonical use-case for C<gtk_window_set_geometry_hints()> is to get a
-terminal widget to resize properly. Here, the terminal text area should be
-the geometry widget; C<Gnome::Gtk3::Window> will then automatically set the base size to
-the size of other widgets in the terminal window, such as the menubar and
-scrollbar. Then, the I<width_inc> and I<height_inc> fields should be set to the
-size of one character in the terminal. Finally, the base size should be set
-to the size of one character. The net effect is that the minimum size of the
-terminal will have a 1x1 character terminal area, and only terminal sizes on
-the “character grid” will be allowed.
-
-Here’s an example of how the terminal example would be implemented, assuming
-a terminal area widget called “terminal” and a toplevel window “toplevel”:
-
-|[<!-- language="C" -->
-C<Gnome::Gdk3::Geometry> hints;
-
-hints.base_width = terminal->char_width;
-hints.base_height = terminal->char_height;
-hints.min_width = terminal->char_width;
-hints.min_height = terminal->char_height;
-hints.width_inc = terminal->char_width;
-hints.height_inc = terminal->char_height;
-
-gtk_window_set_geometry_hints (GTK_WINDOW (toplevel),
-GTK_WIDGET (terminal),
-&hints,
-GDK_HINT_RESIZE_INC |
-GDK_HINT_MIN_SIZE |
-GDK_HINT_BASE_SIZE);
-]|
-
-The other useful fields are the I<min_aspect> and I<max_aspect> fields; these
-contain a width/height ratio as a floating point number. If a geometry widget
-is set, the aspect applies to the geometry widget rather than the entire
-window. The most common use of these hints is probably to set I<min_aspect> and
-I<max_aspect> to the same value, thus forcing the window to keep a constant
-aspect ratio.
-
-
-=item Int $.min_width: minimum width of window (or -1 to use requisition, with C<Gnome::Gtk3::Window> only)
-=item Int $.min_height: minimum height of window (or -1 to use requisition, with C<Gnome::Gtk3::Window> only)
-=item Int $.max_width: maximum width of window (or -1 to use requisition, with C<Gnome::Gtk3::Window> only)
-=item Int $.max_height: maximum height of window (or -1 to use requisition, with C<Gnome::Gtk3::Window> only)
-=item Int $.base_width: allowed window widths are I<base_width> + I<width_inc> * N where N is any integer (-1 allowed with C<Gnome::Gtk3::Window>)
-=item Int $.base_height: allowed window widths are I<base_height> + I<height_inc> * N where N is any integer (-1 allowed with C<Gnome::Gtk3::Window>)
-=item Int $.width_inc: width resize increment
-=item Int $.height_inc: height resize increment
-=item Num $.min_aspect: minimum width/height ratio
-=item Num $.max_aspect: maximum width/height ratio
-=item enum C<GdkGravity> $.win_gravity: window gravity, see C<gtk_window_set_gravity()>
-
-
-=end pod
-
-#TT:0:N-GdkGeometry:
-class GdkGeometry is export is repr('CStruct') {
-  has int32 $.min_width;
-  has int32 $.min_height;
-  has int32 $.max_width;
-  has int32 $.max_height;
-  has int32 $.base_width;
-  has int32 $.base_height;
-  has int32 $.width_inc;
-  has int32 $.height_inc;
-  has num64 $.min_aspect;
-  has num64 $.max_aspect;
-  has int32 $.win_gravity;      # GdkGravity
-}
-}}
-
-
 #-------------------------------------------------------------------------------
 my Bool $signals-added = False;
 #-------------------------------------------------------------------------------
@@ -1019,9 +549,9 @@ Creates a new B<Gnome::Gdk3::Window> using the attributes from I<attributes>. Se
 
 Note: to use this on displays other than the default display, I<parent> must be specified.
 
-  multi method new ( GdkWindowAttr :$attributes, Int $attributes_mask --> N-GObject  )
+  multi method new ( N-GdkWindowAttr :$attributes, Int $attributes_mask --> N-GObject  )
 
-=item GdkWindowAttr $attributes; attributes of the new window
+=item N-GdkWindowAttr $attributes; attributes of the new window
 =item Int $attributes_mask; (type B<Gnome::Gdk3::WindowAttributesType>): mask indicating which fields in I<attributes> are valid
 =end comment
 =end pod
@@ -1061,7 +591,7 @@ submethod BUILD ( *%options ) {
 
         # GDK_WINDOW_ROOT cannot be used because it covers the entire
         # screen, and is created by the window system. (there can only be one!).
-        my GdkWindowAttr $attrs .= new(
+        my N-GdkWindowAttr $attrs .= new(
           :event_mask(0), :wclass(GDK_INPUT_OUTPUT),
           :window_type(GDK_WINDOW_TOPLEVEL), :override_redirect(0)
         );
@@ -1318,7 +848,7 @@ sub gdk_window_begin_resize_drag_for_device (
 Constrains a desired width and height according to a set of geometry hints (such as minimum and maximum size).
 
   method constrain-size (
-    GdkGeometry $geometry, GdkWindowHints $flags,
+    N-GdkGeometry $geometry, GdkWindowHints $flags,
     Int() $width, Int() $height
   )
 
@@ -1331,15 +861,16 @@ Constrains a desired width and height according to a set of geometry hints (such
 =end pod
 
 method constrain-size (
-  GdkGeometry $geometry, GdkWindowHints $flags, Int() $width, Int() $height
+  N-GdkGeometry $geometry, GdkWindowHints $flags, Int() $width, Int() $height
 ) {
   gdk_window_constrain_size(
-    self._get-native-object-no-reffing, $geometry, $flags, $width, $height, my gint $new_width, my gint $new_height
+    self._get-native-object-no-reffing, $geometry, $flags,
+    $width, $height, my gint $new_width, my gint $new_height
   );
 }
 
 sub gdk_window_constrain_size (
-  GdkGeometry $geometry, GEnum $flags, gint $width, gint $height, gint $new_width is rw, gint $new_height is rw
+  N-GdkGeometry $geometry, GEnum $flags, gint $width, gint $height, gint $new_width is rw, gint $new_height is rw
 ) is native(&gdk-lib)
   { * }
 
@@ -1757,10 +1288,7 @@ Returns: whether or not the window should receive input focus.
 =end pod
 
 method get-accept-focus ( --> Bool ) {
-
-  gdk_window_get_accept_focus(
-    self._get-native-object-no-reffing,
-  ).Bool
+  gdk_window_get_accept_focus(self._get-native-object-no-reffing).Bool
 }
 
 sub gdk_window_get_accept_focus (
@@ -1784,10 +1312,7 @@ Returns: (transfer container) (element-type GdkWindow): list of child windows in
 =end pod
 
 method get-children ( --> N-GList ) {
-
-  gdk_window_get_children(
-    self._get-native-object-no-reffing,
-  )
+  gdk_window_get_children(self._get-native-object-no-reffing)
 }
 
 sub gdk_window_get_children (
@@ -1814,7 +1339,6 @@ Returns: (transfer container) (element-type GdkWindow): list of child windows in
 =end pod
 
 method get-children-with-user-data ( Pointer $user_data --> N-GList ) {
-
   gdk_window_get_children_with_user_data(
     self._get-native-object-no-reffing, $user_data
   )
@@ -1840,10 +1364,7 @@ Returns: a B<cairo_region_t>. This must be freed with C<cairo_region_destroy()> 
 =end pod
 
 method get-clip-region ( --> cairo_region_t ) {
-
-  gdk_window_get_clip_region(
-    self._get-native-object-no-reffing,
-  )
+  gdk_window_get_clip_region(self._get-native-object-no-reffing)
 }
 
 sub gdk_window_get_clip_region (
@@ -1866,10 +1387,7 @@ Returns: a B<Gnome::Gdk3::Cursor>, or C<undefined>. The returned object is owned
 =end pod
 
 method get-cursor ( --> N-GObject ) {
-
-  gdk_window_get_cursor(
-    self._get-native-object-no-reffing,
-  )
+  gdk_window_get_cursor(self._get-native-object-no-reffing)
 }
 
 sub gdk_window_get_cursor (
@@ -2055,10 +1573,7 @@ Returns: the B<Gnome::Gdk3::Display> associated with I<window>
 =end pod
 
 method get-display ( --> N-GObject ) {
-
-  gdk_window_get_display(
-    self._get-native-object-no-reffing,
-  )
+  gdk_window_get_display(self._get-native-object-no-reffing)
 }
 
 sub gdk_window_get_display (
@@ -2109,10 +1624,7 @@ Returns: effective parent of I<window>
 =end pod
 
 method get-effective-parent ( --> N-GObject ) {
-
-  gdk_window_get_effective_parent(
-    self._get-native-object-no-reffing,
-  )
+  gdk_window_get_effective_parent(self._get-native-object-no-reffing)
 }
 
 sub gdk_window_get_effective_parent (
@@ -2138,10 +1650,7 @@ Returns: the effective toplevel window containing I<window>
 =end pod
 
 method get-effective-toplevel ( --> N-GObject ) {
-
-  gdk_window_get_effective_toplevel(
-    self._get-native-object-no-reffing,
-  )
+  gdk_window_get_effective_toplevel(self._get-native-object-no-reffing)
 }
 
 sub gdk_window_get_effective_toplevel (
@@ -2163,10 +1672,7 @@ Returns: C<True> if motion events will be compressed
 =end pod
 
 method get-event-compression ( --> Bool ) {
-
-  gdk_window_get_event_compression(
-    self._get-native-object-no-reffing,
-  ).Bool
+  gdk_window_get_event_compression(self._get-native-object-no-reffing).Bool
 }
 
 sub gdk_window_get_event_compression (
@@ -2212,10 +1718,7 @@ Returns: whether or not the window wants to receive input focus when it is mappe
 =end pod
 
 method get-focus-on-map ( --> Bool ) {
-
-  gdk_window_get_focus_on_map(
-    self._get-native-object-no-reffing,
-  ).Bool
+  gdk_window_get_focus_on_map(self._get-native-object-no-reffing).Bool
 }
 
 sub gdk_window_get_focus_on_map (
@@ -2237,10 +1740,7 @@ Returns: the frame clock
 =end pod
 
 method get-frame-clock ( --> N-GObject ) {
-
-  gdk_window_get_frame_clock(
-    self._get-native-object-no-reffing,
-  )
+  gdk_window_get_frame_clock(self._get-native-object-no-reffing)
 }
 
 sub gdk_window_get_frame_clock (
@@ -2294,7 +1794,7 @@ sub gdk_window_get_fullscreen_mode (
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:get-geometry:
+#TM:1:get-geometry:
 =begin pod
 =head2 get-geometry
 
@@ -2306,19 +1806,21 @@ On the X11 platform, the geometry is obtained from the X server, so reflects the
 
 Note: If I<window> is not a toplevel, it is much better to call C<get_position()>, C<get_width()> and C<get_height()> instead, because it avoids the roundtrip to the X server and because these functions support the full 32-bit coordinate space, whereas C<get_geometry()> is restricted to the 16-bit coordinates of X11.
 
-  method get-geometry ( )
+  method get-geometry ( --> List )
 
-=item $x; return location for X coordinate of window (relative to its parent)
-=item $y; return location for Y coordinate of window (relative to its parent)
-=item $width; return location for width of window
-=item $height; return location for height of window
+The List returns
+=item Int; X coordinate of window (relative to its parent)
+=item Int; Y coordinate of window (relative to its parent)
+=item Int; width of window
+=item Int; height of window
 =end pod
 
 method get-geometry ( ) {
-
   gdk_window_get_geometry(
     self._get-native-object-no-reffing, my gint $x, my gint $y, my gint $width, my gint $height
   );
+
+  ( $x, $y, $width, $height)
 }
 
 sub gdk_window_get_geometry (
@@ -2781,10 +2283,7 @@ Retrieves the user data for I<window>, which is normally the widget that I<windo
 =end pod
 
 method get-user-data ( Pointer $data ) {
-
-  gdk_window_get_user_data(
-    self._get-native-object-no-reffing, $data
-  );
+  gdk_window_get_user_data( self._get-native-object-no-reffing, $data);
 }
 
 sub gdk_window_get_user_data (
@@ -2807,10 +2306,7 @@ Returns: a B<cairo_region_t>. This must be freed with C<cairo_region_destroy()> 
 =end pod
 
 method get-visible-region ( --> cairo_region_t ) {
-
-  gdk_window_get_visible_region(
-    self._get-native-object-no-reffing,
-  )
+  gdk_window_get_visible_region(self._get-native-object-no-reffing)
 }
 
 sub gdk_window_get_visible_region (
@@ -2826,17 +2322,14 @@ sub gdk_window_get_visible_region (
 
 Gets the B<Gnome::Gdk3::Visual> describing the pixel format of I<window>.
 
-Returns: a B<Gnome::Gdk3::Visual>
+Returns: a native B<Gnome::Gdk3::Visual>
 
   method get-visual ( --> N-GObject )
 
 =end pod
 
 method get-visual ( --> N-GObject ) {
-
-  gdk_window_get_visual(
-    self._get-native-object-no-reffing,
-  )
+  gdk_window_get_visual(self._get-native-object-no-reffing)
 }
 
 sub gdk_window_get_visual (
@@ -2860,10 +2353,7 @@ Returns: The width of I<window>
 =end pod
 
 method get-width ( --> Int ) {
-
-  gdk_window_get_width(
-    self._get-native-object-no-reffing,
-  )
+  gdk_window_get_width(self._get-native-object-no-reffing)
 }
 
 sub gdk_window_get_width (
@@ -2909,10 +2399,7 @@ Returns: C<True> if the I<window> has a native window, C<False> otherwise.
 =end pod
 
 method has-native ( --> Bool ) {
-
-  gdk_window_has_native(
-    self._get-native-object-no-reffing,
-  ).Bool
+  gdk_window_has_native(self._get-native-object-no-reffing).Bool
 }
 
 sub gdk_window_has_native (
@@ -2932,10 +2419,7 @@ For toplevel windows, withdraws them, so they will no longer be known to the win
 =end pod
 
 method hide ( ) {
-
-  gdk_window_hide(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_hide(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_hide (
@@ -2957,10 +2441,7 @@ This function only makes sense when I<window> is a toplevel window.
 =end pod
 
 method iconify ( ) {
-
-  gdk_window_iconify(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_iconify(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_iconify (
@@ -2989,8 +2470,9 @@ On the Win32 platform, this functionality is not present and the function does n
 =item $offset_y; Y position of I<shape_region> in I<window> coordinates
 =end pod
 
-method input-shape-combine-region ( cairo_region_t $shape_region, Int() $offset_x, Int() $offset_y ) {
-
+method input-shape-combine-region (
+  cairo_region_t $shape_region, Int() $offset_x, Int() $offset_y
+) {
   gdk_window_input_shape_combine_region(
     self._get-native-object-no-reffing, $shape_region, $offset_x, $offset_y
   );
@@ -3077,7 +2559,6 @@ The I<invalidate_children> parameter controls whether the region of each child w
 =end pod
 
 method invalidate-region ( cairo_region_t $region, Bool $invalidate_children ) {
-
   gdk_window_invalidate_region(
     self._get-native-object-no-reffing, $region, $invalidate_children
   );
@@ -3103,10 +2584,7 @@ Returns: C<True> if the window is destroyed
 =end pod
 
 method is-destroyed ( --> Bool ) {
-
-  gdk_window_is_destroyed(
-    self._get-native-object-no-reffing,
-  ).Bool
+  gdk_window_is_destroyed(self._get-native-object-no-reffing).Bool
 }
 
 sub gdk_window_is_destroyed (
@@ -3128,10 +2606,7 @@ Returns: C<True> if I<window> is input only
 =end pod
 
 method is-input-only ( --> Bool ) {
-
-  gdk_window_is_input_only(
-    self._get-native-object-no-reffing,
-  ).Bool
+  gdk_window_is_input_only(self._get-native-object-no-reffing).Bool
 }
 
 sub gdk_window_is_input_only (
@@ -3153,10 +2628,7 @@ Returns: C<True> if I<window> is shaped
 =end pod
 
 method is-shaped ( --> Bool ) {
-
-  gdk_window_is_shaped(
-    self._get-native-object-no-reffing,
-  ).Bool
+  gdk_window_is_shaped(self._get-native-object-no-reffing).Bool
 }
 
 sub gdk_window_is_shaped (
@@ -3178,10 +2650,7 @@ Returns: C<True> if the window is viewable
 =end pod
 
 method is-viewable ( --> Bool ) {
-
-  gdk_window_is_viewable(
-    self._get-native-object-no-reffing,
-  ).Bool
+  gdk_window_is_viewable(self._get-native-object-no-reffing).Bool
 }
 
 sub gdk_window_is_viewable (
@@ -3203,10 +2672,7 @@ Returns: C<True> if the window is mapped
 =end pod
 
 method is-visible ( --> Bool ) {
-
-  gdk_window_is_visible(
-    self._get-native-object-no-reffing,
-  ).Bool
+  gdk_window_is_visible(self._get-native-object-no-reffing).Bool
 }
 
 sub gdk_window_is_visible (
@@ -3230,10 +2696,7 @@ Note that C<show()> raises the window again, so don’t call this function befor
 =end pod
 
 method lower ( ) {
-
-  gdk_window_lower(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_lower(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_lower (
@@ -3256,10 +2719,7 @@ This is typically called automatically by GTK+ and you don't need to care about 
 =end pod
 
 method mark-paint-from-clip ( cairo_t $cr ) {
-
-  gdk_window_mark_paint_from_clip(
-    self._get-native-object-no-reffing, $cr
-  );
+  gdk_window_mark_paint_from_clip( self._get-native-object-no-reffing, $cr);
 }
 
 sub gdk_window_mark_paint_from_clip (
@@ -3283,10 +2743,7 @@ On Windows, reliably maximizes the window.
 =end pod
 
 method maximize ( ) {
-
-  gdk_window_maximize(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_maximize(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_maximize (
@@ -3308,10 +2765,7 @@ This function is distinct from C<set_child_input_shapes()> because it includes I
 =end pod
 
 method merge-child-input-shapes ( ) {
-
-  gdk_window_merge_child_input_shapes(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_merge_child_input_shapes(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_merge_child_input_shapes (
@@ -3333,10 +2787,7 @@ This function is distinct from C<set_child_shapes()> because it includes I<windo
 =end pod
 
 method merge-child-shapes ( ) {
-
-  gdk_window_merge_child_shapes(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_merge_child_shapes(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_merge_child_shapes (
@@ -3360,10 +2811,7 @@ If you’re also planning to resize the window, use C<move_resize()> to both mov
 =end pod
 
 method move ( Int() $x, Int() $y ) {
-
-  gdk_window_move(
-    self._get-native-object-no-reffing, $x, $y
-  );
+  gdk_window_move( self._get-native-object-no-reffing, $x, $y);
 }
 
 sub gdk_window_move (
@@ -3389,7 +2837,6 @@ Child windows are not moved.
 =end pod
 
 method move-region ( cairo_region_t $region, Int() $dx, Int() $dy ) {
-
   gdk_window_move_region(
     self._get-native-object-no-reffing, $region, $dx, $dy
   );
@@ -3417,7 +2864,6 @@ Equivalent to calling C<move()> and C<resize()>, except that both operations are
 =end pod
 
 method move-resize ( Int() $x, Int() $y, Int() $width, Int() $height ) {
-
   gdk_window_move_resize(
     self._get-native-object-no-reffing, $x, $y, $width, $height
   );
@@ -3442,12 +2888,12 @@ I<anchor_hints> determines how I<window> will be moved if the anchor points caus
 Connect to the  I<moved-to-rect> signal to find out how it was actually positioned.
 
   method move-to-rect (
-    N-GObject() $rect, GdkGravity $rect_anchor,
+    N-GdkRectangle $rect, GdkGravity $rect_anchor,
     GdkGravity $window_anchor, GdkAnchorHints $anchor_hints,
     Int() $rect_anchor_dx, Int() $rect_anchor_dy
   )
 
-=item $rect; the destination B<Gnome::Gdk3::Rectangle> to align I<window> with
+=item $rect; the destination rectangle to align I<window> with
 =item $rect_anchor; the point on I<rect> to align with I<window>'s anchor point
 =item $window_anchor; the point on I<window> to align with I<rect>'s anchor point
 =item $anchor_hints; positioning hints to use when limited on space
@@ -3456,7 +2902,7 @@ Connect to the  I<moved-to-rect> signal to find out how it was actually position
 =end pod
 
 method move-to-rect (
-  N-GObject() $rect, GdkGravity $rect_anchor, GdkGravity $window_anchor,
+  N-GdkRectangle $rect, GdkGravity $rect_anchor, GdkGravity $window_anchor,
   GdkAnchorHints $anchor_hints, Int() $rect_anchor_dx, Int() $rect_anchor_dy
 ) {
   gdk_window_move_to_rect(
@@ -3466,8 +2912,9 @@ method move-to-rect (
 }
 
 sub gdk_window_move_to_rect (
-  N-GObject $window, N-GObject $rect, GEnum $rect_anchor, GEnum $window_anchor,
-  GEnum $anchor_hints, gint $rect_anchor_dx, gint $rect_anchor_dy
+  N-GObject $window, N-GdkRectangle $rect, GEnum $rect_anchor,
+  GEnum $window_anchor, GEnum $anchor_hints, gint $rect_anchor_dx,
+  gint $rect_anchor_dy
 ) is native(&gdk-lib)
   { * }
 
@@ -3550,10 +2997,7 @@ Returns:  (element-type GdkWindow): a reference to the list of child windows in 
 =end pod
 
 method peek-children ( --> N-GList ) {
-
-  gdk_window_peek_children(
-    self._get-native-object-no-reffing,
-  )
+  gdk_window_peek_children(self._get-native-object-no-reffing)
 }
 
 sub gdk_window_peek_children (
@@ -3575,10 +3019,7 @@ If I<window> is a toplevel, the window manager may choose to deny the request to
 =end pod
 
 method raise ( ) {
-
-  gdk_window_raise(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_raise(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_raise (
@@ -3598,10 +3039,7 @@ Registers a window as a potential drop destination.
 =end pod
 
 method register-dnd ( ) {
-
-  gdk_window_register_dnd(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_register_dnd(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_register_dnd (
@@ -3624,7 +3062,6 @@ Remove a filter previously added with C<add_filter()>.
 =end pod
 
 method remove-filter ( GdkFilterFunc $function, Pointer $data ) {
-
   gdk_window_remove_filter(
     self._get-native-object-no-reffing, $function, $data
   );
@@ -3677,7 +3114,6 @@ If you’re also planning to move the window, use C<move_resize()> to both move 
 =end pod
 
 method resize ( Int() $width, Int() $height ) {
-
   gdk_window_resize(
     self._get-native-object-no-reffing, $width, $height
   );
@@ -3730,10 +3166,7 @@ For X11, a minimum area will be invalidated if the window has no subwindows, or 
 =end pod
 
 method scroll ( Int() $dx, Int() $dy ) {
-
-  gdk_window_scroll(
-    self._get-native-object-no-reffing, $dx, $dy
-  );
+  gdk_window_scroll( self._get-native-object-no-reffing, $dx, $dy);
 }
 
 sub gdk_window_scroll (
@@ -3756,7 +3189,6 @@ On X, it is the responsibility of the window manager to interpret this hint. ICC
 =end pod
 
 method set-accept-focus ( Bool $accept_focus ) {
-
   gdk_window_set_accept_focus(
     self._get-native-object-no-reffing, $accept_focus
   );
@@ -3779,10 +3211,7 @@ Sets the input shape mask of I<window> to the union of input shape masks for all
 =end pod
 
 method set-child-input-shapes ( ) {
-
-  gdk_window_set_child_input_shapes(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_set_child_input_shapes(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_set_child_input_shapes (
@@ -3802,10 +3231,7 @@ Sets the shape mask of I<window> to the union of shape masks for all children of
 =end pod
 
 method set-child-shapes ( ) {
-
-  gdk_window_set_child_shapes(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_set_child_shapes(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_set_child_shapes (
@@ -3831,9 +3257,7 @@ Use C<gdk_cursor_new_for_display()> or C<gdk_cursor_new_from_pixbuf()> to create
 =end pod
 
 method set-cursor ( N-GObject() $cursor ) {
-  gdk_window_set_cursor(
-    self._get-native-object-no-reffing, $cursor
-  );
+  gdk_window_set_cursor( self._get-native-object-no-reffing, $cursor);
 }
 
 sub gdk_window_set_cursor (
@@ -3936,7 +3360,6 @@ By default, event compression is enabled.
 =end pod
 
 method set-event-compression ( Bool $event_compression ) {
-
   gdk_window_set_event_compression(
     self._get-native-object-no-reffing, $event_compression
   );
@@ -3962,10 +3385,7 @@ See the [input handling overview][event-masks] for details.
 =end pod
 
 method set-events ( GdkEventMask $event_mask ) {
-
-  gdk_window_set_events(
-    self._get-native-object-no-reffing, $event_mask
-  );
+  gdk_window_set_events( self._get-native-object-no-reffing, $event_mask);
 }
 
 sub gdk_window_set_events (
@@ -3988,7 +3408,6 @@ On X, it is the responsibility of the window manager to interpret this hint. Win
 =end pod
 
 method set-focus-on-map ( Bool $focus_on_map ) {
-
   gdk_window_set_focus_on_map(
     self._get-native-object-no-reffing, $focus_on_map
   );
@@ -4020,10 +3439,7 @@ Not all window managers support this, so you can’t rely on the fullscreen wind
 =end pod
 
 method set-fullscreen-mode ( GdkFullscreenMode $mode ) {
-
-  gdk_window_set_fullscreen_mode(
-    self._get-native-object-no-reffing, $mode
-  );
+  gdk_window_set_fullscreen_mode( self._get-native-object-no-reffing, $mode);
 }
 
 sub gdk_window_set_fullscreen_mode (
@@ -4031,6 +3447,7 @@ sub gdk_window_set_fullscreen_mode (
 ) is native(&gdk-lib)
   { * }
 
+#`{{
 #-------------------------------------------------------------------------------
 #TM:0:set-functions:
 =begin pod
@@ -4048,19 +3465,17 @@ The I<functions> argument is the logical OR of values from the B<Gnome::Gdk3::WM
 =end pod
 
 method set-functions ( GdkWMFunction $functions ) {
-
-  gdk_window_set_functions(
-    self._get-native-object-no-reffing, $functions
-  );
+  gdk_window_set_functions( self._get-native-object-no-reffing, $functions);
 }
 
 sub gdk_window_set_functions (
   N-GObject $window, GEnum $functions
 ) is native(&gdk-lib)
   { * }
+}}
 
 #-------------------------------------------------------------------------------
-#TM:0:set-geometry-hints:
+#TM:1:set-geometry-hints:
 =begin pod
 =head2 set-geometry-hints
 
@@ -4072,21 +3487,24 @@ Note that on X11, this effect has no effect on windows of type C<GDK_WINDOW_TEMP
 
 Since you can’t count on the windowing system doing the constraints for programmatic resizes, you should generally call C<constrain_size()> yourself to determine appropriate sizes.
 
-  method set-geometry-hints ( GdkGeometry $geometry, GdkWindowHints $geom_mask )
+  method set-geometry-hints (
+    N-GdkGeometry $geometry, GdkWindowHints $geom_mask
+  )
 
 =item $geometry; geometry hints
 =item $geom_mask; bitmask indicating fields of I<geometry> to pay attention to
 =end pod
 
-method set-geometry-hints ( GdkGeometry $geometry, GdkWindowHints $geom_mask ) {
-
+method set-geometry-hints (
+  N-GdkGeometry $geometry, GdkWindowHints $geom_mask
+) {
   gdk_window_set_geometry_hints(
     self._get-native-object-no-reffing, $geometry, $geom_mask
   );
 }
 
 sub gdk_window_set_geometry_hints (
-  N-GObject $window, GdkGeometry $geometry, GEnum $geom_mask
+  N-GObject $window, N-GdkGeometry $geometry, GEnum $geom_mask
 ) is native(&gdk-lib)
   { * }
 
@@ -4129,10 +3547,7 @@ Note that some platforms don't support window icons.
 
 method set-icon-list ( $pixbufs is copy ) {
   $pixbufs .= _get-native-object-no-reffing unless $pixbufs ~~ N-GList;
-
-  gdk_window_set_icon_list(
-    self._get-native-object-no-reffing, $pixbufs
-  );
+  gdk_window_set_icon_list( self._get-native-object-no-reffing, $pixbufs);
 }
 
 sub gdk_window_set_icon_list (
@@ -5059,14 +4474,14 @@ Creates a new B<Gnome::Gdk3::Window> using the attributes from I<attributes>. Se
 
 Returns: the new B<Gnome::Gdk3::Window>
 
-  method _gdk_window_new ( GdkWindowAttr $attributes, Int() $attributes_mask --> N-GObject )
+  method _gdk_window_new ( N-GdkWindowAttr $attributes, Int() $attributes_mask --> N-GObject )
 
 =item $attributes; attributes of the new window
-=item $attributes_mask; (type GdkWindowAttributesType): mask indicating which fields in I<attributes> are valid
+=item $attributes_mask; (type N-GdkWindowAttributesType): mask indicating which fields in I<attributes> are valid
 =end pod
 }}
 
-sub _gdk_window_new ( N-GObject $parent, GdkWindowAttr $attributes, gint $attributes_mask --> N-GObject )
+sub _gdk_window_new ( N-GObject $parent, N-GdkWindowAttr $attributes, gint $attributes_mask --> N-GObject )
   is native(&gdk-lib)
   is symbol('gdk_window_new')
   { * }
