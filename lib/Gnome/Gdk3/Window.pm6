@@ -3574,10 +3574,7 @@ Note that some platforms don't support window icons.
 =end pod
 
 method set-icon-name ( Str $name ) {
-
-  gdk_window_set_icon_name(
-    self._get-native-object-no-reffing, $name
-  );
+  gdk_window_set_icon_name( self._get-native-object-no-reffing, $name);
 }
 
 sub gdk_window_set_icon_name (
@@ -3601,7 +3598,6 @@ This can be used to record the invalidated region, which is useful if you are ke
 =end pod
 
 method set-invalidate-handler ( GdkWindowInvalidateHandlerFunc $handler ) {
-
   gdk_window_set_invalidate_handler(
     self._get-native-object-no-reffing, $handler
   );
@@ -3628,10 +3624,7 @@ On X11, asks the window manager to keep I<window> above, if the window manager s
 =end pod
 
 method set-keep-above ( Bool $setting ) {
-
-  gdk_window_set_keep_above(
-    self._get-native-object-no-reffing, $setting
-  );
+  gdk_window_set_keep_above( self._get-native-object-no-reffing, $setting);
 }
 
 sub gdk_window_set_keep_above (
@@ -3654,10 +3647,7 @@ On X11, asks the window manager to keep I<window> below, if the window manager s
 =end pod
 
 method set-keep-below ( Bool $setting ) {
-
-  gdk_window_set_keep_below(
-    self._get-native-object-no-reffing, $setting
-  );
+  gdk_window_set_keep_below( self._get-native-object-no-reffing, $setting);
 }
 
 sub gdk_window_set_keep_below (
@@ -3680,10 +3670,7 @@ You should only use this on windows for which you have previously called C<set_t
 =end pod
 
 method set-modal-hint ( Bool $modal ) {
-
-  gdk_window_set_modal_hint(
-    self._get-native-object-no-reffing, $modal
-  );
+  gdk_window_set_modal_hint( self._get-native-object-no-reffing, $modal);
 }
 
 sub gdk_window_set_modal_hint (
@@ -3712,10 +3699,7 @@ Support for non-toplevel windows was added in 3.8.
 =end pod
 
 method set-opacity ( Num() $opacity ) {
-
-  gdk_window_set_opacity(
-    self._get-native-object-no-reffing, $opacity
-  );
+  gdk_window_set_opacity( self._get-native-object-no-reffing, $opacity);
 }
 
 sub gdk_window_set_opacity (
@@ -3768,7 +3752,6 @@ Override redirect should only be used for short-lived temporary windows, such as
 =end pod
 
 method set-override-redirect ( Bool $override_redirect ) {
-
   gdk_window_set_override_redirect(
     self._get-native-object-no-reffing, $override_redirect
   );
@@ -3798,7 +3781,6 @@ Note that a window with I<pass_through> C<True> can still have a subwindow witho
 =end pod
 
 method set-pass-through ( Bool $pass_through ) {
-
   gdk_window_set_pass_through(
     self._get-native-object-no-reffing, $pass_through
   );
@@ -3824,10 +3806,7 @@ The window manager and session manager use a window’s role to distinguish it f
 =end pod
 
 method set-role ( Str $role ) {
-
-  gdk_window_set_role(
-    self._get-native-object-no-reffing, $role
-  );
+  gdk_window_set_role( self._get-native-object-no-reffing, $role);
 }
 
 sub gdk_window_set_role (
@@ -3844,7 +3823,9 @@ Newer GTK+ windows using client-side decorations use extra geometry around their
 
 Note that this property is automatically updated by GTK+, so this function should only be used by applications which do not use GTK+ to create toplevel windows.
 
-  method set-shadow-width ( Int() $left, Int() $right, Int() $top, Int() $bottom )
+  method set-shadow-width (
+    Int() $left, Int() $right, Int() $top, Int() $bottom
+  )
 
 =item $left; The left extent
 =item $right; The right extent
@@ -3852,8 +3833,9 @@ Note that this property is automatically updated by GTK+, so this function shoul
 =item $bottom; The bottom extent
 =end pod
 
-method set-shadow-width ( Int() $left, Int() $right, Int() $top, Int() $bottom ) {
-
+method set-shadow-width (
+  Int() $left, Int() $right, Int() $top, Int() $bottom
+) {
   gdk_window_set_shadow_width(
     self._get-native-object-no-reffing, $left, $right, $top, $bottom
   );
@@ -3877,7 +3859,6 @@ Toggles whether a window should appear in a pager (workspace switcher, or other 
 =end pod
 
 method set-skip-pager-hint ( Bool $skips_pager ) {
-
   gdk_window_set_skip_pager_hint(
     self._get-native-object-no-reffing, $skips_pager
   );
@@ -3901,7 +3882,6 @@ Toggles whether a window should appear in a task list or window list. If a windo
 =end pod
 
 method set-skip-taskbar-hint ( Bool $skips_taskbar ) {
-
   gdk_window_set_skip_taskbar_hint(
     self._get-native-object-no-reffing, $skips_taskbar
   );
@@ -3926,7 +3906,6 @@ Sets the event mask for any floating device (i.e. not attached to any visible po
 =end pod
 
 method set-source-events ( GdkInputSource $source, GdkEventMask $event_mask ) {
-
   gdk_window_set_source_events(
     self._get-native-object-no-reffing, $source, $event_mask
   );
@@ -3950,7 +3929,6 @@ When using GTK+, typically you should use C<gtk_window_set_startup_id()> instead
 =end pod
 
 method set-startup-id ( Str $startup_id ) {
-
   gdk_window_set_startup_id(
     self._get-native-object-no-reffing, $startup_id
   );
@@ -3976,7 +3954,6 @@ Multidevice aware windows will need to handle properly multiple, per device ente
 =end pod
 
 method set-support-multidevice ( Bool $support_multidevice ) {
-
   gdk_window_set_support_multidevice(
     self._get-native-object-no-reffing, $support_multidevice
   );
@@ -4000,10 +3977,7 @@ Sets the title of a toplevel window, to be displayed in the titlebar. If you hav
 =end pod
 
 method set-title ( Str $title ) {
-
-  gdk_window_set_title(
-    self._get-native-object-no-reffing, $title
-  );
+  gdk_window_set_title( self._get-native-object-no-reffing, $title);
 }
 
 sub gdk_window_set_title (
@@ -4049,10 +4023,7 @@ The hint must be set before the window is mapped.
 =end pod
 
 method set-type-hint ( GdkWindowTypeHint $hint ) {
-
-  gdk_window_set_type_hint(
-    self._get-native-object-no-reffing, $hint
-  );
+  gdk_window_set_type_hint( self._get-native-object-no-reffing, $hint);
 }
 
 sub gdk_window_set_type_hint (
@@ -4073,10 +4044,7 @@ Toggles whether a window needs the user's urgent attention.
 =end pod
 
 method set-urgency-hint ( Bool $urgent ) {
-
-  gdk_window_set_urgency_hint(
-    self._get-native-object-no-reffing, $urgent
-  );
+  gdk_window_set_urgency_hint( self._get-native-object-no-reffing, $urgent);
 }
 
 sub gdk_window_set_urgency_hint (
@@ -4097,10 +4065,7 @@ For most purposes this function is deprecated in favor of C<g_object_set_data()>
 =end pod
 
 method set-user-data ( Pointer $user_data ) {
-
-  gdk_window_set_user_data(
-    self._get-native-object-no-reffing, $user_data
-  );
+  gdk_window_set_user_data( self._get-native-object-no-reffing, $user_data);
 }
 
 sub gdk_window_set_user_data (
@@ -4158,10 +4123,7 @@ When implementing a B<Gnome::Gdk3::Widget>, you should call this function on the
 =end pod
 
 method show ( ) {
-
-  gdk_window_show(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_show( self._get-native-object-no-reffing);
 }
 
 sub gdk_window_show (
@@ -4183,10 +4145,7 @@ On the X11 platform, in Xlib terms, this function calls C<XMapWindow()> (it also
 =end pod
 
 method show-unraised ( ) {
-
-  gdk_window_show_unraised(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_show_unraised(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_show_unraised (
@@ -4209,10 +4168,7 @@ Returns: C<True> if the window menu was shown and C<False> otherwise.
 =end pod
 
 method show-window-menu ( GdkEvent $event --> Bool ) {
-
-  gdk_window_show_window_menu(
-    self._get-native-object-no-reffing, $event
-  ).Bool
+  gdk_window_show_window_menu( self._get-native-object-no-reffing, $event).Bool
 }
 
 sub gdk_window_show_window_menu (
@@ -4234,10 +4190,7 @@ On the X11 platform, this function depends on window manager support, so may hav
 =end pod
 
 method stick ( ) {
-
-  gdk_window_stick(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_stick(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_stick (
@@ -4358,10 +4311,7 @@ Thaws a window frozen with C<freeze_updates()>.
 =end pod
 
 method thaw-updates ( ) {
-
-  gdk_window_thaw_updates(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_thaw_updates( self._get-native-object-no-reffing);
 }
 
 sub gdk_window_thaw_updates (
@@ -4407,10 +4357,7 @@ On Windows, reliably unmaximizes the window.
 =end pod
 
 method unmaximize ( ) {
-
-  gdk_window_unmaximize(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_unmaximize(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_unmaximize (
@@ -4430,10 +4377,7 @@ Reverse operation for C<stick()>; see C<stick()>, and C<gtk_window_unstick()>.
 =end pod
 
 method unstick ( ) {
-
-  gdk_window_unstick(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_unstick(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_unstick (
@@ -4453,10 +4397,7 @@ Withdraws a window (unmaps it and asks the window manager to forget about it). T
 =end pod
 
 method withdraw ( ) {
-
-  gdk_window_withdraw(
-    self._get-native-object-no-reffing,
-  );
+  gdk_window_withdraw(self._get-native-object-no-reffing);
 }
 
 sub gdk_window_withdraw (
@@ -4474,7 +4415,9 @@ Creates a new B<Gnome::Gdk3::Window> using the attributes from I<attributes>. Se
 
 Returns: the new B<Gnome::Gdk3::Window>
 
-  method _gdk_window_new ( N-GdkWindowAttr $attributes, Int() $attributes_mask --> N-GObject )
+  method _gdk_window_new (
+    N-GdkWindowAttr $attributes, Int() $attributes_mask --> N-GObject
+  )
 
 =item $attributes; attributes of the new window
 =item $attributes_mask; (type N-GdkWindowAttributesType): mask indicating which fields in I<attributes> are valid
@@ -4523,19 +4466,11 @@ Also here, the types of positional arguments in the signal handler are important
 =comment #TS:0:create-surface:
 =head3 create-surface
 
-The I<create-surface> signal is emitted when an offscreen window
-needs its surface (re)created, which happens either when the
-window is first drawn to, or when the window is being
-resized. The first signal handler that returns a non-C<undefined>
-surface will stop any further signal emission, and its surface
-will be used.
+The I<create-surface> signal is emitted when an offscreen window needs its surface (re)created, which happens either when the window is first drawn to, or when the window is being resized. The first signal handler that returns a non-C<undefined> surface will stop any further signal emission, and its surface will be used.
 
-Note that it is not possible to access the window's previous
-surface from within any callback of this signal. Calling
-C<gdk_offscreen_window_get_surface()> will lead to a crash.
+Note that it is not possible to access the window's previous surface from within any callback of this signal. Calling C<gdk_offscreen_window_get_surface()> will lead to a crash.
 
 Returns: the newly created B<cairo_surface_t> for the offscreen window
-
 
   method handler (
     Int $width,
@@ -4554,12 +4489,12 @@ Returns: the newly created B<cairo_surface_t> for the offscreen window
 
 =item $_handle_id; the registered event handler id
 
+=begin comment
 =comment -----------------------------------------------------------------------
 =comment #TS:0:from-embedder:
 =head3 from-embedder
 
-The I<from-embedder> signal is emitted to translate coordinates
-in the embedder of an offscreen window to the offscreen window.
+The I<from-embedder> signal is emitted to translate coordinates in the embedder of an offscreen window to the offscreen window.
 
 See also  I<to-embedder>.
 
@@ -4585,7 +4520,9 @@ coordinate in the offscreen window
 =item $offscreen_y; (out) (type double): return location for the y
 coordinate in the offscreen window
 =item $_handle_id; the registered event handler id
+=end comment
 
+=begin comment
 =comment -----------------------------------------------------------------------
 =comment #TS:0:moved-to-rect:
 =head3 moved-to-rect
@@ -4625,7 +4562,9 @@ backend can't obtain it
 =item $flipped_y; C<True> if the anchors were flipped vertically
 
 =item $_handle_id; the registered event handler id
+=end comment
 
+=begin comment
 =comment -----------------------------------------------------------------------
 =comment #TS:0:pick-embedded-child:
 =head3 pick-embedded-child
@@ -4653,7 +4592,9 @@ embedded child at I<x>, I<y>, or C<undefined>
 =item $y; y coordinate in the window
 
 =item $_handle_id; the registered event handler id
+=end comment
 
+=begin comment
 =comment -----------------------------------------------------------------------
 =comment #TS:0:to-embedder:
 =head3 to-embedder
@@ -4686,6 +4627,7 @@ coordinate in the embedder window
 coordinate in the embedder window
 =item $_handle_id; the registered event handler id
 
+=end comment
 =end pod
 
 
