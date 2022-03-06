@@ -1,4 +1,7 @@
 ## Release notes
+* 2022-03-04 0.19.4;
+  * Add method `N-GdkRGBA()`
+
 * 2022-02-02 0.19.3:
   * Bug fixes in AppInfo
 

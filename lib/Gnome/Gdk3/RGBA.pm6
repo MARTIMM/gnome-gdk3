@@ -193,6 +193,22 @@ method _fallback ( $native-sub is copy --> Callable ) {
 }
 
 #-------------------------------------------------------------------------------
+#TM:1:N-GdkRGBA:
+=begin pod
+=head2 N-GdkRGBA
+
+Method to get the native object wrapped in the Raku objects.
+
+  method N-GdkRGBA ( --> N-GdkRGBA )
+
+=end pod
+
+method N-GdkRGBA ( --> Any ) {
+  note "Coercing to N-GdkRGBA from ", self.^name if $Gnome::N::x-debug;
+  self.get-native-object()
+}
+
+#-------------------------------------------------------------------------------
 =begin pod
 =head2 red
 
