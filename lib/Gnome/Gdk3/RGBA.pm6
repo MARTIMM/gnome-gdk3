@@ -35,6 +35,8 @@ use NativeCall;
 use Gnome::N::X;
 use Gnome::N::NativeLib;
 use Gnome::N::N-GObject;
+use Gnome::N::GlibToRakuTypes;
+
 use Gnome::GObject::Boxed;
 
 #-------------------------------------------------------------------------------
@@ -62,20 +64,12 @@ The colors originally where B<Num> type but they can now also be B<Int>, B<Rat>,
   my N-GdkRGBA $c .= new( :red(1), :green(1), :blue(0.5), :alpha(0.99));
 
 =end pod
-# TT:1:GdkRGBA:Obsolete
-class GdkRGBA is repr('CStruct') is export is DEPRECATED('N-GdkRGBA') {
-  has num64 $.red;
-  has num64 $.green;
-  has num64 $.blue;
-  has num64 $.alpha;
-}
-
 #TT:1:N-GdkRGBA:
 class N-GdkRGBA is repr('CStruct') is export {
-  has num64 $.red;
-  has num64 $.green;
-  has num64 $.blue;
-  has num64 $.alpha;
+  has gdouble $.red;
+  has gdouble $.green;
+  has gdouble $.blue;
+  has gdouble $.alpha;
 
   submethod BUILD ( :$red = 1, :$green = 1, :$blue = 1, :$alpha = 1 ) {
     $!red = $red.Num;
@@ -92,18 +86,32 @@ my %rgba-hash{UInt} = %();
 =begin pod
 =head1 Methods
 =head2 new
+=head3 :red, :green, :blue, :alpha
 
-Create a new object using colors and transparency values. Their ranges are from 0 to 1
+Create a new object using colors and transparency values. Their ranges are from 0 to 1. All values are optional and are set to 1e0 by default.
 
-  multi method new ( :$red!, :$green!, :$blue!, :$alpha! )
+  multi method new (
+    Num() :$red, Num() :$green, Num() :$blue, Num() :$alpha
+  )
 
-Create an object using a string which is parsed with C<gdk_rgba_parse()>. If parsing fails, the color is set to opaque white. The colors originally where B<Num> type but they can now also be B<Int>, B<Rat>, B<Str> or B<Num> as long as they represent a number between 0 and 1.
+=item $.red; The intensity of the red channel from 0.0 to 1.0 inclusive
+=item $.green; The intensity of the green channel from 0.0 to 1.0 inclusive
+=item $.blue; The intensity of the blue channel from 0.0 to 1.0 inclusive
+=item $.alpha; The opacity of the color from 0.0 for completely translucent to 1.0 for opaque
+
+
+=head3 :rgba
+
+Create an object using a string which is parsed with C<parse()>. If parsing fails, the color is set to opaque white.
 
   multi method new ( Str :$rgba! )
 
-Create an object using a native object from elsewhere.
 
-  multi method new ( Gnome::GObject::Object :$native-object! )
+=head3 :native-object
+
+Create an object using a native object from elsewhere. See also B<Gnome::N::TopLevelSupportClass>.
+
+  multi method new ( N-GObject :$native-object! )
 
 =end pod
 
@@ -111,70 +119,61 @@ Create an object using a native object from elsewhere.
 #TM:1:new(:native-object(Gnome::Gdk3::RGBA)):
 #TM:1:new(:native-object(N-GdkRGBA)):
 #TM:1:new(:rgba(Str)):
-
 submethod BUILD ( *%options ) {
 
   # prevent creating wrong widgets
-  return unless self.^name eq 'Gnome::Gdk3::RGBA';
+  if self.^name eq 'Gnome::Gdk3::RGBA' {
 
-  # process all named arguments
-  if ? %options<red> or ? %options<green> or
-     ? %options<blue> or ? %options<alpha> {
+    if self.is-valid { }
 
-    my Num $red = %options<red>.Num // 1.0e1;
-    my Num $green = %options<green>.Num // 1.0e1;
-    my Num $blue = %options<blue>.Num // 1.0e1;
-    my Num $alpha = %options<alpha>.Num // 1.0e1;
+    # check if common options are handled by some parent
+    elsif %options<native-object>:exists { }
+    elsif %options<build-id>:exists { }
 
-    self._set-native-object(N-GdkRGBA.new( :$red, :$green, :$blue, :$alpha));
-  }
+    else {
+      my N-GdkRGBA $n-rgba;
 
-  elsif ? %options<native-object> {
-    my Any $rgba = %options<native-object>;
-    $rgba .= _get-native-object if $rgba ~~ Gnome::Gdk3::RGBA;
-    self._set-native-object($rgba);
-  }
+      # process all named arguments
+      if ? %options<red> or ? %options<green> or
+         ? %options<blue> or ? %options<alpha> {
 
-  elsif ? %options<rgba> {
-    if %options<rgba> ~~ N-GdkRGBA {
-      Gnome::N::deprecate(
-        '.new(:rgba(N-GdkRGBA))', '.new(:native-object(N-GdkRGBA))',
-        '0.15.1', '0.18.0'
-      );
+        my Num $red = (%options<red> // 1.0e1).Num;
+        my Num $green = (%options<green> // 1.0e1).Num;
+        my Num $blue = (%options<blue> // 1.0e1).Num;
+        my Num $alpha = (%options<alpha> // 1.0e1).Num;
 
-      self._set-native-object(%options<rgba>);
+        $n-rgba = N-GdkRGBA.new( :$red, :$green, :$blue, :$alpha);
+      }
+
+      elsif %options<rgba> ~~ Str {
+        my N-GdkRGBA $c .= new(
+          :red(1.0e0), :green(1.0e0), :blue(1.0e0), :alpha(1.0e0)
+        );
+        $n-rgba = $c;
+        my Int $ok = _gdk_rgba_parse( $c, %options<rgba>);
+        $n-rgba = $c if $ok;
+      }
+
+      elsif %options.keys.elems {
+        die X::Gnome.new(
+          :message('Unsupported options for ' ~ self.^name ~
+                   ': ' ~ %options.keys.join(', ')
+                  )
+        );
+      }
+
+      else {
+        $n-rgba .= new(
+          :red(1.0e0), :green(1.0e0), :blue(1.0e0), :alpha(1.0e0)
+        );
+      }
+
+      self._set-native-object(nativecast( N-GObject, $n-rgba));
     }
 
-    elsif %options<rgba> ~~ Gnome::Gdk3::RGBA {
-      Gnome::N::deprecate(
-        '.new(:rgba(Gnome::Gdk3::RGBA))',
-        '.new(:native-object(Gnome::Gdk3::RGBA))', '0.15.1', '0.18.0'
-      );
-
-      self._set-native-object(%options<rgba>._get-native-object);
-    }
-
-    elsif %options<rgba> ~~ Str {
-      my N-GdkRGBA $c .= new(
-        :red(1.0e0), :green(1.0e0), :blue(1.0e0), :alpha(1.0e0)
-      );
-
-      self._set-native-object($c);
-      my Int $ok = gdk_rgba_parse( $c, %options<rgba>);
-      self._set-native-object($c) if $ok;
-    }
+    # only after creating the native-object, the gtype is known
+    self._set-class-info('GdkRgba');
   }
-
-  elsif %options.keys.elems {
-    die X::Gnome.new(
-      :message('Unsupported options for ' ~ self.^name ~
-               ': ' ~ %options.keys.join(', ')
-              )
-    );
-  }
-
-  # only after creating the native-object, the gtype is known
-  self._set-class-info('GdkRgba');
 }
 
 #-------------------------------------------------------------------------------
@@ -183,8 +182,25 @@ method _fallback ( $native-sub is copy --> Callable ) {
 
   my Callable $s;
   try { $s = &::("gdk_rgba_$native-sub"); };
-  try { $s = &::("gdk_$native-sub"); } unless ?$s;
-  try { $s = &::($native-sub); } if !$s and $native-sub ~~ m/^ 'gdk_' /;
+  Gnome::N::deprecate(
+    "gdk_rgba_$native-sub", $native-sub, '0.19.11', '0.21.0'
+  ) if ?$s;
+
+  unless ?$s {
+    try { $s = &::("gdk_$native-sub"); }
+    Gnome::N::deprecate(
+      "gdk_$native-sub", $native-sub, '0.19.11', '0.21.0'
+    ) if ?$s;
+
+    unless ?$s {
+      try { $s = &::($native-sub); } if $native-sub ~~ m/^ 'gdk_' /;
+      if ?$s {
+        my $nsub = $native-sub;
+        $nsub ~~ s/ 'gdk_rgba_' //;
+        Gnome::N::deprecate( $native-sub, $nsub, '0.19.11', '0.21.0');
+      }
+    }
+  }
 
   self._set-class-name-of-sub('GdkRgba');
   $s = callsame unless ?$s;
@@ -193,45 +209,29 @@ method _fallback ( $native-sub is copy --> Callable ) {
 }
 
 #-------------------------------------------------------------------------------
-#TM:1:N-GdkRGBA:
-=begin pod
-=head2 N-GdkRGBA
-
-Method to get the native object wrapped in the Raku objects.
-
-  method N-GdkRGBA ( --> N-GdkRGBA )
-
-=end pod
-
-method N-GdkRGBA ( --> Any ) {
-  note "Coercing to N-GdkRGBA from ", self.^name if $Gnome::N::x-debug;
-  self.get-native-object()
-}
-
-#-------------------------------------------------------------------------------
 =begin pod
 =head2 red
 
 Set the red color to a new value if provided. Returns original or newly set color value.
 
-  method red ( Num $c? --> Num )
+  method red ( Num() $c? --> Num )
 
 =end pod
 
 #TM:1:red
-method red ( Num $c? is copy --> Num ) {
+method red ( Num() $c? is copy --> Num ) {
   if $c.defined {
     $c = 0e0 if $c < 0e0;
     $c = 1e0 if $c > 1e0;
 
-    my N-GdkRGBA $o = self._get-native-object;
+    my N-GdkRGBA $o = nativecast( N-GdkRGBA, self._get-native-object);
     my N-GdkRGBA $clr .= new(
       :red($c), :green($o.green), :blue($o.blue), :alpha($o.alpha)
     );
-    self._set-native-object($clr);
+    self._set-native-object(nativecast( N-GObject, $clr));
   }
 
-  self._get-native-object.red
+  nativecast( N-GdkRGBA, self._get-native-object).red
 }
 
 #-------------------------------------------------------------------------------
@@ -250,14 +250,14 @@ method green ( Num $c? is copy --> Num ) {
     $c = 0e0 if $c < 0e0;
     $c = 1e0 if $c > 1e0;
 
-    my N-GdkRGBA $o = self._get-native-object;
+    my N-GdkRGBA $o = nativecast( N-GdkRGBA, self._get-native-object);
     my N-GdkRGBA $clr .= new(
       :red($o.red), :green($c), :blue($o.blue), :alpha($o.alpha)
     );
-    self._set-native-object($clr);
+    self._set-native-object(nativecast( N-GObject, $clr));
   }
 
-  self._get-native-object.green
+  nativecast( N-GdkRGBA, self._get-native-object).green
 }
 
 #-------------------------------------------------------------------------------
@@ -276,14 +276,14 @@ method blue ( Num $c? is copy --> Num ) {
     $c = 0e0 if $c < 0e0;
     $c = 1e0 if $c > 1e0;
 
-    my N-GdkRGBA $o = self._get-native-object;
+    my N-GdkRGBA $o = nativecast( N-GdkRGBA, self._get-native-object);
     my N-GdkRGBA $clr .= new(
       :red($o.red), :green($o.green), :blue($c), :alpha($o.alpha)
     );
-    self._set-native-object($clr);
+    self._set-native-object(nativecast( N-GObject, $clr));
   }
 
-  self._get-native-object.blue
+  nativecast( N-GdkRGBA, self._get-native-object).blue
 }
 
 #-------------------------------------------------------------------------------
@@ -302,43 +302,56 @@ method alpha ( Num $c? is copy --> Num ) {
     $c = 0e0 if $c < 0e0;
     $c = 1e0 if $c > 1e0;
 
-    my N-GdkRGBA $o = self._get-native-object;
+    my N-GdkRGBA $o = nativecast( N-GdkRGBA, self._get-native-object);
     my N-GdkRGBA $clr .= new(
       :red($o.red), :green($o.green), :blue($o.blue), :alpha($c)
     );
-    self._set-native-object($clr);
+    self._set-native-object(nativecast( N-GObject, $clr));
   }
 
-  self._get-native-object.alpha
+  nativecast( N-GdkRGBA, self._get-native-object).alpha
 }
 
 #-------------------------------------------------------------------------------
-#TM:1:gdk_rgba_copy:
+#TM:1:copy:
 =begin pod
-=head2 gdk_rgba_copy
+=head2 copy
 
 Makes a copy of a B<Gnome::Gdk3::RGBA>.
 
 =comment The result must be freed through C<gdk_rgba_free()>.
 
-Returns: A newly allocated B<Gnome::Gdk3::RGBA>, with the same contents as I<rgba>
+Returns: A newly allocated B<Gnome::Gdk3::RGBA>, with the same contents as this I<rgba> object
 
-Since: 3.0
-
-  method gdk_rgba_copy ( N-GObject $rgba --> N-GObject  )
+  method copy ( --> N-GObject )
 
 =item N-GdkRGBA $rgba; a B<Gnome::Gdk3::RGBA>
 
 =end pod
 
 # make my own version of copy...
-sub gdk_rgba_copy ( N-GdkRGBA $rgba ) {
+sub gdk_rgba_copy ( N-GObject() $c --> N-GObject ) {
+  my N-GdkRGBA $rgba = nativecast( N-GdkRGBA, $c);
+
   my N-GdkRGBA $clone .= new(
     :red($rgba.red), :green($rgba.green),
     :blue($rgba.blue), :alpha($rgba.alpha)
   );
 
-  $clone
+  nativecast( N-GObject, $clone)
+}
+
+method copy ( --> N-GObject ) {
+  my N-GdkRGBA $rgba = nativecast(
+    N-GdkRGBA, self._get-native-object-no-reffing
+  );
+
+  my N-GdkRGBA $clone .= new(
+    :red($rgba.red), :green($rgba.green),
+    :blue($rgba.blue), :alpha($rgba.alpha)
+  );
+
+  nativecast( N-GObject, $clone)
 }
 
 #-------------------------------------------------------------------------------
@@ -348,25 +361,7 @@ method native-object-ref ( $n-native-object --> Any ) {
 }
 
 #-------------------------------------------------------------------------------
-method native-object-unref ( $n-native-object ) {
-}
-
-#`{{
-#-------------------------------------------------------------------------------
-#TM:1:gdk_rgba_copy:
-=begin pod
-=head2 clear-object
-
-Clear native object and invalidate this object
-
-  method clear-object ( )
-
-=end pod
-
-method clear-object ( ) {
-#  self.set-valid(False);
-}
-}}
+method native-object-unref ( $n-native-object ) { }
 
 #`{{ Not needed because of simulated copy
 #-------------------------------------------------------------------------------
@@ -390,68 +385,89 @@ sub gdk_rgba_free ( N-GObject $rgba )
 }}
 
 #-------------------------------------------------------------------------------
-#TM:1:gdk_rgba_hash(UInt):
-#TM:1:gdk_rgba_hash(N-GdkRGBA):
+#TM:1:hash(N-GObject):
+#TM:1:hash(UInt):
 =begin pod
-=head2 gdk_rgba_hash
+=head2 hash
 
-A method that stores B<Gnome::Gdk3::RGBA> objects in a hash or to return a value. Note that the original GTK function only returns a uint32 value and does not provide a hash table storage facility
+A method that stores B<Gnome::Gdk3::RGBA> objects in a hash or to return a value. Note that the original GTK function only returns a C<UInt> value and does not provide a hash table storage facility.
 
-  multi method gdk_rgba_hash ( N-GdkRGBA $p --> UInt )
+  multi method hash ( N-GObject() $p --> UInt )
 
-  multi method gdk_rgba_hash ( UInt $hash-int --> N-GdkRGBA )
+  multi method hash ( UInt $key --> N-GObject )
 
-=item N-GdkRGBA $p; a B<Gnome::Gdk3::RGBA> value to store
-=item UInt $hash-int; a key to return a previously stored B<N-GdkRGBA> value
+=item $p; a B<Gnome::Gdk3::RGBA> value to store
+=item $key; a key to return a previously stored B<N-GdkRGBA> value
 
 =end pod
 
 # use $rgba-hash
-proto gdk_rgba_hash ( N-GdkRGBA $p, | ) { * }
-multi sub gdk_rgba_hash ( N-GdkRGBA $p --> UInt ) {
-  %rgba-hash{my UInt $hash-int = _gdk_rgba_hash($p)} = $p;
-  $hash-int
+proto sub gdk_rgba_hash ( N-GObject, | ) { * }
+multi sub gdk_rgba_hash ( N-GObject $p --> UInt ) {
+  my N-GdkRGBA $o = nativecast( N-GdkRGBA, $p);
+  %rgba-hash{my UInt $key = _gdk_rgba_hash($o)} = $o;
+  $key
 }
 
-multi sub gdk_rgba_hash ( N-GdkRGBA $p, UInt $hash-int --> N-GdkRGBA ) {
-  %rgba-hash{$hash-int}
+multi sub gdk_rgba_hash ( N-GObject $p, UInt $key --> N-GObject ) {
+  nativecast( N-GObject, %rgba-hash{$key})
 }
 
-sub _gdk_rgba_hash ( N-GdkRGBA $p )
-  returns uint32
+
+multi method hash ( --> UInt ) {
+  my N-GdkRGBA $o = nativecast( N-GdkRGBA, self._get-native-object);
+  %rgba-hash{my UInt $key = _gdk_rgba_hash($o)} = $o;
+  $key
+}
+
+multi method hash ( UInt $key --> N-GObject ) {
+  nativecast( N-GObject, %rgba-hash{$key})
+}
+
+# generate a key only!
+sub _gdk_rgba_hash ( N-GdkRGBA $p --> guint32 )
   is native(&gdk-lib)
   is symbol('gdk_rgba_hash')
   { * }
 
-
 #-------------------------------------------------------------------------------
-#TM:1:gdk_rgba_equal:
+#TM:1:gequal:
 =begin pod
-=head2 gdk_rgba_equal
+=head2 equal
 
 Compare native RGBA color with a given one.
 
-Returns: C<1> if the two colors compare equal
+Returns: C<True> if the two colors compare equal
 
-Since: 3.0
+  method equal ( N-GObject() $compare-with --> Bool )
 
-  method gdk_rgba_equal ( N-GdkRGBA $compare-with --> Int )
-
-=item N-GdkRGBA $compare-with; another B<Gnome::Gdk3::RGBA> pointer
+=item $compare-with; another B<Gnome::Gdk3::RGBA> object
 
 =end pod
 
-sub gdk_rgba_equal ( N-GdkRGBA $p1, N-GdkRGBA $p2 )
-  returns int32
+method equal ( N-GObject() $compare-with --> Bool ) {
+  my N-GdkRGBA $o1 = nativecast( N-GdkRGBA, self._get-native-object);
+  my N-GdkRGBA $o2 = nativecast( N-GdkRGBA, $compare-with);
+  _gdk_rgba_equal( $o1, $o2).Bool
+}
+
+sub gdk_rgba_equal ( N-GObject() $p1, N-GObject() $p2 --> gboolean ) {
+  my N-GdkRGBA $o1 = nativecast( N-GdkRGBA, $p1);
+  my N-GdkRGBA $o2 = nativecast( N-GdkRGBA, $p2);
+  _gdk_rgba_equal( $o1, $o2).Bool
+}
+
+sub _gdk_rgba_equal ( N-GdkRGBA $p1, N-GdkRGBA $p2 --> gboolean )
   is native(&gdk-lib)
+  is symbol('gdk_rgba_equal')
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:0:gdk_rgba_parse:
+#TM:1:parse:
 =begin pod
-=head2 gdk_rgba_parse
+=head2 parse
 
-Parses a textual representation of a color and set / overwrite the values in the I<red>, I<green>, I<blue> and I<alpha> fields in this B<Gnome::Gdk3::RGBA>.
+Parses a textual representation of a color and set / overwrite the values in the I<red>, I<green>, I<blue> and I<alpha> fields in this B<Gnome::Gdk3::RGBA> object.
 
 The string can be either one of:
 =item A standard name (Taken from the X11 rgb.txt file).
@@ -459,53 +475,58 @@ The string can be either one of:
 =item A RGB color in the form B<rgb(r,g,b)> (In this case the color will have full opacity).
 =item A RGBA color in the form B<rgba(r,g,b,a)>.
 
-Where “r”, “g”, “b” and “a” are respectively the red, green, blue and
-alpha color values. In the last two cases, r g and b are either integers
-in the range 0 to 255 or precentage values in the range 0% to 100%, and
-a is a floating point value in the range 0 to 1.
+Where “r”, “g”, “b” and “a” are respectively the red, green, blue and alpha color values. In the last two cases, r g and b are either integers in the range 0 to 255 or precentage values in the range 0% to 100%, and a is a floating point value in the range 0 to 1.
 
-Returns: C<1> if the parsing succeeded
+Returns: C<True> if the parsing succeeded
 
-Since: 3.0
+  method parse ( Str $spec --> Bool )
 
-  method gdk_rgba_parse ( Str $spec --> Int )
-
-=item N-GObject $rgba; the B<Gnome::Gdk3::RGBA> to fill in
 =item Str $spec; the string specifying the color
 
 =end pod
 
-sub gdk_rgba_parse ( N-GdkRGBA $rgba is rw, Str $spec )
-  returns int32
+method parse( Str $spec --> Bool ) {
+  my N-GdkRGBA $rgba .= new;
+  my Bool $r = _gdk_rgba_parse( $rgba, $spec).Bool;
+  self._set-native-object(nativecast( N-GObject, $rgba)) if $r;
+  $r
+}
+
+sub gdk_rgba_parse ( N-GObject $rgba is rw, Str $spec --> Bool ) {
+  my N-GdkRGBA $o = nativecast( N-GdkRGBA, $rgba);
+  my Bool $r = _gdk_rgba_parse( $o, $spec).Bool;
+  $rgba = nativecast( N-GObject, $o);
+  $r
+}
+
+sub _gdk_rgba_parse ( N-GdkRGBA $rgba is rw, Str $spec --> gboolean )
   is native(&gdk-lib)
+  is symbol('gdk_rgba_parse')
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:1:gdk_rgba_to_string:
+#TM:1:to-string:
 =begin pod
-=head2 [[gdk_] rgba_] to_string
+=head2 to-string
 
 Returns a textual specification of this rgba object in the form B<rgb(r,g,b)> or B<rgba(r,g,b,a)>, where C<r>, C<g>, C<b> and C<a> represent the red, green, blue and alpha values respectively. r, g, and b are represented as integers in the range 0 to 255, and a is represented as floating point value in the range 0 to 1.
 
-These string forms are string forms those supported by
-the CSS3 colors module, and can be parsed by C<gdk_rgba_parse()>.
+These string forms are string forms those supported by the CSS3 colors module, and can be parsed by C<parse()>.
 
-Note that this string representation may lose some
-precision, since r, g and b are represented as 8-bit
-integers. If this is a concern, you should use a
-different representation.
+Note that this string representation may lose some precision, since r, g and b are represented as 8-bit integers. If this is a concern, you should use a different representation.
 
 Returns: A newly allocated text string
 
-Since: 3.0
-
-  method gdk_rgba_to_string ( N-GdkRGBA $rgba --> Str  )
+  method to-string ( --> Str )
 
 =item N-GObject $rgba; a native B<Gnome::Gdk3::RGBA>
 
 =end pod
 
-sub gdk_rgba_to_string ( N-GdkRGBA $rgba )
-  returns Str
+method to-string ( --> Str ) {
+  gdk_rgba_to_string(nativecast( N-GdkRGBA, self._get-native-object-no-reffing))
+}
+
+sub gdk_rgba_to_string ( N-GdkRGBA $rgba --> Str )
   is native(&gdk-lib)
   { * }
