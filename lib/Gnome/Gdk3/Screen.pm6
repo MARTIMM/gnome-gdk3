@@ -284,15 +284,13 @@ FIXME needs a list of valid settings here, or a link to more information.
 
 Returns: C<True> if the setting existed and a value was stored in I<value>, C<False> otherwise.
 
-  method get-setting ( Str $name, N-GObject $value --> Bool )
+  method get-setting ( Str $name, N-GObject() $value --> Bool )
 
 =item Str $name; the name of the setting
 =item N-GObject $value; location to store the value of the setting
 =end pod
 
-method get-setting ( Str $name, $value is copy --> Bool ) {
-  $value .= _get-native-object-no-reffing unless $value ~~ N-GObject;
-
+method get-setting ( Str $name, N-GObject() $value --> Bool ) {
   gdk_screen_get_setting(
     self._get-native-object-no-reffing, $name, $value
   ).Bool

@@ -83,10 +83,10 @@ Finds or creates an atom corresponding to a given string.
 
   multi method new ( Str :$intern! )
 
-=item Str $intern; a string, the name of the atom.
+=item $intern; a string, the name of the atom.
 
 =begin comment
-=item Bool $only_if_exists; if C<True>, GDK is allowed to not create a new atom, but just return C<GDK-NONE> if the requested atom doesn’t already exists. Currently, the flag is ignored, since checking the existance of an atom is as expensive as creating it.
+=item $only_if_exists; if C<True>, GDK is allowed to not create a new atom, but just return C<GDK-NONE> if the requested atom doesn’t already exists. Currently, the flag is ignored, since checking the existance of an atom is as expensive as creating it.
 =end comment
 
 =head3 :native-object
@@ -157,30 +157,26 @@ method native-object-unref ( $n-native-object ) {
 Changes the contents of a property on a window.
 
   method property-change (
-    N-GObject $window, N-GObject $property, N-GObject $type,
+    N-GObject() $window, N-GObject() $property, N-GObject() $type,
     Int() $format where * ~~ any( 8, 16, 32),
     GdkPropMode $mode, Str $data
   )
 
-=item N-GObject $window; A Gnome::Gdk3::Window
-=item N-GObject $property; A Gnome::Gdk3::Atom, the property to change
-=item N-GObject $type; A Gnome::Gdk3::Atom, the new type for the property. If mode is GDK_PROP_MODE_PREPEND or GDK_PROP_MODE_APPEND, then this must match the existing type or an error will occur.
-=item Int() $format; the new format for the property. If mode is GDK_PROP_MODE_PREPEND or GDK_PROP_MODE_APPEND, then this must match the existing format or an error will occur.
-=item GdkPropMode $mode; a value describing how the new data is to be combined with the current data.
-=item Str $data; the data.
+=item $window; A Gnome::Gdk3::Window
+=item $property; A Gnome::Gdk3::Atom, the property to change
+=item $type; A Gnome::Gdk3::Atom, the new type for the property. If mode is GDK_PROP_MODE_PREPEND or GDK_PROP_MODE_APPEND, then this must match the existing type or an error will occur.
+=item $format; the new format for the property. If mode is GDK_PROP_MODE_PREPEND or GDK_PROP_MODE_APPEND, then this must match the existing format or an error will occur.
+=item $mode; a value describing how the new data is to be combined with the current data.
+=item $data; the data.
 =comment item Int() $nelements; the number of elements of size determined by the format, contained in data .
 
 =end pod
 
 method property-change (
-  $window is copy, $property is copy, $type is copy,
+  N-GObject() $window, N-GObject() $property, N-GObject() $type,
   Int() $format where * ~~ any( 8, 16, 32), GdkPropMode $mode,
   Str $data
 ) {
-  $window .= _get-native-object-no-reffing unless $window ~~ N-GObject;
-  $property .= _get-native-object-no-reffing unless $property ~~ N-GObject;
-  $type .= _get-native-object-no-reffing unless $type ~~ N-GObject;
-
   my $str-item = CArray[uint8].new($data.encode);
   $str-item[$data.encode.elems] = 0;
   my $length = 0;
@@ -203,16 +199,13 @@ sub gdk_property_change (
 
 Deletes a property from a window.
 
-  method property-delete ( N-GObject $window, N-GObject $property )
+  method property-delete ( N-GObject() $window, N-GObject() $property )
 
-=item N-GObject $window; A Gnome::Gdk3::Window
-=item N-GObject $property; A Gnome::Gdk3::Atom, the property to delete
+=item $window; A Gnome::Gdk3::Window
+=item $property; A Gnome::Gdk3::Atom, the property to delete
 =end pod
 
-method property-delete ( $window is copy, $property is copy ) {
-  $window .= _get-native-object-no-reffing unless $window ~~ N-GObject;
-  $property .= _get-native-object-no-reffing unless $property ~~ N-GObject;
-
+method property-delete ( N-GObject() $window, N-GObject() $property ) {
   gdk_property_delete( $window, $property);
 }
 
@@ -227,35 +220,31 @@ sub gdk_property_delete (
 =head2 property-get
 
   method property-get (
-    N-GObject $window, N-GObject $property, N-GObject $type,
+    N-GObject() $window, N-GObject() $property, N-GObject() $type,
     UInt $offset, UInt $length, Bool $pdelete = False,
     --> List
   )
 
-=item N-GObject $window; A Gnome::Gdk3::Window
-=item N-GObject $property; A Gnome::Gdk3::Atom, the property to retrieve
-=item N-GObject $type; A Gnome::Gdk3::Atom, the desired property type, or GDK_NONE, if any type of data is acceptable. If this does not match the actual type, then actual_format and actual_length will be filled in, a warning will be printed to stderr and no data will be returned.
-=item UInt $offset; the offset into the property at which to begin retrieving data, in 4 byte units.
-=item UInt $length; the length of the data to retrieve in bytes. Data is considered to be retrieved in 4 byte chunks, so length will be rounded up to the next highest 4 byte boundary (so be careful not to pass a value that might overflow when rounded up).
-=item Bool $pdelete; if TRUE, delete the property after retrieving the data.
+=item $window; A Gnome::Gdk3::Window
+=item $property; A Gnome::Gdk3::Atom, the property to retrieve
+=item $type; A Gnome::Gdk3::Atom, the desired property type, or GDK_NONE, if any type of data is acceptable. If this does not match the actual type, then actual_format and actual_length will be filled in, a warning will be printed to stderr and no data will be returned.
+=item $offset; the offset into the property at which to begin retrieving data, in 4 byte units.
+=item $length; the length of the data to retrieve in bytes. Data is considered to be retrieved in 4 byte chunks, so length will be rounded up to the next highest 4 byte boundary (so be careful not to pass a value that might overflow when rounded up).
+=item $pdelete; if TRUE, delete the property after retrieving the data.
 
 Returned List holds
-=item Bool result; TRUE if data was successfully received and stored in data, otherwise FALSE.
-=item N-GObject $actual_property_type; actual type
-=item Int $actual_format; the actual format of the data; either 8, 16 or 32 bits
-=item Int $actual_length; Data returned in the 32 bit format is stored in a long variable, so the actual number of 32 bit elements should be be calculated via actual_length / sizeof(glong) to ensure portability to 64 bit systems.
-=item Str $data;
+=item result; TRUE if data was successfully received and stored in data, otherwise FALSE.
+=item $actual_property_type; actual type
+=item $actual_format; the actual format of the data; either 8, 16 or 32 bits
+=item $actual_length; Data returned in the 32 bit format is stored in a long variable, so the actual number of 32 bit elements should be be calculated via actual_length / sizeof(glong) to ensure portability to 64 bit systems.
+=item $data;
 =end pod
 
 method property-get (
-  $window is copy, $property is copy, $type is copy, UInt $offset,
+  N-GObject() $window, N-GObject() $property, N-GObject() $type, UInt $offset,
   UInt $length, Bool $pdelete = False
   --> List
 ) {
-  $window .= _get-native-object-no-reffing unless $window ~~ N-GObject;
-  $property .= _get-native-object-no-reffing unless $property ~~ N-GObject;
-  $type .= _get-native-object-no-reffing unless $type ~~ N-GObject;
-
   my N-GObject $apt;
   my CArray[uint8] $d;
   my gint $actual_format;
@@ -295,15 +284,15 @@ sub gdk_property_get (
 Converts a text property in the given encoding to a list of UTF-8 strings.
 
   method gdk-text-property-to-utf8-list-for-display (
-    N-GObject $display, N-GObject $encoding,
+    N-GObject() $display, N-GObject() $encoding,
     Int() $format where * ~~ any( 8, 16, 32), Str $text
     --> List
   )
 
-=item N-GObject $display; A Gnome::Gdk3::Display
-=item N-GObject $encoding; A Gnome::Gdk3::Atom, an atom representing the encoding of the text
-=item Int() $format; the format of the property
-=item Str $text; the text to convert.
+=item $display; A Gnome::Gdk3::Display
+=item $encoding; A Gnome::Gdk3::Atom, an atom representing the encoding of the text
+=item $format; the format of the property
+=item $text; the text to convert.
 =comment item Int() $length; the length of text in bytes
 
 Returns a List of UTF-8 strings
@@ -311,13 +300,11 @@ Returns a List of UTF-8 strings
 =end pod
 
 method gdk-text-property-to-utf8-list-for-display (
-  $display is copy, $encoding is copy,
+  N-GObject() $display, N-GObject() $encoding,
   Int() $format where * ~~ any( 8, 16, 32), Str $text,
 #  Int() $length
   --> List
 ) {
-  $display .= _get-native-object-no-reffing unless $display ~~ N-GObject;
-  $encoding .= _get-native-object-no-reffing unless $encoding ~~ N-GObject;
   my $s = CArray[Str].new($text);
 
   gdk_text_property_to_utf8_list_for_display(
@@ -340,7 +327,7 @@ sub gdk_text_property_to_utf8_list_for_display (
 
   method utf8-to-string-target ( Str $str --> Buf )
 
-=item Str $str; a UTF-8 string
+=item $str; a UTF-8 string
 =end pod
 
 method utf8-to-string-target ( Str $str --> Buf ) {
@@ -380,8 +367,8 @@ Returns: the atom corresponding to I<atom-name>.
 
   method intern ( Str $atom_name, Bool $only_if_exists --> N-GObject )
 
-=item Str $atom_name; a string.
-=item Bool $only_if_exists; if C<True>, GDK is allowed to not create a new atom, but just return C<GDK-NONE> if the requested atom doesn’t already exists. Currently, the flag is ignored, since checking the existance of an atom is as expensive as creating it.
+=item $atom_name; a string.
+=item $only_if_exists; if C<True>, GDK is allowed to not create a new atom, but just return C<GDK-NONE> if the requested atom doesn’t already exists. Currently, the flag is ignored, since checking the existance of an atom is as expensive as creating it.
 =end pod
 
 method intern ( Str $atom_name, Bool $only_if_exists --> Gnome::Gdk3::Atom ) {
@@ -413,7 +400,7 @@ Returns: the atom corresponding to I<atom-name>
 
   method intern-static-string ( Str $atom_name --> N-GObject )
 
-=item Str $atom_name; a static string
+=item $atom_name; a static string
 =end pod
 
 method intern-static-string ( Str $atom_name --> N-GObject ) {

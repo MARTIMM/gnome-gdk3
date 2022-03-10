@@ -226,16 +226,16 @@ submethod BUILD ( *%options ) {
 
     # process all other options
     else {
-      my $no;
+      my N-GObject() $no;
       if ? %options<window> and %options<targets>:exists {
-        my $no1 = %options<window>;
-        $no1 .= _get-native-object-no-reffing unless $no1 ~~ N-GObject;
+        my N-GObject() $no1 = %options<window>;
+#        $no1 .= _get-native-object-no-reffing unless $no1 ~~ N-GObject;
         my $no2 = %options<targets>;
         $no2 .= _get-native-object-no-reffing unless $no2 ~~ N-GList;
 
         if ? %options<device> {
-          my $no3 = %options<device>;
-          $no3 .= _get-native-object-no-reffing unless $no3 ~~ N-GObject;
+          my N-GObject() $no3 = %options<device>;
+ #          $no3 .= _get-native-object-no-reffing unless $no3 ~~ N-GObject;
 
           if %options<x>:exists and %options<y>:exists {
             $no =_gdk_drag_begin_from_point(
@@ -301,7 +301,7 @@ This function does not need to be called in managed drag and drop operations.
 
   method abort ( UInt $time )
 
-=item UInt $time; the timestamp for this operation
+=item $time; the timestamp for this operation
 =end pod
 
 method abort ( UInt $time ) {
@@ -323,16 +323,14 @@ Starts a drag and creates a new drag context for it. This function assumes that 
 
 This function is called by the drag source.
 
-  method begin ( N-GObject $window, N-GList $targets --> N-GObject )
+  method begin ( N-GObject() $window, N-GList $targets --> N-GObject )
 
-=item N-GObject $window;
-=item N-GList $targets;
+=item $window;
+=item $targets;
 =end pod
 
-method begin ( $window is copy, $targets is copy --> N-GObject ) {
-  $window .= _get-native-object-no-reffing unless $window ~~ N-GObject;
+method begin ( N-GObject() $window, $targets is copy --> N-GObject ) {
   $targets .= _get-native-object-no-reffing unless $targets ~~ N-GList;
-
   gdk_drag_begin( $window, $targets)
 }
 }}
@@ -353,17 +351,18 @@ Starts a drag and creates a new drag context for it.
 
 This function is called by the drag source.
 
+  method begin-for-device (
+    N-GObject() $window, N-GObject() $device, N-GList $targets
+    --> N-GObject
+  )
 
-  method begin-for-device ( N-GObject $window, N-GObject $device, N-GList $targets --> N-GObject )
-
-=item N-GObject $window;
-=item N-GObject $device;
-=item N-GList $targets;
+=item $window;
+=item $device;
+=item $targets;
 =end pod
 
-method begin-for-device ( $window is copy, $device is copy, $targets is copy --> N-GObject ) {
-  $window .= _get-native-object-no-reffing unless $window ~~ N-GObject;
-  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
+method begin-for-device (
+  N-GObject() $window, N-GObject() $device, $targets --> N-GObject ) {
   $targets .= _get-native-object-no-reffing unless $targets ~~ N-GList;
 
   gdk_drag_begin_for_device(
@@ -388,20 +387,25 @@ Starts a drag and creates a new drag context for it.
 
 This function is called by the drag source.
 
-  method begin-from-point ( N-GObject $window, N-GObject $device, N-GList $targets, Int() $x_root, Int() $y_root --> N-GObject )
+  method begin-from-point (
+    N-GObject() $window, N-GObject() $device, N-GList $targets,
+    Int() $x_root, Int() $y_root
+    --> N-GObject
+  )
 
-=item N-GObject $window;
-=item N-GObject $device;
-=item N-GList $targets;
-=item Int() $x_root;
-=item Int() $y_root;
+=item $window;
+=item $device;
+=item $targets;
+=item $x_root;
+=item $y_root;
 =end pod
 
-method begin-from-point ( $window is copy, $device is copy, $targets is copy, Int() $x_root, Int() $y_root --> N-GObject ) {
-  $window .= _get-native-object-no-reffing unless $window ~~ N-GObject;
-  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
+method begin-from-point (
+  N-GObject() $window, N-GObject() $device, $targets is copy,
+  Int() $x_root, Int() $y_root
+  --> N-GObject
+) {
   $targets .= _get-native-object-no-reffing unless $targets ~~ N-GList;
-
   gdk_drag_begin_from_point(
     self._get-native-object-no-reffing, $window, $device, $targets, $x_root, $y_root
   )
@@ -648,14 +652,14 @@ Once the drag and drop operation is managed, the drag context will emit the foll
 
 Returns: B<TRUE> if the drag and drop operation is managed.
 
-  method manage-dnd ( N-GObject $ipc_window, GdkDragAction $actions --> Bool )
+  method manage-dnd ( N-GObject() $ipc_window, GdkDragAction $actions --> Bool )
 
-=item N-GObject $ipc_window; Window to use for IPC messaging/events
-=item GdkDragAction $actions; the actions supported by the drag source
+=item $ipc_window; Window to use for IPC messaging/events
+=item $actions; the actions supported by the drag source
 =end pod
 
 method manage-dnd (
-  $ipc_window is copy, GdkDragAction $actions --> Bool
+  N-GObject() $ipc_window, GdkDragAction $actions --> Bool
 ) {
   $ipc_window .= _get-native-object-no-reffing unless $ipc_window ~~ N-GObject;
 
@@ -677,17 +681,13 @@ sub gdk_drag_context_manage_dnd (
 
 Associates a B<Gnome::Gdk3::Device> to I<context>, so all Drag and Drop events for I<context> are emitted as if they came from this device.
 
-  method set-device ( N-GObject $device )
+  method set-device ( N-GObject() $device )
 
-=item N-GObject $device; a B<Gnome::Gdk3::Device>
+=item $device; a B<Gnome::Gdk3::Device>
 =end pod
 
-method set-device ( $device is copy ) {
-  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
-
-  gdk_drag_context_set_device(
-    self._get-native-object-no-reffing, $device
-  );
+method set-device ( N-GObject() $device ) {
+  gdk_drag_context_set_device( self._get-native-object-no-reffing, $device);
 }
 
 sub gdk_drag_context_set_device (
@@ -704,8 +704,8 @@ Sets the position of the drag window that will be kept under the cursor hotspot.
 
   method set-hotspot ( Int() $hot_x, Int() $hot_y )
 
-=item Int() $hot_x; x coordinate of the drag window hotspot
-=item Int() $hot_y; y coordinate of the drag window hotspot
+=item $hot_x; x coordinate of the drag window hotspot
+=item $hot_y; y coordinate of the drag window hotspot
 =end pod
 
 method set-hotspot ( Int() $hot_x, Int() $hot_y ) {
@@ -733,7 +733,7 @@ This function does not need to be called in managed drag and drop operations.
 
   method drop ( UInt $time )
 
-=item UInt $time; the timestamp for this operation
+=item $time; the timestamp for this operation
 =end pod
 
 method drop ( UInt $time ) {
@@ -759,7 +759,7 @@ The B<Gnome::Gdk3::DragContext> will only take the first C<drop-done()> call as 
 
   method drop-done ( Bool $success )
 
-=item Bool $success; whether the drag was ultimatively successful
+=item $success; whether the drag was ultimatively successful
 =end pod
 
 method drop-done ( Bool $success ) {
@@ -805,26 +805,26 @@ Finds the destination window and DND protocol to use at the given pointer positi
 This function is called by the drag source to obtain the I<dest-window> and I<protocol> parameters for C<motion()>.
 
   method find-window-for-screen (
-    N-GObject $drag_window, N-GObject $screen,
-    Int() $x_root, Int() $y_root, N-GObject $dest_window,
+    N-GObject() $drag_window, N-GObject() $screen,
+    Int() $x_root, Int() $y_root, N-GObject() $dest_window,
     GdkDragProtocol $protocol
   )
 
-=item N-GObject $drag_window; a window which may be at the pointer position, but should be ignored, since it is put up by the drag source as an icon
-=item N-GObject $screen; the screen where the destination window is sought
-=item Int() $x_root; the x position of the pointer in root coordinates
-=item Int() $y_root; the y position of the pointer in root coordinates
-=item N-GObject $dest_window; location to store the destination window in
-=item GdkDragProtocol $protocol; location to store the DND protocol in
+=item $drag_window; a window which may be at the pointer position, but should be ignored, since it is put up by the drag source as an icon
+=item $screen; the screen where the destination window is sought
+=item $x_root; the x position of the pointer in root coordinates
+=item $y_root; the y position of the pointer in root coordinates
+=item $dest_window; location to store the destination window in
+=item $protocol; location to store the DND protocol in
 =end pod
 
-method find-window-for-screen ( $drag_window is copy, $screen is copy, Int() $x_root, Int() $y_root, $dest_window is copy, GdkDragProtocol $protocol ) {
-  $drag_window .= _get-native-object-no-reffing unless $drag_window ~~ N-GObject;
-  $screen .= _get-native-object-no-reffing unless $screen ~~ N-GObject;
-  $dest_window .= _get-native-object-no-reffing unless $dest_window ~~ N-GObject;
-
+method find-window-for-screen (
+  N-GObject() $drag_window, N-GObject() $screen, Int() $x_root, Int() $y_root,
+  N-GObject() $dest_window, GdkDragProtocol $protocol
+) {
   gdk_drag_find_window_for_screen(
-    self._get-native-object-no-reffing, $drag_window, $screen, $x_root, $y_root, $dest_window, $protocol
+    self._get-native-object-no-reffing, $drag_window, $screen, $x_root,
+    $y_root, $dest_window, $protocol
   );
 }
 
@@ -844,8 +844,8 @@ This function is called by the drag destination.
 
   method gdk-drop-finish ( Bool $success, UInt $time )
 
-=item Bool $success; C<True> if the data was successfully received
-=item UInt $time; the timestamp for this operation
+=item $success; C<True> if the data was successfully received
+=item $time; the timestamp for this operation
 =end pod
 
 method gdk-drop-finish ( Bool $success, UInt $time ) {
@@ -871,8 +871,8 @@ This function is called by the drag destination in response to a drop initiated 
 
   method gdk-drop-reply ( Bool $accepted, UInt $time )
 
-=item Bool $accepted; C<True> if the drop is accepted
-=item UInt $time; the timestamp for this operation
+=item $accepted; C<True> if the drop is accepted
+=item $time; the timestamp for this operation
 =end pod
 
 method gdk-drop-reply ( Bool $accepted, UInt $time ) {
@@ -927,28 +927,27 @@ This function does not need to be called in managed drag and drop operations.
 Returns:
 
   method motion (
-    N-GObject $dest_window, GdkDragProtocol $protocol,
+    N-GObject() $dest_window, GdkDragProtocol $protocol,
     Int() $x_root, Int() $y_root, GdkDragAction $suggested_action,
     GdkDragAction $possible_actions, UInt $time
     --> Bool
   )
 
-=item N-GObject $dest_window; the new destination window, obtained by C<find-window()>
-=item GdkDragProtocol $protocol; the DND protocol in use, obtained by C<find-window()>
-=item Int() $x_root; the x position of the pointer in root coordinates
-=item Int() $y_root; the y position of the pointer in root coordinates
-=item GdkDragAction $suggested_action; the suggested action
-=item GdkDragAction $possible_actions; the possible actions
-=item UInt $time; the timestamp for this operation
+=item $dest_window; the new destination window, obtained by C<find-window()>
+=item $protocol; the DND protocol in use, obtained by C<find-window()>
+=item $x_root; the x position of the pointer in root coordinates
+=item $y_root; the y position of the pointer in root coordinates
+=item $suggested_action; the suggested action
+=item $possible_actions; the possible actions
+=item $time; the timestamp for this operation
 =end pod
 
 method motion (
-  $dest_window is copy, GdkDragProtocol $protocol, Int() $x_root,
+  N-GObject() $dest_window, GdkDragProtocol $protocol, Int() $x_root,
   Int() $y_root, GFlag $suggested_action, GdkDragAction $possible_actions,
   UInt $time
-  --> Bool ) {
-  $dest_window .= _get-native-object-no-reffing unless $dest_window ~~ N-GObject;
-
+  --> Bool
+) {
   gdk_drag_motion(
     self._get-native-object-no-reffing, $dest_window, $protocol,
     $x_root, $y_root, $suggested_action, $possible_actions, $time
@@ -971,8 +970,8 @@ This function is called by the drag destination in response to C<motion()> calle
 
   method status ( GdkDragAction $action, UInt $time )
 
-=item GdkDragAction $action; the selected action which will be taken when a drop happens, or GDK_ACTION_NONE to indicate that a drop will not be accepted
-=item UInt $time; the timestamp for this operation
+=item $action; the selected action which will be taken when a drop happens, or GDK_ACTION_NONE to indicate that a drop will not be accepted
+=item $time; the timestamp for this operation
 =end pod
 
 method status ( GdkDragAction $action, UInt $time ) {

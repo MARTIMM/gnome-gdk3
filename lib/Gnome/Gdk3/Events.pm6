@@ -2623,13 +2623,12 @@ sub gdk_event_request_motions (
 
 Sets the device for I<event> to I<device>. The event must have been allocated by GTK+, for instance, by C<copy()>.
 
-  method set-device ( N-GObject $device )
+  method set-device ( N-GObject() $device )
 
 =item $device; a B<Gnome::Gdk3::Device>
 =end pod
 
-method set-device ( $device is copy ) {
-  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
+method set-device ( N-GObject() $device ) {
   gdk_event_set_device( self._get-native-object-no-reffing, $device);
 }
 
@@ -2646,14 +2645,13 @@ sub gdk_event_set_device (
 
 Sets the device tool for this event, should be rarely used.
 
-  method set-device-tool ( N-GObject $tool )
+  method set-device-tool ( N-GObject() $tool )
 
 =item $tool; tool to set on the event, or C<undefined>
 =end pod
 
-method set-device-tool ( $tool is copy ) {
-  $tool .= _get-native-object-no-reffing unless $tool ~~ N-GObject;
-  gdk_event_set_device_tool(self._get-native-object-no-reffing, $tool);
+method set-device-tool ( N-GObject() $tool ) {
+  gdk_event_set_device_tool( self._get-native-object-no-reffing, $tool);
 }
 
 sub gdk_event_set_device_tool (
@@ -2669,13 +2667,12 @@ sub gdk_event_set_device_tool (
 
 Sets the screen for I<event> to I<screen>. The event must have been allocated by GTK+, for instance, by C<gdk_event_copy()>.
 
-  method set-screen ( N-GObject $screen )
+  method set-screen ( N-GObject() $screen )
 
 =item $screen; a B<Gnome::Gdk3::Screen>
 =end pod
 
-method set-screen ( $screen is copy ) {
-  $screen .= _get-native-object-no-reffing unless $screen ~~ N-GObject;
+method set-screen ( N-GObject() $screen ) {
   gdk_event_set_screen( self._get-native-object-no-reffing, $screen);
 }
 
@@ -2714,13 +2711,12 @@ Sets the slave device for I<event> to I<device>.
 
 The event must have been allocated by GTK+, for instance by C<gdk_event_copy()>.
 
-  method set-source-device ( N-GObject $device )
+  method set-source-device ( N-GObject() $device )
 
 =item $device; a B<Gnome::Gdk3::Device>
 =end pod
 
-method set-source-device ( $device is copy ) {
-  $device .= _get-native-object-no-reffing unless $device ~~ N-GObject;
+method set-source-device ( N-GObject() $device ) {
   gdk_event_set_source_device( self._get-native-object-no-reffing, $device);
 }
 
@@ -2739,15 +2735,13 @@ Obtains a desktop-wide setting, such as the double-click time, for the default s
 
 Returns: C<True> if the setting existed and a value was stored in I<value>, C<False> otherwise.
 
-  method setting-get ( Str $name, N-GObject $value --> Bool )
+  method setting-get ( Str $name, N-GObject() $value --> Bool )
 
 =item $name; the name of the setting.
 =item $value; location to store the value of the setting.
 =end pod
 
-method setting-get ( Str $name, $value is copy --> Bool ) {
-  $value .= _get-native-object-no-reffing unless $value ~~ N-GObject;
-
+method setting-get ( Str $name, N-GObject() $value --> Bool ) {
   gdk_setting_get( $name, $value).Bool
 }
 
