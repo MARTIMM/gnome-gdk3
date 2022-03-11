@@ -209,55 +209,38 @@ method _fallback ( $native-sub is copy --> Callable ) {
 }
 
 #-------------------------------------------------------------------------------
-=begin pod
-=head2 red
-
-Set the red color to a new value if provided. Returns original or newly set color value.
-
-  method red ( Num() $c? --> Num )
-
-=end pod
-
-#TM:1:red
-method red ( Num() $c? is copy --> Num ) {
-  if $c.defined {
-    $c = 0e0 if $c < 0e0;
-    $c = 1e0 if $c > 1e0;
-
-    my N-GdkRGBA $o = nativecast( N-GdkRGBA, self._get-native-object);
-    my N-GdkRGBA $clr .= new(
-      :red($c), :green($o.green), :blue($o.blue), :alpha($o.alpha)
-    );
-    self._set-native-object(nativecast( N-GObject, $clr));
-  }
-
-  nativecast( N-GdkRGBA, self._get-native-object).red
+# no ref/unref
+method native-object-ref ( $n-native-object --> Any ) {
+  $n-native-object
 }
 
 #-------------------------------------------------------------------------------
+method native-object-unref ( $n-native-object ) { }
+
+#-------------------------------------------------------------------------------
 =begin pod
-=head2 green
+=head2 alpha
 
-Set the green color to a new value if provided. Returns original or newly set color value.
+Set the alpha transparency to a new value if provided. Returns original or newly set value.
 
-  method green ( Num $c? --> Num )
+  method alpha ( Num $c? --> Num )
 
 =end pod
 
-#TM:1:green
-method green ( Num $c? is copy --> Num ) {
+#TM:1:alpha
+method alpha ( Num $c? is copy --> Num ) {
   if $c.defined {
     $c = 0e0 if $c < 0e0;
     $c = 1e0 if $c > 1e0;
 
     my N-GdkRGBA $o = nativecast( N-GdkRGBA, self._get-native-object);
     my N-GdkRGBA $clr .= new(
-      :red($o.red), :green($c), :blue($o.blue), :alpha($o.alpha)
+      :red($o.red), :green($o.green), :blue($o.blue), :alpha($c)
     );
     self._set-native-object(nativecast( N-GObject, $clr));
   }
 
-  nativecast( N-GdkRGBA, self._get-native-object).green
+  nativecast( N-GdkRGBA, self._get-native-object).alpha
 }
 
 #-------------------------------------------------------------------------------
@@ -284,32 +267,6 @@ method blue ( Num $c? is copy --> Num ) {
   }
 
   nativecast( N-GdkRGBA, self._get-native-object).blue
-}
-
-#-------------------------------------------------------------------------------
-=begin pod
-=head2 alpha
-
-Set the alpha transparency to a new value if provided. Returns original or newly set value.
-
-  method alpha ( Num $c? --> Num )
-
-=end pod
-
-#TM:1:alpha
-method alpha ( Num $c? is copy --> Num ) {
-  if $c.defined {
-    $c = 0e0 if $c < 0e0;
-    $c = 1e0 if $c > 1e0;
-
-    my N-GdkRGBA $o = nativecast( N-GdkRGBA, self._get-native-object);
-    my N-GdkRGBA $clr .= new(
-      :red($o.red), :green($o.green), :blue($o.blue), :alpha($c)
-    );
-    self._set-native-object(nativecast( N-GObject, $clr));
-  }
-
-  nativecast( N-GdkRGBA, self._get-native-object).alpha
 }
 
 #-------------------------------------------------------------------------------
@@ -354,15 +311,6 @@ method copy ( --> N-GObject ) {
   nativecast( N-GObject, $clone)
 }
 
-#-------------------------------------------------------------------------------
-# no ref/unref
-method native-object-ref ( $n-native-object --> Any ) {
-  $n-native-object
-}
-
-#-------------------------------------------------------------------------------
-method native-object-unref ( $n-native-object ) { }
-
 #`{{ Not needed because of simulated copy
 #-------------------------------------------------------------------------------
 # TM:FF:gdk_rgba_free:
@@ -383,6 +331,64 @@ sub gdk_rgba_free ( N-GObject $rgba )
   is native(&gdk-lib)
   { * }
 }}
+
+#-------------------------------------------------------------------------------
+#TM:1:gequal:
+=begin pod
+=head2 equal
+
+Compare native RGBA color with a given one.
+
+Returns: C<True> if the two colors compare equal
+
+  method equal ( N-GObject() $compare-with --> Bool )
+
+=item $compare-with; another B<Gnome::Gdk3::RGBA> object
+
+=end pod
+
+method equal ( N-GObject() $compare-with --> Bool ) {
+  my N-GdkRGBA $o1 = nativecast( N-GdkRGBA, self._get-native-object);
+  my N-GdkRGBA $o2 = nativecast( N-GdkRGBA, $compare-with);
+  _gdk_rgba_equal( $o1, $o2).Bool
+}
+
+sub gdk_rgba_equal ( N-GObject() $p1, N-GObject() $p2 --> gboolean ) {
+  my N-GdkRGBA $o1 = nativecast( N-GdkRGBA, $p1);
+  my N-GdkRGBA $o2 = nativecast( N-GdkRGBA, $p2);
+  _gdk_rgba_equal( $o1, $o2).Bool
+}
+
+sub _gdk_rgba_equal ( N-GdkRGBA $p1, N-GdkRGBA $p2 --> gboolean )
+  is native(&gdk-lib)
+  is symbol('gdk_rgba_equal')
+  { * }
+
+#-------------------------------------------------------------------------------
+=begin pod
+=head2 green
+
+Set the green color to a new value if provided. Returns original or newly set color value.
+
+  method green ( Num $c? --> Num )
+
+=end pod
+
+#TM:1:green
+method green ( Num $c? is copy --> Num ) {
+  if $c.defined {
+    $c = 0e0 if $c < 0e0;
+    $c = 1e0 if $c > 1e0;
+
+    my N-GdkRGBA $o = nativecast( N-GdkRGBA, self._get-native-object);
+    my N-GdkRGBA $clr .= new(
+      :red($o.red), :green($c), :blue($o.blue), :alpha($o.alpha)
+    );
+    self._set-native-object(nativecast( N-GObject, $clr));
+  }
+
+  nativecast( N-GdkRGBA, self._get-native-object).green
+}
 
 #-------------------------------------------------------------------------------
 #TM:1:hash(N-GObject):
@@ -431,38 +437,6 @@ sub _gdk_rgba_hash ( N-GdkRGBA $p --> guint32 )
   { * }
 
 #-------------------------------------------------------------------------------
-#TM:1:gequal:
-=begin pod
-=head2 equal
-
-Compare native RGBA color with a given one.
-
-Returns: C<True> if the two colors compare equal
-
-  method equal ( N-GObject() $compare-with --> Bool )
-
-=item $compare-with; another B<Gnome::Gdk3::RGBA> object
-
-=end pod
-
-method equal ( N-GObject() $compare-with --> Bool ) {
-  my N-GdkRGBA $o1 = nativecast( N-GdkRGBA, self._get-native-object);
-  my N-GdkRGBA $o2 = nativecast( N-GdkRGBA, $compare-with);
-  _gdk_rgba_equal( $o1, $o2).Bool
-}
-
-sub gdk_rgba_equal ( N-GObject() $p1, N-GObject() $p2 --> gboolean ) {
-  my N-GdkRGBA $o1 = nativecast( N-GdkRGBA, $p1);
-  my N-GdkRGBA $o2 = nativecast( N-GdkRGBA, $p2);
-  _gdk_rgba_equal( $o1, $o2).Bool
-}
-
-sub _gdk_rgba_equal ( N-GdkRGBA $p1, N-GdkRGBA $p2 --> gboolean )
-  is native(&gdk-lib)
-  is symbol('gdk_rgba_equal')
-  { * }
-
-#-------------------------------------------------------------------------------
 #TM:1:parse:
 =begin pod
 =head2 parse
@@ -492,7 +466,7 @@ method parse( Str $spec --> Bool ) {
   $r
 }
 
-sub gdk_rgba_parse ( N-GObject $rgba is rw, Str $spec --> Bool ) {
+sub gdk_rgba_parse ( N-GObject $rgba, Str $spec --> Bool ) {
   my N-GdkRGBA $o = nativecast( N-GdkRGBA, $rgba);
   my Bool $r = _gdk_rgba_parse( $o, $spec).Bool;
   $rgba = nativecast( N-GObject, $o);
@@ -503,6 +477,32 @@ sub _gdk_rgba_parse ( N-GdkRGBA $rgba is rw, Str $spec --> gboolean )
   is native(&gdk-lib)
   is symbol('gdk_rgba_parse')
   { * }
+
+#-------------------------------------------------------------------------------
+=begin pod
+=head2 red
+
+Set the red color to a new value if provided. Returns original or newly set color value.
+
+  method red ( Num() $c? --> Num )
+
+=end pod
+
+#TM:1:red
+method red ( Num() $c? is copy --> Num ) {
+  if $c.defined {
+    $c = 0e0 if $c < 0e0;
+    $c = 1e0 if $c > 1e0;
+
+    my N-GdkRGBA $o = nativecast( N-GdkRGBA, self._get-native-object);
+    my N-GdkRGBA $clr .= new(
+      :red($c), :green($o.green), :blue($o.blue), :alpha($o.alpha)
+    );
+    self._set-native-object(nativecast( N-GObject, $clr));
+  }
+
+  nativecast( N-GdkRGBA, self._get-native-object).red
+}
 
 #-------------------------------------------------------------------------------
 #TM:1:to-string:
