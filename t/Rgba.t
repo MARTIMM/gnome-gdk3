@@ -46,14 +46,14 @@ subtest 'Manipulations', {
 
   ok $key > 0, '.hash(Gnome::Gdk3::RGBA)';
   my Gnome::Gdk3::RGBA $r3 .= new(:native-object($r2.hash($key)));
-  is $r.to-string, $r3.to-string, '.gdk-rgba-hash(UInt)';
+  is $r.to-string, $r3.to-string, '.hash(UInt)';
 
   ok $r.equal($r3), '.equal(): =';
   nok $r2.equal($r3), '.equal(): ≠';
 
-  ok $r.parse('#8f0'), '.gdk-rgba-parse("#rgb")';
+  ok $r.parse('#8f0'), '.parse("#rgb")';
   is $r.to-string, 'rgb(136,255,0)', 'compare rgb string ok';
-  ok $r.parse('rgba(127,255,0,0.5)'), '.gdk-rgba-parse("rgba()")';
+  ok $r.parse('rgba(127,255,0,0.5)'), '.parse("rgba()")';
   is $r.to-string, 'rgba(127,255,0,0.5)', 'compare string ok';
 
   is $r.red.round(0.1), 0.5, '.red()';

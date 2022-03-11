@@ -466,7 +466,7 @@ method parse( Str $spec --> Bool ) {
   $r
 }
 
-sub gdk_rgba_parse ( N-GObject $rgba, Str $spec --> Bool ) {
+sub gdk_rgba_parse ( N-GObject $rgba is rw, Str $spec --> Bool ) {
   my N-GdkRGBA $o = nativecast( N-GdkRGBA, $rgba);
   my Bool $r = _gdk_rgba_parse( $o, $spec).Bool;
   $rgba = nativecast( N-GObject, $o);
