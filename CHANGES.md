@@ -1,10 +1,10 @@
 ## Release notes
 * 2022-03-10 0.19.5;
   * Deprecate `-rk()` methods and update documentation.
-  * Methods added to **Gnome::Gdk3::RGBA**, changed documentation and deprecated several methods. Also N-GdkRGBA structure will be used internally only and casted to N-GObject before returning to the user.
+  * Methods added to **Gnome::Gdk3::RGBA**, changed documentation and deprecated several methods. Also `N-GdkRGBA` structure will be used internally only and casted to `N-GObject` before returning to the user.
 
 * 2022-03-04 0.19.4;
-  * Add method `N-GdkRGBA()` This is still in a test phase
+  * Add method `N-GdkRGBA()` This is still in a test phase. (2022-03-10; it turns out that it is not needed and is removed).
 
 * 2022-02-02 0.19.3:
   * Bug fixes in AppInfo
