@@ -180,24 +180,30 @@ submethod BUILD ( *%options ) {
 # no pod. user does not have to know about it.
 method _fallback ( $native-sub is copy --> Callable ) {
 
+  my Str $new-patt = $native-sub.subst( '_', '-', :g);
+
   my Callable $s;
   try { $s = &::("gdk_rgba_$native-sub"); };
-  Gnome::N::deprecate(
-    "gdk_rgba_$native-sub", $native-sub, '0.19.11', '0.21.0'
-  ) if ?$s;
-
-  unless ?$s {
-    try { $s = &::("gdk_$native-sub"); }
+  if ?$s {
     Gnome::N::deprecate(
-      "gdk_$native-sub", $native-sub, '0.19.11', '0.21.0'
-    ) if ?$s;
+      "gdk_rgba_$native-sub", $new-patt, '0.19.11', '0.21.0'
+    );
+  }
 
-    unless ?$s {
+  else {
+    try { $s = &::("gdk_$native-sub"); }
+    if ?$s {
+      Gnome::N::deprecate(
+        "gdk_$native-sub", $new-patt.subst('gdk-'), '0.19.11', '0.21.0'
+      );
+    }
+
+    else {
       try { $s = &::($native-sub); } if $native-sub ~~ m/^ 'gdk_' /;
       if ?$s {
-        my $nsub = $native-sub;
-        $nsub ~~ s/ 'gdk_rgba_' //;
-        Gnome::N::deprecate( $native-sub, $nsub, '0.19.11', '0.21.0');
+        Gnome::N::deprecate(
+          $native-sub, $new-patt.subst('gdk-rgba-'), '0.19.11', '0.21.0'
+        );
       }
     }
   }
