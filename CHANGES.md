@@ -1,49 +1,52 @@
 ## Release notes
-* 2022-03-10 0.19.5;
+* 2022-03-18 0.19.6
+  * Bugfix in deprecation messages in **Gnome::Gdk3::RGBA**.
+
+* 2022-03-10 0.19.5
   * Deprecate `-rk()` methods and update documentation.
   * Methods added to **Gnome::Gdk3::RGBA**, changed documentation and deprecated several methods. Also `N-GdkRGBA` structure will be used internally only and casted to `N-GObject` before returning to the user.
 
-* 2022-03-04 0.19.4;
+* 2022-03-04 0.19.4
   * Add method `N-GdkRGBA()` This is still in a test phase. (2022-03-10; it turns out that it is not needed and is removed).
 
-* 2022-02-02 0.19.3:
+* 2022-02-02 0.19.3
   * Bug fixes in AppInfo
 
-* 2022-02-02 0.19.2:
+* 2022-02-02 0.19.2
   * Doc changes for **Gnome::Gdk3::Events**. Quite a few methods were defined uncorrectly and therefore unusable.
 
-* 2021-12-12 0.19.1:
+* 2021-12-12 0.19.1
   * Changes for renamed methods in **Gnome::N::TopLevelClassSupport**.
 
-* 2021-05-24 0.19.0:
+* 2021-05-24 0.19.0
   * Added modules **Gnome::Gdk3::DragContext** and **Gnome::Gdk3::Atom** for drag and drop support.
 
-* 2021-04-25 0.18.1:
+* 2021-04-25 0.18.1
   * Changed  **Gnome::Gdk3::Screen** and **Gnome::Gdk3::Visual** for remarks made in release notes of Gtk3.
 
-* 2021-04-11 0.18.0:
+* 2021-04-11 0.18.0
   * Add module **Gnome::Gdk3::Visual**.
   * Bugfixes in **Gnome::Gdk3::Screen**. option `:native-object` for `.new()` was not recognized.
 
-* 2021-04-01 0.17.3:
+* 2021-04-01 0.17.3
   * Enumerated type `N-GdkEventMask` has a wrong name and is renamed to `GdkEventMask`. All enumerated types are without the leading N-. The N- prefix is used for native structures and classes like `N-GObject`, `N-GError`, `N-GdkRectangle`, etcetera. It won't break anything because it is not used as a type on parameters. It is mainly used for its members which are or'ed into a mask and sent/received as an `Int`.
   * Window was using the N-GdkEventMask parameter wrongly. It must use `Int` because it is a mask of flags from the now renamed enum `GdkEventMask`.
 
-* 2020-12-16 0.17.2:
+* 2020-12-16 0.17.2
   * Also this package is now tested on Travis-ci and Appveyor.
 
-* 2020-07-16 0.17.1:
+* 2020-07-16 0.17.1
   * Modified the structure types of `GdkEvent*`into `N-GdkEvent*`. The older types are deprecated and are removed in version 0.20.0.
 
-* 2020-07-10 0.17.0:
+* 2020-07-10 0.17.0
   * Introduction to Cairo
   * Added `gdk_window_create_similar_surface()` and `gdk_window_create_similar_image_surface()` to **Gnome::Gdk3::Window**.
   * Added `new(:window)` and `new(:surface)` to **Gnome::Gdk3::Pixbuf**.
 
-* 2020-04-22 0.15.6:
+* 2020-04-22 0.15.6
   * Modified and extended **Gnome::Gdk3::Pixbuf**.
 
-* 2020-04-15 0.15.5:
+* 2020-04-15 0.15.5
   * Added `gdk_pixbuf_get_type()` to support a missing type GDK_TYPE_PIXBUF. This cannot be encoded because it is not a fundamental type like G_TYPE_INT.
 
 * 2020-03-25 0.15.4:
