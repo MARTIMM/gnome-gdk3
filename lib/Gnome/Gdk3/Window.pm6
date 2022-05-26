@@ -1400,24 +1400,22 @@ sub gdk_window_get_cursor (
 =begin pod
 =head2 get-decorations
 
-Returns the decorations set on the GdkWindow with C<set_decorations()>.
+Returns the decorations set on the GdkWindow with C<set-decorations()>. Returns -1 if no decorations were set. The returned value is a mask with bits from C<GdkWMDecoration> enumeration.
 
-Returns: C<True> if the window has decorations set, C<False> otherwise.
+  method get-decorations ( --> Int )
 
-  method get-decorations ( GdkWMDecoration $decorations --> Bool )
-
-=item $decorations; The window decorations will be written here
 =end pod
 
-method get-decorations ( GdkWMDecoration $decorations --> Bool ) {
+method get-decorations ( --> Int ) {
+  my Bool $r = gdk_window_get_decorations(
+    self._get-native-object-no-reffing, my GFlag $decorations
+  ).Bool;
 
-  gdk_window_get_decorations(
-    self._get-native-object-no-reffing, $decorations
-  ).Bool
+  $r ?? $decorations !! -1;
 }
 
 sub gdk_window_get_decorations (
-  N-GObject $window, GEnum $decorations --> gboolean
+  N-GObject $window, GFlag $decorations is rw --> gboolean
 ) is native(&gdk-lib)
   { * }
 
@@ -3267,27 +3265,27 @@ sub gdk_window_set_cursor (
 }}
 
 #-------------------------------------------------------------------------------
-#TM:0:set-decorations:
+#TM:4:set-decorations:
 =begin pod
 =head2 set-decorations
 
-“Decorations” are the features the window manager adds to a toplevel B<Gnome::Gdk3::Window>. This function sets the traditional Motif window manager hints that tell the window manager which decorations you would like your window to have. Usually you should use C<gtk_window_set_decorated()> on a B<Gnome::Gdk3::Window> instead of using the GDK function directly.
+“Decorations” are the features the window manager adds to a toplevel B<Gnome::Gdk3::Window>. This function sets the traditional Motif window manager hints that tell the window manager which decorations you would like your window to have. Usually you should use C<Gnome::Gtk3::Window.set_decorated()> on a B<Gnome::Gdk3::Window> instead of using the GDK function directly.
 
-The I<decorations> argument is the logical OR of the fields in the B<GdkWMDecoration> enumeration. If B<GDK_DECOR_ALL> is included in the mask, the other bits indicate which decorations should be turned off. If B<GDK_DECOR_ALL> is not included, then the other bits indicate which decorations should be turned on.
+The I<$decorations> argument is the logical OR of the fields in the C<GdkWMDecoration> enumeration. If C<GDK_DECOR_ALL> is included in the mask, the other bits indicate which decorations should be turned off. If C<GDK_DECOR_ALL> is not included, then the other bits indicate which decorations should be turned on.
 
 Most window managers honor a decorations hint of 0 to disable all decorations, but very few honor all possible combinations of bits.
 
-  method set-decorations ( GdkWMDecoration $decorations )
+  method set-decorations ( Int $decorations )
 
 =item $decorations; decoration hint mask
 =end pod
 
-method set-decorations ( GdkWMDecoration $decorations ) {
+method set-decorations ( Int $decorations ) {
   gdk_window_set_decorations( self._get-native-object-no-reffing, $decorations);
 }
 
 sub gdk_window_set_decorations (
-  N-GObject $window, GEnum $decorations
+  N-GObject $window, GFlag $decorations
 ) is native(&gdk-lib)
   { * }
 

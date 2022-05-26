@@ -1,4 +1,7 @@
 ## Release notes
+* 2022-05-26 0.19.7
+  * Bugfixes in docs and code of get/set-decorations in Window
+
 * 2022-03-18 0.19.6
   * Bugfix in deprecation messages in **Gnome::Gdk3::RGBA**.
 
