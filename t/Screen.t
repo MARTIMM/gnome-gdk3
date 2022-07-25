@@ -172,7 +172,7 @@ subtest 'Signals ...', {
 
     method ... (
       'any-args',
-      Gnome::Gdk3::Screen :$_widget, gulong :$_handler-id
+      Gnome::Gdk3::Screen() :$_native-object, gulong :$_handler-id
       # --> ...
     ) {
 

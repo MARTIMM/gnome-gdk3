@@ -140,7 +140,7 @@ subtest 'Signals ...', {
 
     method ... (
       'any-args',
-      Gnome::Gdk3::Visual :$_widget, gulong :$_handler-id
+      Gnome::Gdk3::Visual() :$_native-object, gulong :$_handler-id
       # --> ...
     ) {
 

@@ -116,7 +116,7 @@ subtest 'Signals ...', {
 
     method ... (
       'any-args',
-      Gnome::Gdk3::Dnd :$_widget, gulong :$_handler-id
+      Gnome::Gdk3::Dnd() :$_native-object, gulong :$_handler-id
       # --> ...
     ) {
 
