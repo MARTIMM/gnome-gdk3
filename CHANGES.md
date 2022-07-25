@@ -1,4 +1,7 @@
 ## Release notes
+* 2022-07-25 0.19.8
+  * Remove dependency on :_widget in event callback handlers
+
 * 2022-05-26 0.19.7
   * Bugfixes in docs and code of get/set-decorations in Window
 
