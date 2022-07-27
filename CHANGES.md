@@ -1,4 +1,7 @@
 ## Release notes
+* 2022-07-27 0.19.9
+  * Added coercion routines to **Gnome::Gdk3::Events**.
+
 * 2022-07-25 0.19.8
   * Remove dependency on :_widget in event callback handlers
 
