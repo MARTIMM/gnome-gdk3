@@ -27,9 +27,9 @@ In GTK+ applications the events are handled automatically in C<gtk_main_do_event
   # ... etcetera ...
 
   # Define a handler method
-  method handle-keypress ( N-GdkEvent $event, :$widget ) {
+  method handle-keypress ( N-GdkEvent() $event, :$widget ) {
     if $event.event-any.type ~~ GDK_KEY_PRESS {
-      my N-GdkEventKey $event-key = $event;
+      my N-GdkEventKey() $event-key = $event;
       if Buf.new($event.event-key.keyval).decode eq 's' {
         # key 's' pressed, stop process ...
       }
@@ -41,7 +41,7 @@ In GTK+ applications the events are handled automatically in C<gtk_main_do_event
 
 If the handler handles only one event type, the method can also be defined as
 
-  method handle-keypress ( N-GdkEventKey $event-key, :$widget ) {
+  method handle-keypress ( N-GdkEventKey() $event-key, :$widget ) {
     if $event-key.type ~~ GDK_KEY_PRESS and
       Buf.new($event-key.keyval).decode eq 's' {
       # key 's' pressed, stop process ...
@@ -457,6 +457,11 @@ class N-GdkEventAny is export is repr('CStruct') {
   has GEnum $.type;
   has N-GObject $.window;
   has gint8 $.send_event;
+
+  method COERCE ( $no --> N-GdkEventAny ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventAny, $no)
+  }
 }
 
 #`{{TODO cairo_region_t not defined
@@ -475,7 +480,7 @@ Generated when all or part of a window becomes visible and needs to be redrawn.
 
 =end pod
 
-#TT:0:N-GdkEventExpose:
+# TT:0:N-GdkEventExpose:
 class N-GdkEventExpose is export is repr('CStruct') {
   has GEnum $.type;
   has N-GObject $.window;
@@ -501,7 +506,7 @@ Deprecated: 3.12: Modern composited windowing systems with pervasive transparenc
 
 =end pod
 
-#TT:0:N-GdkEventVisibility:
+# TT:0:N-GdkEventVisibility:
 class N-GdkEventVisibility is export is repr('CStruct') {
   has GEnum $.type;
   has N-GObject $.window;
@@ -566,6 +571,11 @@ class N-GdkEventMotion is export is repr('CStruct') {
   submethod TWEAK ( N-GObject() :$window, N-GObject() :$device ) {
     $!window := $window if ?$window;
     $!device := $device if ?$device;
+  }
+
+  method COERCE ( $no --> N-GdkEventMotion ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventMotion, $no)
   }
 }
 
@@ -649,6 +659,11 @@ class N-GdkEventButton is export is repr('CStruct') {
   submethod TWEAK ( N-GObject() :$window, N-GObject() :$device ) {
     $!window := $window if ?$window;
     $!device := $device if ?$device;
+  }
+
+  method COERCE ( $no --> N-GdkEventButton ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventButton, $no)
   }
 }
 
@@ -772,6 +787,11 @@ class N-GdkEventScroll is export is repr('CStruct') {
     $!window := $window if ?$window;
     $!device := $device if ?$device;
   }
+
+  method COERCE ( $no --> N-GdkEventScroll ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventScroll, $no)
+  }
 }
 
 #-------------------------------------------------------------------------------
@@ -826,6 +846,11 @@ class N-GdkEventKey is export is repr('CStruct') {
   submethod TWEAK ( N-GObject() :$window ) {
     $!window := $window if ?$window;
   }
+
+  method COERCE ( $no --> N-GdkEventKey ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventKey, $no)
+  }
 }
 
 #-------------------------------------------------------------------------------
@@ -867,6 +892,11 @@ class N-GdkEventCrossing is export is repr('CStruct') {
   has GEnum $.detail;
   has gboolean $.focus;
   has guint $.state;
+
+  method COERCE ( $no --> N-GdkEventCrossing ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventCrossing, $no)
+  }
 }
 
 #-------------------------------------------------------------------------------
@@ -890,6 +920,11 @@ class N-GdkEventFocus is export is repr('CStruct') {
   has N-GObject $.window;
   has gint8 $.send_event;
   has gint16 $.in;
+
+  method COERCE ( $no --> N-GdkEventFocus ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventFocus, $no)
+  }
 }
 
 #-------------------------------------------------------------------------------
@@ -919,6 +954,11 @@ class N-GdkEventConfigure is export is repr('CStruct') {
   has gint $.y;
   has gint $.width;
   has gint $.height;
+
+  method COERCE ( $no --> N-GdkEventConfigure ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventConfigure, $no)
+  }
 }
 
 #`{{
@@ -1050,6 +1090,11 @@ class N-GdkEventProximity is export is repr('CStruct') {
   has gint8 $.send_event;
   has guint32 $.time;
   has N-GObject $.device;
+
+  method COERCE ( $no --> N-GdkEventProximity ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventProximity, $no)
+  }
 }
 
 #-------------------------------------------------------------------------------
@@ -1075,6 +1120,11 @@ class N-GdkEventSetting is export is repr('CStruct') {
   has gint8 $.send_event;
   has GEnum $.action;
   has gchar-ptr $.name;
+
+  method COERCE ( $no --> N-GdkEventSetting ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventSetting, $no)
+  }
 }
 
 #-------------------------------------------------------------------------------
@@ -1100,6 +1150,11 @@ class N-GdkEventWindowState is export is repr('CStruct') {
   has gint8 $.send_event;
   has GEnum $.changed_mask;
   has GEnum $.new_window_state;
+
+  method COERCE ( $no --> N-GdkEventWindowState ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventWindowState, $no)
+  }
 }
 
 #-------------------------------------------------------------------------------
@@ -1132,6 +1187,11 @@ class N-GdkEventGrabBroken is export is repr('CStruct') {
   has gboolean $.keyboard;
   has gboolean $.implicit;
   has N-GObject $.grab_window;
+
+  method COERCE ( $no --> N-GdkEventGrabBroken ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventGrabBroken, $no)
+  }
 }
 
 #`{{
@@ -1204,6 +1264,11 @@ class N-GdkEventTouchpadSwipe is export is repr('CStruct') {
   has gdouble $.x_root;
   has gdouble $.y_root;
   has guint $.state;
+
+  method COERCE ( $no --> N-GdkEventTouchpadSwipe ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventTouchpadSwipe, $no)
+  }
 }
 
 #-------------------------------------------------------------------------------
@@ -1249,6 +1314,11 @@ class N-GdkEventTouchpadPinch is export is repr('CStruct') {
   has gdouble $.x_root;
   has gdouble $.y_root;
   has guint $.state;
+
+  method COERCE ( $no --> N-GdkEventTouchpadPinch ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventTouchpadPinch, $no)
+  }
 }
 
 #-------------------------------------------------------------------------------
@@ -1279,6 +1349,11 @@ class N-GdkEventPadButton is export is repr('CStruct') {
   has guint $.group;
   has guint $.button;
   has guint $.mode;
+
+  method COERCE ( $no --> N-GdkEventPadButton ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventPadButton, $no)
+  }
 }
 
 #-------------------------------------------------------------------------------
@@ -1311,6 +1386,11 @@ class N-GdkEventPadAxis is export is repr('CStruct') {
   has guint $.index;
   has guint $.mode;
   has gdouble $.value;
+
+  method COERCE ( $no --> N-GdkEventPadAxis ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventPadAxis, $no)
+  }
 }
 
 #-------------------------------------------------------------------------------
@@ -1339,6 +1419,11 @@ class N-GdkEventPadGroupMode is export is repr('CStruct') {
   has guint32 $.time;
   has guint $.group;
   has guint $.mode;
+
+  method COERCE ( $no --> N-GdkEventPadGroupMode ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEventPadGroupMode, $no)
+  }
 }
 
 #-------------------------------------------------------------------------------
@@ -1399,6 +1484,11 @@ class N-GdkEvent is repr('CUnion') is export {
   HAS N-GdkEventPadButton $.pad_button;
   HAS N-GdkEventPadAxis $.pad_axis;
   HAS N-GdkEventPadGroupMode $.pad_group_mode;
+
+  method COERCE ( $no --> N-GdkEvent ) {
+    note "Coercing from {$no.^name} to ", self.^name if $Gnome::N::x-debug;
+    nativecast( N-GdkEvent, $no)
+  }
 }
 
 my constant GdkEvent is export = N-GdkEvent;
