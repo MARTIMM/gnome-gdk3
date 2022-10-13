@@ -1,7 +1,7 @@
 {
   "description": "Raku - Gnome Gdk Interface, Please install Gnome::Gtk3",
   "name": "Gnome::Gdk3",
-  "version": "0.19.9",
+  "version": "0.19.10",
   "authors": [ "Marcel Timmerman"],
   "tags": [ "gnome", "gdk"],
 
@@ -9,18 +9,18 @@
   "license": "Artistic-2.0",
 
   "provides": {
-    "Gnome::Gdk3::Atom": "lib/Gnome/Gdk3/Atom.pm6",
-    "Gnome::Gdk3::Device": "lib/Gnome/Gdk3/Device.pm6",
-    "Gnome::Gdk3::Display": "lib/Gnome/Gdk3/Display.pm6",
-    "Gnome::Gdk3::DragContext": "lib/Gnome/Gdk3/DragContext.pm6",
-    "Gnome::Gdk3::Events": "lib/Gnome/Gdk3/Events.pm6",
-    "Gnome::Gdk3::Keysyms": "lib/Gnome/Gdk3/Keysyms.pm6",
-    "Gnome::Gdk3::Pixbuf": "lib/Gnome/Gdk3/Pixbuf.pm6",
-    "Gnome::Gdk3::RGBA": "lib/Gnome/Gdk3/RGBA.pm6",
-    "Gnome::Gdk3::Screen": "lib/Gnome/Gdk3/Screen.pm6",
-    "Gnome::Gdk3::Types": "lib/Gnome/Gdk3/Types.pm6",
-    "Gnome::Gdk3::Visual": "lib/Gnome/Gdk3/Visual.pm6",
-    "Gnome::Gdk3::Window": "lib/Gnome/Gdk3/Window.pm6"
+    "Gnome::Gdk3::Atom": "lib/Gnome/Gdk3/Atom.rakumod",
+    "Gnome::Gdk3::Device": "lib/Gnome/Gdk3/Device.rakumod",
+    "Gnome::Gdk3::Display": "lib/Gnome/Gdk3/Display.rakumod",
+    "Gnome::Gdk3::DragContext": "lib/Gnome/Gdk3/DragContext.rakumod",
+    "Gnome::Gdk3::Events": "lib/Gnome/Gdk3/Events.rakumod",
+    "Gnome::Gdk3::Keysyms": "lib/Gnome/Gdk3/Keysyms.rakumod",
+    "Gnome::Gdk3::Pixbuf": "lib/Gnome/Gdk3/Pixbuf.rakumod",
+    "Gnome::Gdk3::RGBA": "lib/Gnome/Gdk3/RGBA.rakumod",
+    "Gnome::Gdk3::Screen": "lib/Gnome/Gdk3/Screen.rakumod",
+    "Gnome::Gdk3::Types": "lib/Gnome/Gdk3/Types.rakumod",
+    "Gnome::Gdk3::Visual": "lib/Gnome/Gdk3/Visual.rakumod",
+    "Gnome::Gdk3::Window": "lib/Gnome/Gdk3/Window.rakumod"
   },
 
   "source-url": "git://github.com/MARTIMM/gnome-gdk3.git",
