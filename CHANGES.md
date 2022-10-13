@@ -1,4 +1,7 @@
 ## Release notes
+* 2022-10-13 0.19.10
+  * File extensions renamed
+
 * 2022-07-27 0.19.9
   * Added coercion routines to **Gnome::Gdk3::Events**.
 
