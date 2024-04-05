@@ -36,14 +36,14 @@ The functions in this section are used to add, remove and change properties on w
 #-------------------------------------------------------------------------------
 use NativeCall;
 
-#use Gnome::N::X;
-use Gnome::N::NativeLib;
-use Gnome::N::N-GObject;
-use Gnome::N::GlibToRakuTypes;
-use Gnome::N::TopLevelClassSupport;
+#use Gnome::N::X:api<1>;
+use Gnome::N::NativeLib:api<1>;
+use Gnome::N::N-GObject:api<1>;
+use Gnome::N::GlibToRakuTypes:api<1>;
+use Gnome::N::TopLevelClassSupport:api<1>;
 
 #-------------------------------------------------------------------------------
-unit class Gnome::Gdk3::Atom:auth<github:MARTIMM>;
+unit class Gnome::Gdk3::Atom:auth<github:MARTIMM>:api<1>;
 also is Gnome::N::TopLevelClassSupport;
 
 #-------------------------------------------------------------------------------

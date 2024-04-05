@@ -4,9 +4,9 @@ use v6;
 use NativeCall;
 use Test;
 
-use Gnome::Gdk3::RGBA;
+use Gnome::Gdk3::RGBA:api<1>;
 
-#use Gnome::N::X;
+#use Gnome::N::X:api<1>;
 #Gnome::N::debug(:on);
 
 #-------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ use v6;
 use NativeCall;
 use Test;
 
-use Gnome::Gdk3::RGBA;
+use Gnome::Gdk3::RGBA:api<1>;
 
 #-------------------------------------------------------------------------------
 subtest 'rgba set', {

@@ -42,17 +42,17 @@ C<gdk_display_get_device_manager()>.
 #-------------------------------------------------------------------------------
 use NativeCall;
 
-use Gnome::N::X;
-use Gnome::N::NativeLib;
-use Gnome::N::N-GObject;
-use Gnome::Glib::List;
-use Gnome::GObject::Object;
-use Gnome::Gdk3::Events;
+use Gnome::N::X:api<1>;
+use Gnome::N::NativeLib:api<1>;
+use Gnome::N::N-GObject:api<1>;
+use Gnome::Glib::List:api<1>;
+use Gnome::GObject::Object:api<1>;
+use Gnome::Gdk3::Events:api<1>;
 
 #-------------------------------------------------------------------------------
 # See /usr/include/gtk-3.0/gdk/gdkscreen.h
 # https://developer.gnome.org/gdk3/stable/GdkDisplay.html
-unit class Gnome::Gdk3::Display:auth<github:MARTIMM>;
+unit class Gnome::Gdk3::Display:auth<github:MARTIMM>:api<1>;
 also is Gnome::GObject::Object;
 
 #-------------------------------------------------------------------------------

@@ -4,17 +4,17 @@ use v6;
 use Test;
 
 
-use Gnome::N::N-GObject;
+use Gnome::N::N-GObject:api<1>;
 
-use Gnome::GObject::Object;
-use Gnome::GObject::Type;
+use Gnome::GObject::Object:api<1>;
+use Gnome::GObject::Type:api<1>;
 
-use Gnome::Gdk3::Visual;
-use Gnome::Gdk3::Display;
-use Gnome::Gdk3::Screen;
+use Gnome::Gdk3::Visual:api<1>;
+use Gnome::Gdk3::Display:api<1>;
+use Gnome::Gdk3::Screen:api<1>;
 
 
-#use Gnome::N::X;
+#use Gnome::N::X:api<1>;
 #Gnome::N::debug(:on);
 
 #-------------------------------------------------------------------------------
@@ -89,8 +89,8 @@ with $s.get-rgba-visual {
 # different values and therefore fail.
 #-------------------------------------------------------------------------------
 subtest 'Properties ...', {
-  use Gnome::GObject::Value;
-  use Gnome::GObject::Type;
+  use Gnome::GObject::Value:api<1>;
+  use Gnome::GObject::Type:api<1>;
 
   #my Gnome::Gdk3::Screen $s .= new;
 
@@ -162,8 +162,8 @@ subtest 'Themes ...', {
 
 #-------------------------------------------------------------------------------
 subtest 'Signals ...', {
-  use Gnome::Gtk3::Main;
-  use Gnome::N::GlibToRakuTypes;
+  use Gnome::Gtk3::Main:api<1>;
+  use Gnome::N::GlibToRakuTypes:api<1>;
 
   my Gnome::Gtk3::Main $main .= new;
 

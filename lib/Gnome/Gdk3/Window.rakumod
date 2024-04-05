@@ -42,28 +42,28 @@ Some routines are added to this module for GUI testing. They were in a separate 
 #-------------------------------------------------------------------------------
 use NativeCall;
 
-use Gnome::N::X;
-use Gnome::N::NativeLib;
-use Gnome::N::N-GObject;
-use Gnome::N::GlibToRakuTypes;
+use Gnome::N::X:api<1>;
+use Gnome::N::NativeLib:api<1>;
+use Gnome::N::N-GObject:api<1>;
+use Gnome::N::GlibToRakuTypes:api<1>;
 
-use Gnome::Glib::Error;
-use Gnome::Glib::List;
+use Gnome::Glib::Error:api<1>;
+use Gnome::Glib::List:api<1>;
 
-use Gnome::GObject::Object;
+use Gnome::GObject::Object:api<1>;
 
-use Gnome::Gdk3::Types;
-use Gnome::Gdk3::Events;
-use Gnome::Gdk3::Device;
+use Gnome::Gdk3::Types:api<1>;
+use Gnome::Gdk3::Events:api<1>;
+use Gnome::Gdk3::Device:api<1>;
 
 #use Gnome::Cairo;
-use Gnome::Cairo::Types;
-use Gnome::Cairo::Enums;
+use Gnome::Cairo::Types:api<1>;
+use Gnome::Cairo::Enums:api<1>;
 
 #-------------------------------------------------------------------------------
 # /usr/include/gtk-3.0/gdk/gdkwindow.h
 # https://developer.gnome.org/gdk3/stable/gdk3-Windows.html
-unit class Gnome::Gdk3::Window:auth<github:MARTIMM>;
+unit class Gnome::Gdk3::Window:auth<github:MARTIMM>:api<1>;
 also is Gnome::GObject::Object;
 
 #-------------------------------------------------------------------------------

@@ -55,23 +55,23 @@ Gnome::Gdk3::Pixbuf implements
 #-------------------------------------------------------------------------------
 use NativeCall;
 
-use Gnome::N::X;
-use Gnome::N::NativeLib;
-use Gnome::N::N-GObject;
+use Gnome::N::X:api<1>;
+use Gnome::N::NativeLib:api<1>;
+use Gnome::N::N-GObject:api<1>;
 
-use Gnome::GObject::Object;
+use Gnome::GObject::Object:api<1>;
 
-use Gnome::Glib::Error;
+use Gnome::Glib::Error:api<1>;
 
-use Gnome::Cairo::Types;
+use Gnome::Cairo::Types:api<1>;
 
-#use Gnome::Gio::Icon;
-#use Gnome::Gio::LoadableIcon;
+#use Gnome::Gio::Icon:api<1>;
+#use Gnome::Gio::LoadableIcon:api<1>;
 
 #-------------------------------------------------------------------------------
 # /usr/include/gtk-3.0/gtk/INCLUDE
 # https://developer.gnome.org/WWW
-unit class Gnome::Gdk3::Pixbuf:auth<github:MARTIMM>;
+unit class Gnome::Gdk3::Pixbuf:auth<github:MARTIMM>:api<1>;
 also is Gnome::GObject::Object;
 #also does Gnome::Gio::Icon;
 #also does Gnome::Gio::LoadableIcon;

@@ -3,16 +3,16 @@ use NativeCall;
 use Test;
 #use lib '../gnome-gtk3/lib';
 
-use Gnome::Gtk3::Window;
-use Gnome::Gtk3::Button;
+use Gnome::Gtk3::Window:api<1>;
+use Gnome::Gtk3::Button:api<1>;
 
-use Gnome::Gdk3::Display;
-use Gnome::Gdk3::Window;
+use Gnome::Gdk3::Display:api<1>;
+use Gnome::Gdk3::Window:api<1>;
 
-use Gnome::Gdk3::Events;
+use Gnome::Gdk3::Events:api<1>;
 ok 1, 'load module ok';
 
-#use Gnome::N::X;
+#use Gnome::N::X:api<1>;
 #Gnome::N::debug(:on);
 
 #-------------------------------------------------------------------------------
@@ -79,9 +79,9 @@ use v6;
 use NativeCall;
 use Test;
 
-use Gnome::Gdk3::Events;
+use Gnome::Gdk3::Events:api<1>;
 
-#use Gnome::N::X;
+#use Gnome::N::X:api<1>;
 #X::Gnome.debug(:on);
 
 #-------------------------------------------------------------------------------

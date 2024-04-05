@@ -52,20 +52,20 @@ If the handler handles only one event type, the method can also be defined as
 #-------------------------------------------------------------------------------
 use NativeCall;
 
-use Gnome::N::X;
-use Gnome::N::NativeLib;
-use Gnome::N::N-GObject;
-use Gnome::N::TopLevelClassSupport;
-use Gnome::N::GlibToRakuTypes;
+use Gnome::N::X:api<1>;
+use Gnome::N::NativeLib:api<1>;
+use Gnome::N::N-GObject:api<1>;
+use Gnome::N::TopLevelClassSupport:api<1>;
+use Gnome::N::GlibToRakuTypes:api<1>;
 
-use Gnome::Gdk3::Types;
+use Gnome::Gdk3::Types:api<1>;
 
-use Gnome::Cairo::Types;
+use Gnome::Cairo::Types:api<1>;
 
 #-------------------------------------------------------------------------------
 # https://developer.gnome.org/gdk3/stable/gdk3-Event-Structures.html
 # https://developer.gnome.org/gdk3/stable/gdk3-Events.html
-unit class Gnome::Gdk3::Events:auth<github:MARTIMM>;
+unit class Gnome::Gdk3::Events:auth<github:MARTIMM>:api<1>;
 also is Gnome::N::TopLevelClassSupport;
 
 #-------------------------------------------------------------------------------

@@ -36,7 +36,7 @@ A number of functions are provided for determining the “best” available visu
 
 Inheriting is done in a special way in that it needs a call from new() to get the native object created by the class you are inheriting from.
 
-  use Gnome::Gdk3::Visual;
+  use Gnome::Gdk3::Visual:api<1>;
 
   unit class MyGuiClass;
   also is Gnome::Gdk3::Visual;
@@ -57,17 +57,17 @@ Inheriting is done in a special way in that it needs a call from new() to get th
 #-------------------------------------------------------------------------------
 use NativeCall;
 
-use Gnome::GObject::Object;
+use Gnome::GObject::Object:api<1>;
 
-#use Gnome::N::X;
-use Gnome::N::NativeLib;
-use Gnome::N::N-GObject;
-use Gnome::N::GlibToRakuTypes;
+#use Gnome::N::X:api<1>;
+use Gnome::N::NativeLib:api<1>;
+use Gnome::N::N-GObject:api<1>;
+use Gnome::N::GlibToRakuTypes:api<1>;
 
-#use Gnome::Gdk3::Screen;
+#use Gnome::Gdk3::Screen:api<1>;
 
 #-------------------------------------------------------------------------------
-unit class Gnome::Gdk3::Visual:auth<github:MARTIMM>;
+unit class Gnome::Gdk3::Visual:auth<github:MARTIMM>:api<1>;
 also is Gnome::GObject::Object;
 
 #-------------------------------------------------------------------------------

@@ -22,7 +22,7 @@ use NativeCall;
 
 #-------------------------------------------------------------------------------
 # See /usr/include/gtk-3.0/gtk/gdktypes.h
-unit class Gnome::Gdk3::Types:auth<github:MARTIMM>;
+unit class Gnome::Gdk3::Types:auth<github:MARTIMM>:api<1>;
 #-------------------------------------------------------------------------------
 =begin pod
 =head1 Types

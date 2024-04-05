@@ -2,10 +2,10 @@ use NativeCall;
 use Test;
 #use lib '../gnome-native/lib';
 
-use Gnome::N::N-GObject;
-use Gnome::Gdk3::RGBA;
+use Gnome::N::N-GObject:api<1>;
+use Gnome::Gdk3::RGBA:api<1>;
 
-#use Gnome::N::X;
+#use Gnome::N::X:api<1>;
 #Gnome::N::debug(:on);
 
 #-------------------------------------------------------------------------------

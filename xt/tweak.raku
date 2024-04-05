@@ -1,19 +1,19 @@
 use v6.d;
 use NativeCall;
 
-use Gnome::N::GlibToRakuTypes;
-use Gnome::N::N-GObject;
-use Gnome::N::X;
+use Gnome::N::GlibToRakuTypes:api<1>;
+use Gnome::N::N-GObject:api<1>;
+use Gnome::N::X:api<1>;
 Gnome::N::debug(:on);
 
-use Gnome::Gtk3::Window;
-use Gnome::Gtk3::Button;
+use Gnome::Gtk3::Window:api<1>;
+use Gnome::Gtk3::Button:api<1>;
 
-use Gnome::Gdk3::Display;
-use Gnome::Gdk3::Window;
-use Gnome::Gdk3::Events;
+use Gnome::Gdk3::Display:api<1>;
+use Gnome::Gdk3::Window:api<1>;
+use Gnome::Gdk3::Events:api<1>;
 
-use Gnome::Glib::MainLoop;
+use Gnome::Glib::MainLoop:api<1>;
 
 #class N-GObject is repr('CPointer') is export { }
 

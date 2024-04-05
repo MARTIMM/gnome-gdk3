@@ -34,21 +34,21 @@ A screen device can be retrieved from a widget via the following steps
 #-------------------------------------------------------------------------------
 use NativeCall;
 
-use Gnome::N::X;
-use Gnome::N::NativeLib;
-use Gnome::N::N-GObject;
-use Gnome::N::GlibToRakuTypes;
+use Gnome::N::X:api<1>;
+use Gnome::N::NativeLib:api<1>;
+use Gnome::N::N-GObject:api<1>;
+use Gnome::N::GlibToRakuTypes:api<1>;
 
-use Gnome::Glib::List;
+use Gnome::Glib::List:api<1>;
 
-use Gnome::GObject::Object;
+use Gnome::GObject::Object:api<1>;
 
-#use Gnome::Gdk3::Types;
+#use Gnome::Gdk3::Types:api<1>;
 
 #-------------------------------------------------------------------------------
 # See /usr/include/gtk-3.0/gdk/gdkdevice.h
 # https://developer.gnome.org/gdk3/stable/GdkDevice.html
-unit class Gnome::Gdk3::Device:auth<github:MARTIMM>;
+unit class Gnome::Gdk3::Device:auth<github:MARTIMM>:api<1>;
 also is Gnome::GObject::Object;
 
 #-------------------------------------------------------------------------------

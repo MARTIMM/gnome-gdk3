@@ -26,22 +26,22 @@ B<Gnome::Gdk3::Screen> is used throughout GDK and GTK+ to specify which screen t
 #-------------------------------------------------------------------------------
 use NativeCall;
 
-use Gnome::N::X;
-use Gnome::N::NativeLib;
-use Gnome::N::N-GObject;
-use Gnome::N::GlibToRakuTypes;
+use Gnome::N::X:api<1>;
+use Gnome::N::NativeLib:api<1>;
+use Gnome::N::N-GObject:api<1>;
+use Gnome::N::GlibToRakuTypes:api<1>;
 
-use Gnome::Glib::List;
+use Gnome::Glib::List:api<1>;
 
-use Gnome::GObject::Object;
+use Gnome::GObject::Object:api<1>;
 
 use Gnome::Cairo;
-use Gnome::Cairo::Types;
+use Gnome::Cairo::Types:api<1>;
 
 #-------------------------------------------------------------------------------
 # See /usr/include/gtk-3.0/gdk/gdkscreen.h
 # https://developer.gnome.org/gdk3/stable/GdkScreen.html
-unit class Gnome::Gdk3::Screen:auth<github:MARTIMM>;
+unit class Gnome::Gdk3::Screen:auth<github:MARTIMM>:api<1>;
 also is Gnome::GObject::Object;
 
 #-------------------------------------------------------------------------------

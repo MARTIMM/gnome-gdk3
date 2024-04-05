@@ -1,6 +1,6 @@
 use v6;
 
-unit module Gnome::Gdk3::Keysyms:auth<github:MARTIMM>;
+unit module Gnome::Gdk3::Keysyms:auth<github:MARTIMM>:api<1>;
 
 constant GDK_KEY_VoidSymbol is export = 0xffffff;
 constant GDK_KEY_BackSpace is export = 0xff08;
