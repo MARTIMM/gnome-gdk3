@@ -1,11 +1,14 @@
 {
-  "description": "Raku - Gnome Gdk Interface, Please install Gnome::Gtk3",
+  "description": "Raku - Gnome Gdk 3 Interface",
   "name": "Gnome::Gdk3",
-  "version": "0.19.10",
+  "version": "0.20.0",
   "authors": [ "Marcel Timmerman"],
-  "tags": [ "gnome", "gdk"],
+  "tags": [ "gnome", "gdk3"],
+  "api": "1",
 
-  "perl": "6",
+  "meta-version": "2",
+  "perl": "6.d",
+  "raku": "6.d",
   "license": "Artistic-2.0",
 
   "provides": {
@@ -26,7 +29,11 @@
   "source-url": "git://github.com/MARTIMM/gnome-gdk3.git",
 
   "depends": [
-    "Gnome::N", "Gnome::Glib", "Gnome::GObject", "Gnome::Cairo", "Gnome::Gio"
+    "Gnome::N:api<1>",
+    "Gnome::Glib:api<1>",
+    "Gnome::GObject:api<1>",
+    "Gnome::Cairo:api<1>",
+    "Gnome::Gio:api<1>"
   ],
   "test-depends": [ ],
   "build-depends": [ ],
